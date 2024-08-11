@@ -1,3 +1,13 @@
 ---
+import CommonHead from '@/components/CommonHead.astro'
 import '@styles/globals.css'
 ---
+
+<html lang="es" class="dark">
+  <head>
+    <CommonHead />
+  </head>
+  <body class="max-w-7xl mx-auto w-[90%]">
+    <slot />
+  </body>
+</html>

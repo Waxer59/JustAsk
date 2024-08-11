@@ -1,0 +1,79 @@
+---
+import { MagicCard } from '@ui/magicui/magic-card'
+import WordPullUp from '@ui/magicui/word-pull-up'
+import {
+  Search,
+  ClipboardList,
+  SlidersVertical,
+  Smile,
+  Sparkles
+} from 'lucide-react'
+import type React from 'react'
+import type { SVGProps } from 'react'
+
+interface StepData {
+  title: string
+  desc: string
+  icon: React.FC<SVGProps<SVGSVGElement>>
+}
+
+const steps: StepData[] = [
+  {
+    title: '1. Encuentra o crea tu oferta ideal',
+    desc: 'Explora oportunidades laborales en InfoJobs, Indeed, Tecnoempleo o LinkedIn. Ajustaremos las preguntas a la oferta seleccionada, ¡o agrégala manualmente si lo prefieres!',
+    icon: Search
+  },
+  {
+    title: '2. Personalízalo a tu manera',
+    desc: 'Sube documentos clave como tu CV, una tabla DAFO o cualquier material que consideres esencial para destacar en tu entrevista.',
+    icon: ClipboardList
+  },
+  {
+    title: '3. Ajustes finales',
+    desc: 'Personaliza la simulación de entrevista según tus preferencias para sentirte completamente preparado.',
+    icon: SlidersVertical
+  },
+  {
+    title: '4. Realiza la entrevista',
+    desc: 'Practica con nuestra IA y recibe un feedback detallado junto con un puntaje al finalizar.',
+    icon: Smile
+  },
+  {
+    title: '5. ¡Acelera tu carrera!',
+    desc: 'Desarrolla tus habilidades y da el siguiente paso hacia tu nuevo trabajo.',
+    icon: Sparkles
+  }
+]
+---
+
+<section class="flex flex-col items-center gap-28 w-full">
+  <WordPullUp
+    client:only="react"
+    className="text-4xl font-bold tracking-[-0.02em] text-black dark:text-white md:text-6xl md:leading-[5rem]"
+    words="¿Cómo funciona?"
+  />
+  <ol class="flex flex-col flex-nowrap sm:flex-row sm:flex-wrap gap-12">
+    {
+      steps.map(({ title, desc, icon: Icon }) => (
+        <li class="w-full sm:flex-1">
+          <MagicCard
+            client:only="react"
+            className="cursor-pointer flex flex-col items-center justify-center shadow-2xl whitespace-nowrap w-full h-full sm:h-80 p-4"
+            gradientColor="#262626">
+            <div class="flex flex-col gap-8 justify-center items-center">
+              <div class="bg-zinc-800 p-4 inline rounded-full">
+                <Icon className="w-9 h-9" />
+              </div>
+              <div class="flex flex-col gap-4 text-center">
+                <h2 class="text-2xl sm:text-3xl font-medium text-pretty sm:text-nowrap">
+                  {title}
+                </h2>
+                <p class="text-md sm:text-lg max-w-md text-pretty">{desc}</p>
+              </div>
+            </div>
+          </MagicCard>
+        </li>
+      ))
+    }
+  </ol>
+</section>

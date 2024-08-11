@@ -1,0 +1,22 @@
+---
+import { Head } from 'astro-capo'
+const isProd = import.meta.env.PROD
+---
+
+<Head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Just ask</title>
+  {
+    isProd && (
+      <script
+        is:inline
+        defer
+        src="https://analytics.hgo.one/script.js"
+        data-website-id="052b7a31-a682-472d-943f-6df7e0f58982"
+      />
+    )
+  }
+</Head>

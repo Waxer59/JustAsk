@@ -1,0 +1,18 @@
+---
+import { cn } from '@lib/utils'
+import { buttonVariants } from '@ui/button'
+import BlurIn from '@ui/magicui/blur-in'
+---
+
+<section class="flex flex-col items-center gap-28">
+  <BlurIn
+    client:only="react"
+    word="¿A qué esperas?"
+    className="md:text-4xl font-bold text-black dark:text-white"
+  />
+  <a
+    class={cn(`${buttonVariants({ variant: 'secondary' })} text-2xl p-7`)}
+    href="/job">
+    ¡Empieza ya!
+  </a>
+</section>

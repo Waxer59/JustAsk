@@ -6,9 +6,10 @@
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
-      "@shadcn/*": ["./src/shadcn"],
-      "@lib/*": ["./src/lib"],
+      "@ui/*": ["./src/ui/*"],
+      "@lib/*": ["./src/lib/*"],
       "@styles/*": ["./src/styles/*"],
+      "@constants": ["./src/constants/index.ts"],
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"

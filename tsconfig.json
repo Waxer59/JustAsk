@@ -9,7 +9,9 @@
       "@ui/*": ["./src/ui/*"],
       "@lib/*": ["./src/lib/*"],
       "@styles/*": ["./src/styles/*"],
-      "@constants": ["./src/constants/index.ts"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@store/*": ["./src/store/*"],
+      "@constants": ["./src/constants/index.ts"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"

@@ -68,6 +68,27 @@
   }
 }
 
+.filepond--wrapper {
+  width: 100%;
+}
+
+.filepond--drop-label {
+  color: white !important;
+}
+
+.filepond--panel-top {
+  height: 50px !important;
+}
+
+.filepond--panel-root {
+  background-color: hsl(var(--primary-foreground)) !important;
+}
+
+.filepond--root,
+.filepond--root .filepond--drop-label {
+  min-height: 250px !important;
+}
+
 @supports selector(::-webkit-scrollbar) {
   /* width */
   ::-webkit-scrollbar {

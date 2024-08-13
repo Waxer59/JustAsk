@@ -16,12 +16,15 @@ registerPlugin(
 
 export const DocumentsStep = () => {
   return (
-    <FilePond
-      allowMultiple={true}
-      maxFiles={10}
-      credits={false}
-      acceptedFileTypes={['image/*', 'application/pdf']}
-      maxTotalFileSize="50MB"
-    />
+    <div className="flex flex-col gap-8 items-center w-full">
+      <h2 className="text-4xl font-semibold italic">Opcional</h2>
+      <FilePond
+        allowMultiple={true}
+        maxFiles={10}
+        credits={false}
+        acceptedFileTypes={['image/*', 'application/pdf']}
+        maxTotalFileSize="50MB"
+      />
+    </div>
   )
 }

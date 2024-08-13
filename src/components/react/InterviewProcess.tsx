@@ -3,26 +3,44 @@ import { Stepper } from '@components/react/Stepper'
 import { OfferStep } from '@components/react/OfferStep'
 import { DocumentsStep } from '@components/react/DocumentsStep'
 import { useInterviewStore } from '@store/interview'
-import { Button } from '@/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { ControlButtons } from './ControlButtons'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Toaster } from '@ui/sonner'
+import { ConfigureStep } from './ConfigureStep'
+import { FinalStep } from './FinalStep'
+
+const HIDE_CONTROL_BUTTONS_STEPS = [
+  InterviewProcessSteps.OFFER,
+  InterviewProcessSteps.COMPLETE
+]
+
+const queryClient = new QueryClient()
 
 export const InterviewProcess = () => {
   const currentStep = useInterviewStore((state) => state.currentStep)
-  const nextStep = useInterviewStore((state) => state.nextStep)
+  const currentStepIndex = InterviewProcessStepsTexts.indexOf(currentStep)
 
   return (
-    <div className="mt-16">
-      <Stepper
-        steps={InterviewProcessStepsTexts}
-        currentStep={InterviewProcessStepsTexts.indexOf(currentStep)}
-      />
-      <div className="mt-28 flex flex-col gap-12 items-center justify-center">
-        {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
-        {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}
-        <Button onClick={nextStep}>
-          Siguiente <ArrowRight className="stroke-1" />
-        </Button>
+    <QueryClientProvider client={queryClient}>
+      <div className="mt-16">
+        <Stepper
+          steps={InterviewProcessStepsTexts}
+          currentStep={currentStepIndex}
+        />
+        <div className="mt-28 flex flex-col gap-12 items-center justify-center max-w-5xl mx-auto">
+          {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
+          {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}
+          {currentStep === InterviewProcessSteps.SETUP && <ConfigureStep />}
+          {currentStep === InterviewProcessSteps.COMPLETE && <FinalStep />}
+
+          {!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) && (
+            <ControlButtons />
+          )}
+        </div>
       </div>
-    </div>
+      <Toaster />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }

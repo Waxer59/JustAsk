@@ -14,22 +14,91 @@ import {
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Textarea } from '@/ui/textarea'
+import { useInterviewStore } from '@/store/interview'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import type { CreateQuestionsData, CreateQuestionsResponse } from '@/types'
+import { BounceLoader } from 'react-spinners'
+import { useUiStore } from '@/store/ui'
 
 const formSchema = z.object({
   type: z.enum(['interview', 'questions'], {
     required_error: 'Tienes que seleccionar el tipo de simulacion'
   }),
-  style: z.string(),
+  interviewStyle: z.string(),
   additionalInfo: z.string().optional()
 })
 export const ConfigureStep = () => {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      type: 'interview',
+      interviewStyle: '',
+      additionalInfo: ''
+    }
+  })
+  const currentOffer = useInterviewStore((state) => state.currentOffer)
+  const documents = useInterviewStore((state) => state.documents)
+  const setIsSimulatingInterview = useInterviewStore(
+    (state) => state.setIsSimulatingInterview
+  )
+  const nextStep = useInterviewStore((state) => state.nextStep)
+  const setQuestions = useInterviewStore((state) => state.setQuestions)
+  const setDisableControlButtons = useUiStore(
+    (state) => state.setDisableControlButtons
+  )
+  const [sendData, setSendData] = useState<CreateQuestionsData | null>(null)
+  const { isLoading, refetch, data } = useQuery<CreateQuestionsResponse>({
+    queryKey: ['questions', sendData],
+    enabled: false,
+    retry: false,
+    queryFn: ({ queryKey }) => {
+      const [, data] = queryKey
+      return fetch('/api/createQuestions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }).then((res) => res.json())
+    }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  useEffect(() => {
+    if (data) {
+      setQuestions(data.questions)
+      nextStep()
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (!sendData) {
+      return
+    }
+
+    setDisableControlButtons(true)
+    refetch()
+  }, [sendData])
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { interviewStyle, additionalInfo, type } = values
+
+    if (type === 'interview') {
+      setIsSimulatingInterview(true)
+    }
+
+    setSendData({
+      offer: currentOffer!,
+      interviewStyle,
+      additionalInfo,
+      documents
+    })
   }
+
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <div className="w-full flex items-center justify-center">
       <Form {...form}>
@@ -38,7 +107,7 @@ export const ConfigureStep = () => {
           className="w-2/3 space-y-6">
           <FormField
             control={form.control}
-            name="style"
+            name="interviewStyle"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Estilo de la entrevista</FormLabel>
@@ -108,6 +177,15 @@ export const ConfigureStep = () => {
           </Button>
         </form>
       </Form>
+    </div>
+  )
+}
+
+const Loading = () => {
+  return (
+    <div className="flex flex-col gap-8 justify-center items-center">
+      <BounceLoader color="#2f2f33" />
+      <p className="text-xl">Estamos pensado las preguntas</p>
     </div>
   )
 }

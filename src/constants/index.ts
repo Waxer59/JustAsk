@@ -8,3 +8,5 @@ export enum ALLOWED_JOB_OFFERS_SITES {
 export const ALLOWED_JOB_OFFERS_SITES_ARRAY = Object.values(
   ALLOWED_JOB_OFFERS_SITES
 ) as string[]
+
+export const NUMBER_OF_QUESTIONS = 10

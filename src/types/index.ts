@@ -3,9 +3,15 @@ export interface OfferDetails {
   description: string
 }
 
-export interface ScrapeFields {
-  title: string
-  desc: string
+export interface CreateQuestionsResponse {
+  questions: string[]
+}
+
+export interface CreateQuestionsData {
+  offer: OfferDetails
+  interviewStyle: string
+  additionalInfo?: string
+  documents?: string[]
 }
 
 export enum InterviewProcessSteps {

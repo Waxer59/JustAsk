@@ -6,6 +6,8 @@ import FilePondPluginFileEncode from 'filepond-plugin-file-encode'
 
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import 'filepond/dist/filepond.min.css'
+import { useEffect } from 'react'
+import { useInterviewStore } from '@store/interview'
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -15,6 +17,26 @@ registerPlugin(
 )
 
 export const DocumentsStep = () => {
+  const setDocuments = useInterviewStore((state) => state.setDocuments)
+
+  const updateDocuments = (e: any) => {
+    const filepond = e.detail.pond
+    const files = filepond.getFiles()
+
+    setDocuments(files.map((file: any) => file.getFileEncodeBase64String()))
+  }
+
+  useEffect(() => {
+    document.addEventListener('FilePond:addfile', updateDocuments)
+
+    document.addEventListener('FilePond:removefile', updateDocuments)
+
+    return () => {
+      document.removeEventListener('FilePond:addfile', updateDocuments)
+      document.removeEventListener('FilePond:removefile', updateDocuments)
+    }
+  }, [])
+
   return (
     <div className="flex flex-col gap-8 items-center w-full">
       <h2 className="text-4xl font-semibold italic">Opcional</h2>
@@ -22,7 +44,13 @@ export const DocumentsStep = () => {
         allowMultiple={true}
         maxFiles={10}
         credits={false}
-        acceptedFileTypes={['image/*', 'application/pdf']}
+        acceptedFileTypes={[
+          'image/bmp',
+          'image/jpeg',
+          'image/png',
+          'image/pbm',
+          'image/webp'
+        ]}
         maxTotalFileSize="50MB"
       />
     </div>

@@ -11,6 +11,8 @@ interface State {
   currentOffer: OfferDetails | null
   isCurrentOfferManual: boolean
   isSimulatingInterview: boolean
+  questions: string[]
+  documents: string[]
   feedback: string
   score: number
 }
@@ -21,6 +23,8 @@ interface Actions {
   setIsCurrentOfferManual: (isManual: boolean) => void
   setIsSimulatingInterview: (isSimulating: boolean) => void
   setFeedback: (feedback: string) => void
+  setDocuments: (documents: string[]) => void
+  setQuestions: (questions: string[]) => void
   setScore: (score: number) => void
   nextStep: () => void
   prevStep: () => void
@@ -33,7 +37,9 @@ const initialState: State = {
   isCurrentOfferManual: false,
   isSimulatingInterview: false,
   feedback: '',
-  score: 0
+  score: 0,
+  documents: [],
+  questions: []
 }
 
 export const useInterviewStore = create<State & Actions>()(
@@ -48,6 +54,7 @@ export const useInterviewStore = create<State & Actions>()(
         set({ currentStep: InterviewProcessStepsTexts[currentIndex + 1] })
       }
     },
+    setDocuments: (documents: string[]) => set({ documents }),
     prevStep: () => {
       const currentStep = get().currentStep
       const currentIndex = InterviewProcessStepsTexts.indexOf(currentStep)
@@ -57,6 +64,7 @@ export const useInterviewStore = create<State & Actions>()(
       }
     },
     setCurrentOffer: (offer: OfferDetails) => set({ currentOffer: offer }),
+    setQuestions: (questions: string[]) => set({ questions }),
     setIsSimulatingInterview: (isSimulating: boolean) =>
       set({ isSimulatingInterview: isSimulating }),
     setIsCurrentOfferManual: (isManual: boolean) =>

@@ -7,10 +7,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Card } from '@ui/card'
 import { randomInRange } from '@helpers/randomInRange'
-
-const duration = 2.5 * 1000 // ms
-const animationEnd = Date.now() + duration
-const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
+import { CONFETTI_DEFAULTS, CONFETTI_DURATION } from '@constants'
 
 interface Props {
   feedback: string
@@ -18,22 +15,24 @@ interface Props {
 
 export const InterviewFeedbackFinal: React.FC<Props> = ({ feedback }) => {
   useEffect(() => {
+    const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION
+
     const interval = setInterval(() => {
-      const timeLeft = animationEnd - Date.now()
+      const timeLeft = CONFETTI_ANIMATION_END - Date.now()
 
       if (timeLeft <= 0) {
         return clearInterval(interval)
       }
 
-      const particleCount = 100 * (timeLeft / duration)
+      const particleCount = 100 * (timeLeft / CONFETTI_DURATION)
 
       confetti({
-        ...defaults,
+        ...CONFETTI_DEFAULTS,
         particleCount,
         origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
       })
       confetti({
-        ...defaults,
+        ...CONFETTI_DEFAULTS,
         particleCount,
         origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
       })
@@ -52,7 +51,7 @@ export const InterviewFeedbackFinal: React.FC<Props> = ({ feedback }) => {
         <ReactMarkdown children={feedback} remarkPlugins={[remarkGfm]} />
       </Card>
       <Button className="flex items-center gap-2" asChild>
-        <a href="/job">
+        <a href="/job" data-astro-reload>
           Comenzar de nuevo <RefreshCw />
         </a>
       </Button>

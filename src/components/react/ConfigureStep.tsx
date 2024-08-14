@@ -20,6 +20,8 @@ import { useEffect, useState } from 'react'
 import type { CreateQuestionsData, CreateQuestionsResponse } from '@/types'
 import { BounceLoader } from 'react-spinners'
 import { useUiStore } from '@/store/ui'
+import { toast } from 'sonner'
+import { Frown, RefreshCw } from 'lucide-react'
 
 const formSchema = z.object({
   type: z.enum(['interview', 'questions'], {
@@ -48,21 +50,30 @@ export const ConfigureStep = () => {
     (state) => state.setDisableControlButtons
   )
   const [sendData, setSendData] = useState<CreateQuestionsData | null>(null)
-  const { isLoading, refetch, data } = useQuery<CreateQuestionsResponse>({
-    queryKey: ['questions', sendData],
-    enabled: false,
-    retry: false,
-    queryFn: ({ queryKey }) => {
-      const [, data] = queryKey
-      return fetch('/api/createQuestions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      }).then((res) => res.json())
+  const { isLoading, refetch, data, isError } =
+    useQuery<CreateQuestionsResponse>({
+      queryKey: ['questions', sendData],
+      enabled: false,
+      retry: false,
+      queryFn: ({ queryKey }) => {
+        const [, data] = queryKey
+        return fetch('/api/createQuestions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        }).then((res) => res.json())
+      }
+    })
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(
+        'Ocurrio un error al crear las preguntas, intenta de nuevo mas tarde.'
+      )
     }
-  })
+  }, [isError])
 
   useEffect(() => {
     if (data) {
@@ -91,12 +102,17 @@ export const ConfigureStep = () => {
       offer: currentOffer!,
       interviewStyle,
       additionalInfo,
-      documents
+      documents,
+      language: 'spanish'
     })
   }
 
   if (isLoading) {
     return <Loading />
+  }
+
+  if (isError) {
+    return <Error />
   }
 
   return (
@@ -177,6 +193,23 @@ export const ConfigureStep = () => {
           </Button>
         </form>
       </Form>
+    </div>
+  )
+}
+
+const Error = () => {
+  return (
+    <div className="flex flex-col gap-8 justify-center items-center">
+      <Frown className="w-24 h-24" />
+      <p className="text-xl text-center max-w-md text-pretty">
+        Ocurrio un error al crear las preguntas, intenta de nuevo mas tarde.
+      </p>
+      <Button className="flex items-center gap-2" asChild>
+        <a href="/job" data-astro-reload>
+          <RefreshCw />
+          Comenzar de nuevo
+        </a>
+      </Button>
     </div>
   )
 }

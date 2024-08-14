@@ -7,9 +7,17 @@ export interface CreateQuestionsResponse {
   questions: string[]
 }
 
+export interface GetFeedbackRequest {
+  offer: OfferDetails
+  interviewQuestions: string[]
+  interviewResponses: string[]
+  language: string
+}
+
 export interface CreateQuestionsData {
   offer: OfferDetails
   interviewStyle: string
+  language: string
   additionalInfo?: string
   documents?: string[]
 }

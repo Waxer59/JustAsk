@@ -61,7 +61,7 @@ export const OfferSearch = () => {
       <ul className="mt-10 flex flex-col items-center gap-6 w-full max-h-[800px] overflow-auto pr-2">
         {offers?.map(
           ({ job_title, job_description, job_id, job_apply_link }) => (
-            <li key={job_id}>
+            <li key={job_id} className="w-full">
               <Card className="py-8 px-16 relative flex flex-col justify-center flex-wrap md:flex-row items-center gap-8">
                 <div className="flex flex-col items-center gap-4">
                   <h2 className="text-2xl font-bold self-start">{job_title}</h2>

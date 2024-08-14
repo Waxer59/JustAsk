@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 import { z } from 'zod'
 import { generateText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
-import { createQuestionsPrompt } from '@helpers/createQuestionPrompt'
+import { createQuestionsPrompt } from '@/helpers/createQuestionsPrompt'
 import { documentToText } from '@helpers/documentToText'
 
 export const prerender = false
@@ -19,7 +19,8 @@ const bodySchema = z.object({
   }),
   interviewStyle: z.string(),
   documents: z.string().array().optional(),
-  additionalInfo: z.string().optional()
+  additionalInfo: z.string().optional(),
+  language: z.string()
 })
 
 export const POST: APIRoute = async ({ request }) => {
@@ -37,64 +38,91 @@ export const POST: APIRoute = async ({ request }) => {
     )
   }
 
-  const { documents, offer, interviewStyle, additionalInfo } = parsedBody.data
+  const { documents, offer, interviewStyle, additionalInfo, language } =
+    parsedBody.data
 
-  const imagesPromises =
-    documents?.map(async (document) => {
-      const buffer = Buffer.from(document, 'base64')
-      const text = await documentToText(buffer)
-      return text
-    }) ?? []
+  try {
+    const imagesPromises =
+      documents?.map(async (document) => {
+        const buffer = Buffer.from(document, 'base64')
+        const text = await documentToText(buffer)
+        return text
+      }) ?? []
 
-  const resolvedImages = await Promise.all(imagesPromises)
+    const resolvedImages = await Promise.all(imagesPromises)
+    const { toolResults } = await generateText({
+      model: groq('gemma2-9b-it'),
+      prompt: `Your task is to generate a specific set of tailored interview questions for each job offer.
+        Follow these steps:
+        
+        1. Review the job description: Understand the role's requirements, responsibilities, and desired qualifications.
+        2. Determine the interview style: Note whether the interview will be technical, behavioral, or another style.
+        3. Review provided documents (if any): Analyze any CVs, SWOT analyses, or other relevant materials that have been provided.
+        4. Generate questions:
+            - Create questions that relate to the job description and the provided documents.
+            - Include a mix of technical, behavioral, and general questions.
+            - Adapt and refine your questions based on any new information provided by the candidate during the interview.
+        5. Language considerations:
+           *. All responses and questions must be in ${language}
+        6. Do not engage in any other conversation or activities outside of generating interview questions.
+        Example Structure:
 
-  const { toolResults } = await generateText({
-    model: groq('llama-3.1-70b-versatile'),
-    messages: [
-      {
-        role: 'system',
-        content: `You are an expert interviewer for a company, specializing in adapting your approach based on the job offer, the required interview style, and the language of the offer. Your primary objective is to generate a specific set of tailored questions for each interview, considering the details of the job offer, the interview style (technical, behavioral, etc.), and any provided documents such as CVs, SWOT analyses, or other relevant materials. Additionally, you should be prepared to adapt and refine your questions based on any new information provided by the candidate during the interview. All responses and questions should be conducted in the language of the job offer.`
-      },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'text',
-            text: createQuestionsPrompt({
-              title: offer.title.replace(/\s+/g, ' '),
-              description: offer.description.replace(/\s+/g, ' '),
-              interviewStyle,
-              additionalInfo,
-              filesContent: resolvedImages
-            })
-          }
-        ]
-      }
-    ],
-    toolChoice: 'required',
-    tools: {
-      generateQuestions: {
-        description: 'Use this to give all interview questions',
-        parameters: z.object({
-          questions: z.string().array().min(10).describe('Interview questions')
-        }),
-        execute: async ({ questions }) => {
-          return {
-            questions: questions
+        - Job Description:
+          * Title: ... insert title here ...
+          * Description: ... insert description here ...
+        - Interview Style: 
+          * ... insert interview style here ...
+        - Additional Information (if any):
+           ... insert additional info here ...
+        - Documents Provided (if any):
+           ... insert documents content here ...
+    
+        Use this structure and guidelines to generate tailored interview questions in the correct language.
+        
+        ---
+        
+        ${createQuestionsPrompt({
+          title: offer.title.replace(/\s+/g, ' '),
+          description: offer.description.replace(/\s+/g, ' '),
+          interviewStyle,
+          additionalInfo,
+          filesContent: resolvedImages
+        })}
+        `,
+      toolChoice: 'required',
+      tools: {
+        generateQuestions: {
+          description: 'Use this to give all interview questions',
+          parameters: z.object({
+            questions: z
+              .string()
+              .array()
+              .min(10)
+              .describe('Interview questions')
+          }),
+          execute: async ({ questions }) => {
+            return {
+              questions: questions
+            }
           }
         }
       }
-    }
-  })
+    })
 
-  const questions = toolResults[0].result.questions
+    const questions = toolResults[0].result.questions
 
-  return new Response(
-    JSON.stringify({
-      questions
-    }),
-    {
-      status: 200
-    }
-  )
+    return new Response(
+      JSON.stringify({
+        questions
+      }),
+      {
+        status: 200
+      }
+    )
+  } catch (error) {
+    console.error(error)
+    return new Response(null, {
+      status: 500
+    })
+  }
 }

@@ -1,4 +1,4 @@
-import { InterviewProcessSteps, InterviewProcessStepsTexts } from '@/types'
+import { InterviewProcessSteps } from '@/types'
 import { Stepper } from '@components/react/Stepper'
 import { OfferStep } from '@components/react/OfferStep'
 import { DocumentsStep } from '@components/react/DocumentsStep'
@@ -10,6 +10,7 @@ import { Toaster } from '@ui/sonner'
 import { ConfigureStep } from './ConfigureStep'
 import { FinalStep } from './FinalStep'
 import { useUiStore } from '@store/ui'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const HIDE_CONTROL_BUTTONS_STEPS = [
   InterviewProcessSteps.OFFER,
@@ -18,9 +19,12 @@ const HIDE_CONTROL_BUTTONS_STEPS = [
 
 const queryClient = new QueryClient()
 
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+
 export const InterviewProcess = () => {
   const currentStep = useInterviewStore((state) => state.currentStep)
-  const currentStepIndex = InterviewProcessStepsTexts.indexOf(currentStep)
+  const t = useTranslations(lang)
   const disableControlButtons = useUiStore(
     (state) => state.disableControlButtons
   )
@@ -29,8 +33,13 @@ export const InterviewProcess = () => {
     <QueryClientProvider client={queryClient}>
       <div className="mt-16">
         <Stepper
-          steps={InterviewProcessStepsTexts}
-          currentStep={currentStepIndex}
+          steps={[
+            t('stepper.step.1'),
+            t('stepper.step.2'),
+            t('stepper.step.3'),
+            t('stepper.step.4')
+          ]}
+          currentStep={currentStep}
         />
 
         <div className="mt-28 flex flex-col gap-12 items-center justify-center max-w-5xl mx-auto pb-5">

@@ -1,18 +1,23 @@
 ---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { cn } from '@lib/utils'
 import { buttonVariants } from '@ui/button'
 import BlurIn from '@ui/magicui/blur-in'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 ---
 
 <section class="flex flex-col items-center gap-28">
   <BlurIn
     client:only="react"
-    word="¿A qué esperas?"
+    word={t('callToAction2.title')}
     className="md:text-4xl font-bold text-black dark:text-white"
   />
   <a
     class={cn(`${buttonVariants({ variant: 'secondary' })} text-2xl p-7`)}
-    href="/job">
-    ¡Empieza ya!
+    href={getRelativeLocaleUrl(lang, 'job')}>
+    {t('callToAction2')}
   </a>
 </section>

@@ -1,6 +1,6 @@
 import {
   InterviewProcessSteps,
-  InterviewProcessStepsTexts,
+  numberOfSteps,
   type OfferDetails
 } from '@/types'
 import { create } from 'zustand'
@@ -49,10 +49,9 @@ export const useInterviewStore = create<State & Actions>()(
     setCurrentStep: (step: InterviewProcessSteps) => set({ currentStep: step }),
     nextStep: () => {
       const currentStep = get().currentStep
-      const currentIndex = InterviewProcessStepsTexts.indexOf(currentStep)
 
-      if (currentIndex < InterviewProcessStepsTexts.length - 1) {
-        set({ currentStep: InterviewProcessStepsTexts[currentIndex + 1] })
+      if (currentStep < numberOfSteps - 1) {
+        set({ currentStep: currentStep + 1 })
       }
     },
     setDocuments: (documents: string[]) => set({ documents }),
@@ -61,10 +60,9 @@ export const useInterviewStore = create<State & Actions>()(
     addAnswer: (answer: string) => set({ answers: [...get().answers, answer] }),
     prevStep: () => {
       const currentStep = get().currentStep
-      const currentIndex = InterviewProcessStepsTexts.indexOf(currentStep)
 
-      if (currentIndex > 0) {
-        set({ currentStep: InterviewProcessStepsTexts[currentIndex - 1] })
+      if (currentStep > 0) {
+        set({ currentStep: currentStep - 1 })
       }
     },
     setAnswers: (answers: string[]) => set({ answers }),

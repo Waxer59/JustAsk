@@ -8,16 +8,22 @@ import remarkGfm from 'remark-gfm'
 import { Card } from '@ui/card'
 import { randomInRange } from '@helpers/randomInRange'
 import { CONFETTI_DEFAULTS, CONFETTI_DURATION } from '@constants'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 interface Props {
   feedback: string
   score: number
 }
 
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+
 export const InterviewFeedbackFinal: React.FC<Props> = ({
   feedback,
   score
 }) => {
+  const t = useTranslations(lang)
   useEffect(() => {
     const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION
 
@@ -46,7 +52,7 @@ export const InterviewFeedbackFinal: React.FC<Props> = ({
   return (
     <div className="flex flex-col items-center gap-8 w-full">
       <h2 className="italic flex items-center gap-8 text-6xl">
-        <span className="font-semibold">Puntuación: </span>
+        <span className="font-semibold">{t('score')}: </span>
         <span className="whitespace-pre-wrap font-medium tracking-tighter text-black dark:text-white">
           {score ? <NumberTicker value={score} /> : 0}
         </span>
@@ -59,8 +65,8 @@ export const InterviewFeedbackFinal: React.FC<Props> = ({
         />
       </Card>
       <Button className="flex items-center gap-2" asChild>
-        <a href="/job" data-astro-reload>
-          Comenzar de nuevo <RefreshCw />
+        <a href={getRelativeLocaleUrl(lang, 'job')} data-astro-reload>
+          {t('restart')} <RefreshCw />
         </a>
       </Button>
     </div>

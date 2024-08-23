@@ -22,6 +22,10 @@ import { useUiStore } from '@/store/ui'
 import { toast } from 'sonner'
 import { Loading } from './Loading'
 import { ErrorMessage } from './ErrorMessage'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
 
 const formSchema = z.object({
   type: z.enum(['interview', 'questions'], {
@@ -30,7 +34,9 @@ const formSchema = z.object({
   interviewStyle: z.string(),
   additionalInfo: z.string().optional()
 })
+
 export const ConfigureStep = () => {
+  const t = useTranslations(lang)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -108,13 +114,11 @@ export const ConfigureStep = () => {
   }
 
   if (isLoading) {
-    return <Loading text="Estamos pensado las preguntas" />
+    return <Loading text={t('questions.loading')} />
   }
 
   if (isError) {
-    return (
-      <ErrorMessage text="Ocurrio un error al crear las preguntas, intenta de nuevo mas tarde." />
-    )
+    return <ErrorMessage text={t('questions.error')} />
   }
 
   return (
@@ -128,12 +132,16 @@ export const ConfigureStep = () => {
             name="interviewStyle"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Estilo de la entrevista</FormLabel>
+                <FormLabel>{t('step3.interviewStyle')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Tecnica" {...field} className="text-lg" />
+                  <Input
+                    placeholder={t('step3.interviewStyle.placeholder')}
+                    {...field}
+                    className="text-lg"
+                  />
                 </FormControl>
                 <FormDescription>
-                  ¿Que estilo de entrevista quieres?
+                  {t('step3.interviewStyle.description')}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -144,7 +152,7 @@ export const ConfigureStep = () => {
             name="type"
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel>Define la simulacion</FormLabel>
+                <FormLabel>{t('step3.simulation')}</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -155,7 +163,7 @@ export const ConfigureStep = () => {
                         <RadioGroupItem value="questions" />
                       </FormControl>
                       <FormLabel className="font-normal">
-                        Solo quiero las preguntas
+                        {t('step3.simulation.option.1')}
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
@@ -163,7 +171,7 @@ export const ConfigureStep = () => {
                         <RadioGroupItem value="interview" />
                       </FormControl>
                       <FormLabel className="font-normal">
-                        ¡Simulemos una entrevista!
+                        {t('step3.simulation.option.2')}
                       </FormLabel>
                     </FormItem>
                   </RadioGroup>
@@ -177,7 +185,7 @@ export const ConfigureStep = () => {
             name="additionalInfo"
             render={({ field }: { field: any }) => (
               <FormItem>
-                <FormLabel>¿Quieres añadir algo más?</FormLabel>
+                <FormLabel>{t('step3.additionalInfo')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="..."
@@ -185,13 +193,15 @@ export const ConfigureStep = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Informacion adicional</FormDescription>
+                <FormDescription>
+                  {t('step3.additionalInfo.description')}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit" className="w-full">
-            ¡Empezar!
+            {t('step3.start')}
           </Button>
         </form>
       </Form>

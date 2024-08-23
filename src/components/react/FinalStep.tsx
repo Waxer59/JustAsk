@@ -7,8 +7,13 @@ import { InterviewFeedbackFinal } from './InterviewFeedbackFinal'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { ErrorMessage } from './ErrorMessage'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
 
 export const FinalStep = () => {
+  const t = useTranslations(lang)
   const isSimulatingInterview = useInterviewStore(
     (state) => state.isSimulatingInterview
   )
@@ -60,10 +65,8 @@ export const FinalStep = () => {
           score={+feedbackData.evaluation.score}
         />
       )}
-      {isFeedbackLoading && (
-        <Loading text="Estamos calificando tus respuestas" />
-      )}
-      {isFeedbackError && <ErrorMessage text="Algo salio mal :(" />}
+      {isFeedbackLoading && <Loading text={t('feedback.loading')} />}
+      {isFeedbackError && <ErrorMessage text={t('feedback.error')} />}
     </>
   )
 }

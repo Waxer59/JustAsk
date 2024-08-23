@@ -14,13 +14,18 @@ import { Input } from '@ui/input'
 import { Textarea } from '@ui/textarea'
 import { Button } from '@ui/button'
 import { useInterviewStore } from '@store/interview'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: 'Title is required' }), // TODO: Change msg
-  description: z.string().min(1, { message: 'Description is required' }) // TODO: Change msg
+  title: z.string().min(1, { message: '' }),
+  description: z.string().min(1, { message: '' })
 })
 
 export const OfferManual = () => {
+  const t = useTranslations(lang)
   const isCurrentOfferManual = useInterviewStore(
     (state) => state.isCurrentOfferManual
   )
@@ -58,7 +63,7 @@ export const OfferManual = () => {
           name="title"
           render={({ field }: { field: any }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t('step1.offerTitle')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Frontend developer"
@@ -66,7 +71,9 @@ export const OfferManual = () => {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>The job offer title</FormDescription>
+              <FormDescription>
+                {t('step1.offerTitle.description')}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -76,7 +83,7 @@ export const OfferManual = () => {
           name="description"
           render={({ field }: { field: any }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t('step1.offerDescription')}</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="..."
@@ -84,12 +91,14 @@ export const OfferManual = () => {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>The job offer description</FormDescription>
+              <FormDescription>
+                {t('step1.offerDescription.description')}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Seleccionar oferta</Button>
+        <Button type="submit">{t('step1.selectOffer')}</Button>
       </form>
     </Form>
   )

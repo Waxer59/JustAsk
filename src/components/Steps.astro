@@ -1,4 +1,5 @@
 ---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { MagicCard } from '@ui/magicui/magic-card'
 import WordPullUp from '@ui/magicui/word-pull-up'
 import {
@@ -17,30 +18,33 @@ interface StepData {
   icon: React.FC<SVGProps<SVGSVGElement>>
 }
 
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
 const steps: StepData[] = [
   {
-    title: '1. Encuentra o crea tu oferta ideal',
-    desc: 'Descubre oportunidades laborales en plataformas como InfoJobs, Indeed, Glassdoor, y muchas más. Adaptamos las preguntas a la oferta que elijas, ¡o también puedes agregarla manualmente si lo prefieres!',
+    title: t('steps.1.title'),
+    desc: t('steps.1.desc'),
     icon: Search
   },
   {
-    title: '2. Personalízalo a tu manera',
-    desc: 'Sube documentos clave como tu CV, una tabla DAFO o cualquier material que consideres esencial para destacar en tu entrevista.',
+    title: t('steps.2.title'),
+    desc: t('steps.2.desc'),
     icon: ClipboardList
   },
   {
-    title: '3. Ajustes finales',
-    desc: 'Personaliza la simulación de entrevista según tus preferencias para sentirte completamente preparado.',
+    title: t('steps.3.title'),
+    desc: t('steps.3.desc'),
     icon: SlidersVertical
   },
   {
-    title: '4. Realiza la entrevista',
-    desc: 'Practica con nuestra IA y recibe un feedback detallado junto con un puntaje al finalizar.',
+    title: t('steps.4.title'),
+    desc: t('steps.4.desc'),
     icon: Smile
   },
   {
-    title: '5. ¡Acelera tu carrera!',
-    desc: 'Desarrolla tus habilidades y da el siguiente paso hacia tu nuevo trabajo.',
+    title: t('steps.5.title'),
+    desc: t('steps.5.desc'),
     icon: Sparkles
   }
 ]
@@ -50,7 +54,7 @@ const steps: StepData[] = [
   <WordPullUp
     client:only="react"
     className="text-4xl font-bold tracking-[-0.02em] text-black dark:text-white md:text-6xl md:leading-[5rem]"
-    words="¿Cómo funciona?"
+    words={t('steps.title')}
   />
   <ol class="flex flex-col flex-nowrap sm:flex-row sm:flex-wrap gap-12">
     {

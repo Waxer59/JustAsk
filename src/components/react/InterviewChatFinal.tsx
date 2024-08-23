@@ -1,3 +1,4 @@
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { useInterviewStore } from '@/store/interview'
 import { AutosizeTextarea } from '@ui/autosize-textarea'
 import { Button } from '@ui/button'
@@ -15,7 +16,11 @@ interface Props {
   questions: string[]
 }
 
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+
 export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
+  const t = useTranslations(lang)
   const userMessages = useRef<string[]>([])
   const addAnswer = useInterviewStore((state) => state.addAnswer)
   const [allMessages, setAllMessages] = useState<MessageProps[]>([
@@ -72,7 +77,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
     ev.preventDefault()
 
     if (currentMessage.trim() === '') {
-      toast.error('No puedes enviar un mensaje vacío')
+      toast.error(t('chat.error.emptyMessage'))
       return
     }
 
@@ -113,7 +118,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
                 <Send />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Enviar</TooltipContent>
+            <TooltipContent>{t('chat.send')}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </form>

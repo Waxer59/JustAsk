@@ -8,6 +8,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import 'filepond/dist/filepond.min.css'
 import { useEffect } from 'react'
 import { useInterviewStore } from '@store/interview'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -16,8 +17,12 @@ registerPlugin(
   FilePondPluginFileEncode
 )
 
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+
 export const DocumentsStep = () => {
   const setDocuments = useInterviewStore((state) => state.setDocuments)
+  const t = useTranslations(lang)
 
   const updateDocuments = (e: any) => {
     const filepond = e.detail.pond
@@ -39,7 +44,7 @@ export const DocumentsStep = () => {
 
   return (
     <div className="flex flex-col gap-8 items-center w-full">
-      <h2 className="text-4xl font-semibold italic">Opcional</h2>
+      <h2 className="text-4xl font-semibold italic">{t('step2.title')}</h2>
       <FilePond
         allowMultiple={true}
         maxFiles={10}

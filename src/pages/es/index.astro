@@ -1,0 +1,16 @@
+---
+import Header from '@components/Header.astro'
+import BaseLayout from '@layouts/BaseLayout.astro'
+import Steps from '@components/Steps.astro'
+import CallToAction from '@components/CallToAction.astro'
+import Footer from '@components/Footer.astro'
+---
+
+<BaseLayout>
+  <Header />
+  <main class="mt-28 flex flex-col items-center gap-28">
+    <Steps />
+    <CallToAction />
+  </main>
+  <Footer />
+</BaseLayout>

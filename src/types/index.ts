@@ -23,13 +23,13 @@ export interface CreateQuestionsData {
 }
 
 export enum InterviewProcessSteps {
-  OFFER = 'Oferta',
-  DOCUMENTS = 'Documentos',
-  SETUP = 'Configura',
-  COMPLETE = '¡Listo!'
+  OFFER,
+  DOCUMENTS,
+  SETUP,
+  COMPLETE
 }
 
-export const InterviewProcessStepsTexts = Object.values(InterviewProcessSteps)
+export const numberOfSteps = Object.keys(InterviewProcessSteps).length / 2
 
 export interface OffersResponse {
   status: string

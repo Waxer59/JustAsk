@@ -1,9 +1,12 @@
 ---
+import { getLangFromUrl } from '@/i18n/utils'
 import CommonHead from '@components/CommonHead.astro'
 import '@styles/globals.css'
+
+const lang = getLangFromUrl(Astro.url)
 ---
 
-<html lang="es" class="dark">
+<html lang={lang} class="dark">
   <head>
     <CommonHead />
   </head>

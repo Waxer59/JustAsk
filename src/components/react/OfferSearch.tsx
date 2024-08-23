@@ -8,8 +8,13 @@ import { Button } from '@ui/button'
 import type { OffersResponse } from '@/types'
 import { useInterviewStore } from '@store/interview'
 import { BounceLoader } from 'react-spinners'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
 
 export const OfferSearch = () => {
+  const t = useTranslations(lang)
   const [search, setSearch] = useState<string>('')
   const [debouncedSearch] = useDebounce(search, 1000)
   const setIsCurrentOfferManual = useInterviewStore(
@@ -68,13 +73,13 @@ export const OfferSearch = () => {
                   <p className="max-w-3xl text-pretty">{job_description}</p>
                   <Button variant="link" asChild>
                     <a href={job_apply_link} target="_blank">
-                      Enlace a la oferta
+                      {t('step1.offerLink')}
                     </a>
                   </Button>
                   <Button
                     className="w-full"
                     onClick={() => onOfferClick(job_title, job_description)}>
-                    Seleccionar oferta
+                    {t('step1.selectOffer')}
                   </Button>
                 </div>
               </Card>

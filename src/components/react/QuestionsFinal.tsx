@@ -5,12 +5,18 @@ import { Card } from '@ui/card'
 import confetti from 'canvas-confetti'
 import { RefreshCw } from 'lucide-react'
 import { useEffect } from 'react'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 interface Props {
   questions: string[]
 }
 
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+
 export const Questions: React.FC<Props> = ({ questions }) => {
+  const t = useTranslations(lang)
   useEffect(() => {
     const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION
 
@@ -38,7 +44,7 @@ export const Questions: React.FC<Props> = ({ questions }) => {
 
   return (
     <div className="flex flex-col gap-8 items-center justify-center pb-6">
-      <h2 className="text-4xl font-bold">Preguntas</h2>
+      <h2 className="text-4xl font-bold">{t('questions')}</h2>
       <Card className="text-xl max-w-3xl max-h-[600px] overflow-auto">
         <ol className="list-decimal px-10 py-5 flex flex-col gap-4">
           {questions.map((question, index) => (
@@ -49,8 +55,8 @@ export const Questions: React.FC<Props> = ({ questions }) => {
         </ol>
       </Card>
       <Button className="flex items-center gap-2" asChild>
-        <a href="/job" data-astro-reload>
-          Comenzar de nuevo <RefreshCw />
+        <a href={getRelativeLocaleUrl(lang, 'job')} data-astro-reload>
+          {t('restart')} <RefreshCw />
         </a>
       </Button>
     </div>

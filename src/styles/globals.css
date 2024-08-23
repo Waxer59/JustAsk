@@ -68,6 +68,19 @@
   }
 }
 
+.markdown-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.markdown-feedback ul,
+.markdown-feedback ol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .filepond--wrapper {
   width: 100%;
 }

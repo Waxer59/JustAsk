@@ -4,6 +4,7 @@ import { generateText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
 import { createQuestionsPrompt } from '@/helpers/createQuestionsPrompt'
 import { documentToText } from '@helpers/documentToText'
+import { LANGUAGE_TEXT } from '@constants'
 
 export const prerender = false
 
@@ -20,7 +21,7 @@ const bodySchema = z.object({
   interviewStyle: z.string(),
   documents: z.string().array().optional(),
   additionalInfo: z.string().optional(),
-  language: z.string()
+  language: z.enum(['es', 'en'])
 })
 
 export const POST: APIRoute = async ({ request }) => {
@@ -40,6 +41,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   const { documents, offer, interviewStyle, additionalInfo, language } =
     parsedBody.data
+
+  const languageText = LANGUAGE_TEXT[language]
 
   try {
     const imagesPromises =
@@ -63,7 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
             - Include a mix of technical, behavioral, and general questions.
             - Adapt and refine your questions based on any new information provided by the candidate during the interview.
         5. Language considerations:
-           *. All responses and questions must be in ${language}
+           *. All responses and questions must be in ${languageText}
         6. Do not engage in any other conversation or activities outside of generating interview questions.
         Example Structure:
 
@@ -100,11 +103,7 @@ export const POST: APIRoute = async ({ request }) => {
               .min(10)
               .describe('Interview questions')
           }),
-          execute: async ({ questions }) => {
-            return {
-              questions: questions
-            }
-          }
+          execute: async ({ questions }) => ({ questions })
         }
       }
     })

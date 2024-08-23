@@ -11,9 +11,13 @@ import { CONFETTI_DEFAULTS, CONFETTI_DURATION } from '@constants'
 
 interface Props {
   feedback: string
+  score: number
 }
 
-export const InterviewFeedbackFinal: React.FC<Props> = ({ feedback }) => {
+export const InterviewFeedbackFinal: React.FC<Props> = ({
+  feedback,
+  score
+}) => {
   useEffect(() => {
     const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION
 
@@ -44,11 +48,15 @@ export const InterviewFeedbackFinal: React.FC<Props> = ({ feedback }) => {
       <h2 className="italic flex items-center gap-8 text-6xl">
         <span className="font-semibold">Puntuación: </span>
         <span className="whitespace-pre-wrap font-medium tracking-tighter text-black dark:text-white">
-          <NumberTicker value={100} />
+          {score ? <NumberTicker value={score} /> : 0}
         </span>
       </h2>
       <Card className="text-lg p-4 w-full max-h-[500px] overflow-auto">
-        <ReactMarkdown children={feedback} remarkPlugins={[remarkGfm]} />
+        <ReactMarkdown
+          children={feedback}
+          remarkPlugins={[remarkGfm]}
+          className="markdown-feedback"
+        />
       </Card>
       <Button className="flex items-center gap-2" asChild>
         <a href="/job" data-astro-reload>

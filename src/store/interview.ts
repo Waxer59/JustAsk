@@ -11,10 +11,10 @@ interface State {
   currentOffer: OfferDetails | null
   isCurrentOfferManual: boolean
   isSimulatingInterview: boolean
+  hasInterviewFinished: boolean
   questions: string[]
+  answers: string[]
   documents: string[]
-  feedback: string
-  score: number
 }
 
 interface Actions {
@@ -22,10 +22,11 @@ interface Actions {
   setCurrentOffer: (offer: OfferDetails) => void
   setIsCurrentOfferManual: (isManual: boolean) => void
   setIsSimulatingInterview: (isSimulating: boolean) => void
-  setFeedback: (feedback: string) => void
+  setHasInterviewFinished: (hasFinished: boolean) => void
+  setAnswers: (answers: string[]) => void
+  addAnswer: (answer: string) => void
   setDocuments: (documents: string[]) => void
   setQuestions: (questions: string[]) => void
-  setScore: (score: number) => void
   nextStep: () => void
   prevStep: () => void
   clear: () => void
@@ -36,10 +37,10 @@ const initialState: State = {
   currentOffer: null,
   isCurrentOfferManual: false,
   isSimulatingInterview: false,
-  feedback: '',
-  score: 0,
   documents: [],
-  questions: []
+  questions: [],
+  hasInterviewFinished: false,
+  answers: []
 }
 
 export const useInterviewStore = create<State & Actions>()(
@@ -55,6 +56,9 @@ export const useInterviewStore = create<State & Actions>()(
       }
     },
     setDocuments: (documents: string[]) => set({ documents }),
+    setHasInterviewFinished: (hasFinished: boolean) =>
+      set({ hasInterviewFinished: hasFinished }),
+    addAnswer: (answer: string) => set({ answers: [...get().answers, answer] }),
     prevStep: () => {
       const currentStep = get().currentStep
       const currentIndex = InterviewProcessStepsTexts.indexOf(currentStep)
@@ -63,14 +67,13 @@ export const useInterviewStore = create<State & Actions>()(
         set({ currentStep: InterviewProcessStepsTexts[currentIndex - 1] })
       }
     },
+    setAnswers: (answers: string[]) => set({ answers }),
     setCurrentOffer: (offer: OfferDetails) => set({ currentOffer: offer }),
     setQuestions: (questions: string[]) => set({ questions }),
     setIsSimulatingInterview: (isSimulating: boolean) =>
       set({ isSimulatingInterview: isSimulating }),
     setIsCurrentOfferManual: (isManual: boolean) =>
       set({ isCurrentOfferManual: isManual }),
-    setFeedback: (feedback: string) => set({ feedback }),
-    setScore: (score: number) => set({ score }),
     clear: () => set(initialState)
   }))
 )

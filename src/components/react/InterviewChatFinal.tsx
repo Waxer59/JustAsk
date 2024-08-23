@@ -1,3 +1,4 @@
+import { useInterviewStore } from '@/store/interview'
 import { AutosizeTextarea } from '@ui/autosize-textarea'
 import { Button } from '@ui/button'
 import {
@@ -16,18 +17,22 @@ interface Props {
 
 export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
   const userMessages = useRef<string[]>([])
+  const addAnswer = useInterviewStore((state) => state.addAnswer)
   const [allMessages, setAllMessages] = useState<MessageProps[]>([
     {
       message: questions[0],
       isUser: false
     }
   ])
+  const setHasInterviewFinished = useInterviewStore(
+    (state) => state.setHasInterviewFinished
+  )
   const [currentMessage, setcurrentMessage] = useState<string>('')
   const formRef = useRef<HTMLFormElement>(null)
   const messagesRef = useRef<HTMLUListElement>(null)
 
   const finishInterview = () => {
-    toast('Acabó!')
+    setHasInterviewFinished(true)
   }
 
   useEffect(() => {
@@ -45,6 +50,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       return
     }
 
+    // Add the interview question to the state
     setAllMessages((prev) => [
       ...prev,
       { message: questions[currentQuestionIdx], isUser: false }
@@ -70,6 +76,8 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       return
     }
 
+    // Add the user's message to the state
+    addAnswer(currentMessage)
     setAllMessages((prev) => [
       ...prev,
       { message: currentMessage, isUser: true }
@@ -92,11 +100,11 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
           onChange={(e) => setcurrentMessage(e.target.value)}
           name="message"
           maxHeight={200}
-          className="resize-none text-lg"
+          className="resize-none text-lg h-[54px] pr-[50px]"
         />
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger className="absolute top-2 right-2">
+            <TooltipTrigger className="absolute top-2 right-2" asChild>
               <Button
                 size="icon"
                 variant="secondary"

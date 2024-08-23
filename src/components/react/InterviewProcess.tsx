@@ -32,6 +32,7 @@ export const InterviewProcess = () => {
           steps={InterviewProcessStepsTexts}
           currentStep={currentStepIndex}
         />
+
         <div className="mt-28 flex flex-col gap-12 items-center justify-center max-w-5xl mx-auto pb-5">
           {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
           {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}

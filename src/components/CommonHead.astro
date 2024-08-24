@@ -1,7 +1,17 @@
 ---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { cannonicalURL } from '@constants/seo'
 import { Head } from 'astro-capo'
 import { ViewTransitions } from 'astro:transitions'
 const isProd = import.meta.env.PROD
+
+const localeCode = {
+  es: 'es_ES',
+  en: 'en_US'
+}
+
+const currentLang = getLangFromUrl(Astro.url)
+const t = useTranslations(currentLang)
 ---
 
 <Head>
@@ -9,8 +19,27 @@ const isProd = import.meta.env.PROD
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width" />
   <meta name="generator" content={Astro.generator} />
-  <ViewTransitions />
   <title>Just ask</title>
+
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <link rel="canonical" href={cannonicalURL} />
+  <meta name="keywords" content={t('meta.keywords')} />
+  <meta name="description" content={t('meta.description')} />
+
+  <meta property="og:image" content="/og.png" />
+  <meta property="og:title" content="Just Ask" />
+  <meta property="og:description" content={t('meta.description')} />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:site_name" content="Just Ask" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content={localeCode[currentLang]} />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Just Ask" />
+  <meta name="twitter:description" content={t('meta.description')} />
+  <meta name="twitter:image" content="/og.png" />
+
   {
     isProd && (
       <script
@@ -21,4 +50,6 @@ const isProd = import.meta.env.PROD
       />
     )
   }
+
+  <ViewTransitions />
 </Head>

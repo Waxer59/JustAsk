@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://justask.hgo.one/sitemap-index.xml

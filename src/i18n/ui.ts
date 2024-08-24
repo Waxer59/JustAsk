@@ -7,6 +7,10 @@ export const defaultLang = 'en'
 
 export const ui = {
   en: {
+    'meta.description':
+      'Simulate realistic interviews with Just Ask. Customize your simulation, get detailed feedback, and accelerate your career. Start now!',
+    'meta.keywords':
+      'interview simulation, interview preparation, job interviews, skill improvement, job search, feedback, CV, SWOT analysis, simulated interview, professional development',
     'header.description':
       'Simulate realistic interviews and be prepared to stand out',
     callToAction1: 'Start now!',
@@ -64,6 +68,10 @@ export const ui = {
     questions: 'Questions'
   },
   es: {
+    'meta.description':
+      'Simula entrevistas realistas con Just Ask. Personaliza tu simulación, recibe feedback detallado y acelera tu carrera. ¡Empieza ahora!',
+    'meta.keywords':
+      'simulación de entrevistas, preparación para entrevistas, entrevistas de trabajo, mejorar habilidades, búsqueda de empleo, retroalimentación, CV, análisis FODA, entrevista simulada, desarrollo profesional',
     'header.description':
       'Simula entrevistas realistas y prepárate para destacar',
     callToAction1: '¡Empieza ahora!',

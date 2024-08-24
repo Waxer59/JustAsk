@@ -1,47 +1,42 @@
-# Astro Starter Kit: Minimal
+# Just Ask
 
-```sh
-npm create astro@latest -- --template minimal
+<img src="./docs/justAsk.webp" />
+
+**Just Ask** is an interview simulation platform that uses real job offers. With **Just Ask**, you can search for an existing job offer or manually enter one yourself. You then have the option to attach relevant files, such as your resume or a SWOT analysis, to include in the simulation. The next step is to define the interview style: you can choose to simulate a full interview, where you'll be asked five questions, receive a performance score, and get detailed feedback on how to improve. Alternatively, you can skip this step and simply receive the questions. The choice is yours!
+
+## How to run the project?
+
+1. Install all the dependencies with the command:
+
+```bash
+pnpm i
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+2. Rename the file `.template.env` to `.env` and fill the fields.
+   
+   * `GROQ_API_KEY`: You will need a [Groq](https://console.groq.com/) API key.
+   * `JSEARCH_API_KEY`: You will need a [Jsearch](https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch) API key. 
+   * `RAPID_API_HOST`: Provide the Rapid API host.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+3. Run the project with the command:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+pnnpm dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Technologies used
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+* [React](https://react.dev/)
+* [Astro](https://astro.build/)
+* [Shadcn](https://ui.shadcn.com/)
+* [MagicUI](https://magicui.design/)
+* [Vercel AI SDK](https://sdk.vercel.ai/)
+* [Lucide Icons](https://lucide.dev/icons/)
+* [Canvas confetti](https://github.com/catdad/canvas-confetti)
+* [FilePond](https://pqina.nl/filepond/)
+* [Zustand](https://zustand-demo.pmnd.rs/)
 
-Any static assets, like images, can be placed in the `public/` directory.
+## API's used
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+* [Groq](https://console.groq.com/)
+* [Jsearch](https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch)

@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@ai-sdk/openai':
-    specifier: ^0.0.45
+    specifier: 0.0.45
     version: 0.0.45(zod@3.23.8)
   '@astrojs/check':
     specifier: 0.9.2
@@ -18,37 +18,37 @@ dependencies:
     specifier: 3.6.2
     version: 3.6.2(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)(vite@5.4.0)
   '@astrojs/sitemap':
-    specifier: ^3.1.6
+    specifier: 3.1.6
     version: 3.1.6
   '@astrojs/tailwind':
     specifier: 5.1.0
     version: 5.1.0(astro@4.13.2)(tailwindcss@3.4.9)
   '@hookform/resolvers':
-    specifier: ^3.9.0
+    specifier: 3.9.0
     version: 3.9.0(react-hook-form@7.52.2)
   '@radix-ui/react-label':
-    specifier: ^2.1.0
+    specifier: 2.1.0
     version: 2.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
   '@radix-ui/react-popover':
-    specifier: ^1.1.1
+    specifier: 1.1.1
     version: 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
   '@radix-ui/react-radio-group':
-    specifier: ^1.2.0
+    specifier: 1.2.0
     version: 1.2.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
   '@radix-ui/react-slot':
     specifier: 1.1.0
     version: 1.1.0(@types/react@18.3.3)(react@18.3.1)
   '@radix-ui/react-tabs':
-    specifier: ^1.1.0
+    specifier: 1.1.0
     version: 1.1.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
   '@radix-ui/react-tooltip':
-    specifier: ^1.1.2
+    specifier: 1.1.2
     version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
   '@tanstack/react-query':
-    specifier: ^5.51.23
+    specifier: 5.51.23
     version: 5.51.23(react@18.3.1)
   '@tanstack/react-query-devtools':
-    specifier: ^5.51.23
+    specifier: 5.51.23
     version: 5.51.23(@tanstack/react-query@5.51.23)(react@18.3.1)
   '@types/react':
     specifier: 18.3.3
@@ -57,7 +57,7 @@ dependencies:
     specifier: 18.3.0
     version: 18.3.0
   ai:
-    specifier: ^3.3.5
+    specifier: 3.3.5
     version: 3.3.5(react@18.3.1)(svelte@4.2.18)(vue@3.4.37)(zod@3.23.8)
   astro:
     specifier: 4.13.2
@@ -66,7 +66,7 @@ dependencies:
     specifier: 0.0.1
     version: 0.0.1(astro@4.13.2)
   canvas-confetti:
-    specifier: ^1.9.3
+    specifier: 1.9.3
     version: 1.9.3
   class-variance-authority:
     specifier: 0.7.0
@@ -75,22 +75,19 @@ dependencies:
     specifier: 2.1.1
     version: 2.1.1
   file-type:
-    specifier: ^19.4.1
+    specifier: 19.4.1
     version: 19.4.1
   filepond:
-    specifier: ^4.31.1
+    specifier: 4.31.1
     version: 4.31.1
-  filepond-plugin-file-encode:
-    specifier: ^2.1.14
-    version: 2.1.14(filepond@4.31.1)
   filepond-plugin-file-validate-size:
-    specifier: ^2.2.8
+    specifier: 2.2.8
     version: 2.2.8(filepond@4.31.1)
   filepond-plugin-file-validate-type:
-    specifier: ^1.2.9
+    specifier: 1.2.9
     version: 1.2.9(filepond@4.31.1)
   filepond-plugin-image-preview:
-    specifier: ^4.6.12
+    specifier: 4.6.12
     version: 4.6.12(filepond@4.31.1)
   framer-motion:
     specifier: 11.3.24
@@ -99,7 +96,7 @@ dependencies:
     specifier: 0.427.0
     version: 0.427.0(react@18.3.1)
   next-themes:
-    specifier: ^0.3.0
+    specifier: 0.3.0
     version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
   react:
     specifier: 18.3.1
@@ -108,22 +105,22 @@ dependencies:
     specifier: 18.3.1
     version: 18.3.1(react@18.3.1)
   react-filepond:
-    specifier: ^7.1.2
+    specifier: 7.1.2
     version: 7.1.2(filepond@4.31.1)(react-dom@18.3.1)(react@18.3.1)
   react-hook-form:
-    specifier: ^7.52.2
+    specifier: 7.52.2
     version: 7.52.2(react@18.3.1)
   react-markdown:
-    specifier: ^9.0.1
+    specifier: 9.0.1
     version: 9.0.1(@types/react@18.3.3)(react@18.3.1)
   react-spinners:
-    specifier: ^0.14.1
+    specifier: 0.14.1
     version: 0.14.1(react-dom@18.3.1)(react@18.3.1)
   remark-gfm:
-    specifier: ^4.0.0
+    specifier: 4.0.0
     version: 4.0.0
   sonner:
-    specifier: ^1.5.0
+    specifier: 1.5.0
     version: 1.5.0(react-dom@18.3.1)(react@18.3.1)
   tailwind-merge:
     specifier: 2.4.0
@@ -135,19 +132,19 @@ dependencies:
     specifier: 1.0.7
     version: 1.0.7(tailwindcss@3.4.9)
   tesseract.js:
-    specifier: ^5.1.0
+    specifier: 5.1.0
     version: 5.1.0
   typescript:
     specifier: 5.5.4
     version: 5.5.4
   use-debounce:
-    specifier: ^10.0.2
+    specifier: 10.0.2
     version: 10.0.2(react@18.3.1)
   zod:
-    specifier: ^3.23.8
+    specifier: 3.23.8
     version: 3.23.8
   zustand:
-    specifier: ^4.5.4
+    specifier: 4.5.4
     version: 4.5.4(@types/react@18.3.3)(react@18.3.1)
 
 devDependencies:
@@ -155,10 +152,10 @@ devDependencies:
     specifier: 9.9.0
     version: 9.9.0
   '@types/canvas-confetti':
-    specifier: ^1.6.4
+    specifier: 1.6.4
     version: 1.6.4
   '@types/node':
-    specifier: ^22.2.0
+    specifier: 22.2.0
     version: 22.2.0
   '@typescript-eslint/parser':
     specifier: 8.0.1
@@ -4252,14 +4249,6 @@ packages:
 
   /file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
-    dev: false
-
-  /filepond-plugin-file-encode@2.1.14(filepond@4.31.1):
-    resolution: {integrity: sha512-uWHCyO9ZwMSime025TCRN7/Nay4+MvTh6DLjzV7i9BaAZ1FOvK1sACLydyjv0rL82rabyTSFEG0M1dA2nnshWg==}
-    peerDependencies:
-      filepond: '>=3.x <5.x'
-    dependencies:
-      filepond: 4.31.1
     dev: false
 
   /filepond-plugin-file-validate-size@2.2.8(filepond@4.31.1):

@@ -1,6 +1,7 @@
 import {
   InterviewProcessSteps,
   numberOfSteps,
+  type DocumentContent,
   type OfferDetails
 } from '@/types'
 import { create } from 'zustand'
@@ -14,7 +15,7 @@ interface State {
   hasInterviewFinished: boolean
   questions: string[]
   answers: string[]
-  documents: string[]
+  documentsContent: DocumentContent[]
 }
 
 interface Actions {
@@ -25,7 +26,9 @@ interface Actions {
   setHasInterviewFinished: (hasFinished: boolean) => void
   setAnswers: (answers: string[]) => void
   addAnswer: (answer: string) => void
-  setDocuments: (documents: string[]) => void
+  removeDocumentContentById: (id: string) => void
+  setDocumentsContent: (documents: DocumentContent[]) => void
+  addDocumentContent: (document: DocumentContent) => void
   setQuestions: (questions: string[]) => void
   nextStep: () => void
   prevStep: () => void
@@ -37,7 +40,7 @@ const initialState: State = {
   currentOffer: null,
   isCurrentOfferManual: false,
   isSimulatingInterview: false,
-  documents: [],
+  documentsContent: [],
   questions: [],
   hasInterviewFinished: false,
   answers: []
@@ -47,6 +50,8 @@ export const useInterviewStore = create<State & Actions>()(
   devtools((set, get) => ({
     ...initialState,
     setCurrentStep: (step: InterviewProcessSteps) => set({ currentStep: step }),
+    addDocumentContent: (document: DocumentContent) =>
+      set({ documentsContent: [...get().documentsContent, document] }),
     nextStep: () => {
       const currentStep = get().currentStep
 
@@ -54,7 +59,14 @@ export const useInterviewStore = create<State & Actions>()(
         set({ currentStep: currentStep + 1 })
       }
     },
-    setDocuments: (documents: string[]) => set({ documents }),
+    removeDocumentContentById: (id: string) =>
+      set({
+        documentsContent: get().documentsContent.filter(
+          (document) => document.id !== id
+        )
+      }),
+    setDocumentsContent: (documentsContent: DocumentContent[]) =>
+      set({ documentsContent }),
     setHasInterviewFinished: (hasFinished: boolean) =>
       set({ hasInterviewFinished: hasFinished }),
     addAnswer: (answer: string) => set({ answers: [...get().answers, answer] }),

@@ -65,6 +65,9 @@ export const ui = {
     'chat.send': 'Send',
     'error.creatingQuestions':
       'An error occurred while creating the questions.',
+    'fileUpload.error': 'An error occurred while uploading the file.',
+    'fileUpload.loading': 'Loading file...',
+    'fileUpload.success': 'File uploaded successfully',
     score: 'Score',
     restart: 'Try again',
     questions: 'Questions'
@@ -129,6 +132,9 @@ export const ui = {
     'error.creatingQuestions': 'Ocurrio un error al crear las preguntas.',
     score: 'Puntuación',
     questions: 'Preguntas',
-    restart: 'Comenzar de nuevo'
+    restart: 'Comenzar de nuevo',
+    'fileUpload.error': 'Ocurrio un error subiendo el archivo',
+    'fileUpload.loading': 'Cargando archivo...',
+    'fileUpload.success': 'Archivo subido correctamente'
   }
 } as const

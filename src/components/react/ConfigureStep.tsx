@@ -44,14 +44,14 @@ export const ConfigureStep = () => {
     }
   })
   const currentOffer = useInterviewStore((state) => state.currentOffer)
-  const documents = useInterviewStore((state) => state.documents)
+  const documentsContent = useInterviewStore((state) => state.documentsContent)
   const setIsSimulatingInterview = useInterviewStore(
     (state) => state.setIsSimulatingInterview
   )
   const nextStep = useInterviewStore((state) => state.nextStep)
   const setQuestions = useInterviewStore((state) => state.setQuestions)
-  const setDisableControlButtons = useUiStore(
-    (state) => state.setDisableControlButtons
+  const setHideControlButtons = useUiStore(
+    (state) => state.setHideControlButtons
   )
   const [sendData, setSendData] = useState<CreateQuestionsData | null>(null)
   const { isLoading, refetch, data, isError } =
@@ -91,7 +91,7 @@ export const ConfigureStep = () => {
       return
     }
 
-    setDisableControlButtons(true)
+    setHideControlButtons(true)
     refetch()
   }, [sendData])
 
@@ -106,7 +106,7 @@ export const ConfigureStep = () => {
       offer: currentOffer!,
       interviewStyle,
       additionalInfo,
-      documents,
+      documentsContent: documentsContent.map((d) => d.content),
       language: lang
     })
   }

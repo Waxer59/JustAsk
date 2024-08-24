@@ -25,9 +25,7 @@ const lang = getLangFromUrl(url)
 export const InterviewProcess = () => {
   const currentStep = useInterviewStore((state) => state.currentStep)
   const t = useTranslations(lang)
-  const disableControlButtons = useUiStore(
-    (state) => state.disableControlButtons
-  )
+  const hideControlButtons = useUiStore((state) => state.hideControlButtons)
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -49,7 +47,7 @@ export const InterviewProcess = () => {
           {currentStep === InterviewProcessSteps.COMPLETE && <FinalStep />}
 
           {!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) &&
-            !disableControlButtons && <ControlButtons />}
+            !hideControlButtons && <ControlButtons />}
         </div>
       </div>
       <Toaster />

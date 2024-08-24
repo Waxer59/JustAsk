@@ -19,7 +19,12 @@ export interface CreateQuestionsData {
   interviewStyle: string
   language: string
   additionalInfo?: string
-  documents?: string[]
+  documentsContent?: string[]
+}
+
+export interface DocumentContent {
+  id: string
+  content: string
 }
 
 export enum InterviewProcessSteps {

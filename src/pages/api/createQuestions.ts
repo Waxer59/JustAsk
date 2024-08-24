@@ -3,9 +3,7 @@ import { z } from 'zod'
 import { generateText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
 import { createQuestionsPrompt } from '@/helpers/createQuestionsPrompt'
-import { documentToText } from '@helpers/documentToText'
-import { ALLOWED_FILE_MIME_TYPES, LANGUAGE_TEXT } from '@constants'
-import { fileTypeFromBuffer } from 'file-type'
+import { LANGUAGE_TEXT } from '@constants'
 
 export const prerender = false
 
@@ -20,7 +18,7 @@ const bodySchema = z.object({
     description: z.string()
   }),
   interviewStyle: z.string(),
-  documents: z.string().array().optional(),
+  documentsContent: z.string().array().optional(),
   additionalInfo: z.string().optional(),
   language: z.enum(['es', 'en'])
 })
@@ -40,54 +38,12 @@ export const POST: APIRoute = async ({ request }) => {
     )
   }
 
-  const { documents, offer, interviewStyle, additionalInfo, language } =
+  const { documentsContent, offer, interviewStyle, additionalInfo, language } =
     parsedBody.data
-
-  // Check if all documents have an allowed mime type
-  if (documents && documents.length > 0) {
-    for (const document of documents) {
-      const fileType = await fileTypeFromBuffer(Buffer.from(document, 'base64'))
-      const isMimeTypeAllowed =
-        fileType && ALLOWED_FILE_MIME_TYPES.includes(fileType.mime)
-
-      if (!isMimeTypeAllowed) {
-        return new Response(
-          JSON.stringify({
-            error: 'Invalid file type'
-          }),
-          {
-            status: 400
-          }
-        )
-      }
-    }
-  }
 
   const languageText = LANGUAGE_TEXT[language]
 
   try {
-    const imagesPromises =
-      documents?.map(async (document) => {
-        const buffer = Buffer.from(document, 'base64')
-        const text = await documentToText(buffer)
-        return text
-      }) ?? []
-    let resolvedImages
-
-    try {
-      resolvedImages = await Promise.all(imagesPromises)
-    } catch (error) {
-      console.log(error)
-      return new Response(
-        JSON.stringify({
-          error: 'Error processing documents'
-        }),
-        {
-          status: 500
-        }
-      )
-    }
-
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),
       prompt: `Your task is to generate a specific set of tailored interview questions for each job offer.
@@ -130,7 +86,7 @@ export const POST: APIRoute = async ({ request }) => {
           description: offer.description.replace(/\s+/g, ' '),
           interviewStyle,
           additionalInfo,
-          filesContent: resolvedImages
+          filesContent: documentsContent
         })}
         `,
       toolChoice: 'required',

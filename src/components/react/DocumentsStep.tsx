@@ -2,51 +2,75 @@ import { FilePond, registerPlugin } from 'react-filepond'
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
-import FilePondPluginFileEncode from 'filepond-plugin-file-encode'
-
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import 'filepond/dist/filepond.min.css'
-import { useEffect } from 'react'
 import { useInterviewStore } from '@store/interview'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { ALLOWED_FILE_MIME_TYPES } from '@/constants'
+import { useUiStore } from '@/store/ui'
+import { documentToText } from '@/helpers/documentToText'
+import { toast } from 'sonner'
+import { useState } from 'react'
 
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginFileValidateSize,
-  FilePondPluginFileValidateType,
-  FilePondPluginFileEncode
+  FilePondPluginFileValidateType
 )
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 
 export const DocumentsStep = () => {
-  const setDocuments = useInterviewStore((state) => state.setDocuments)
+  const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
+  const setDisableControlButtons = useUiStore(
+    (state) => state.setDisableControlButtons
+  )
+  const addDocumentContent = useInterviewStore(
+    (state) => state.addDocumentContent
+  )
+  const removeDocumentContentById = useInterviewStore(
+    (state) => state.removeDocumentContentById
+  )
   const t = useTranslations(lang)
 
-  const updateDocuments = (e: any) => {
-    const filepond = e.detail.pond
-    const files = filepond.getFiles()
-
-    setDocuments(files.map((file: any) => file.getFileEncodeBase64String()))
+  const removeFile = (file: any) => {
+    const deletedFileId = file.id
+    removeDocumentContentById(deletedFileId)
   }
 
-  useEffect(() => {
-    document.addEventListener('FilePond:addfile', updateDocuments)
+  const addFile = async (file: any) => {
+    const uploadedFileId = file.id
+    const uploadedFile = file.file
+    setDisableControlButtons(true)
+    setIsUploadingFile(true)
 
-    document.addEventListener('FilePond:removefile', updateDocuments)
-
-    return () => {
-      document.removeEventListener('FilePond:addfile', updateDocuments)
-      document.removeEventListener('FilePond:removefile', updateDocuments)
-    }
-  }, [])
+    toast.promise(documentToText(uploadedFile), {
+      loading: t('fileUpload.loading'),
+      success: (text) => {
+        addDocumentContent({
+          id: uploadedFileId,
+          content: text
+        })
+        setDisableControlButtons(false)
+        setIsUploadingFile(false)
+        return t('fileUpload.success')
+      },
+      error: () => {
+        setDisableControlButtons(false)
+        setIsUploadingFile(false)
+        return t('fileUpload.error')
+      }
+    })
+  }
 
   return (
     <div className="flex flex-col gap-8 items-center w-full">
       <h2 className="text-4xl font-semibold italic">{t('step2.title')}</h2>
       <FilePond
+        onaddfile={(_, file) => addFile(file)}
+        onremovefile={(_, file) => removeFile(file)}
+        disabled={isUploadingFile}
         allowMultiple={true}
         maxFiles={10}
         credits={false}

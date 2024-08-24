@@ -13,7 +13,7 @@ export const LANGUAGE_TEXT = {
   en: 'english'
 }
 
-export const CONFETTI_DURATION = 2.5 * 1000 // ms
+export const CONFETTI_DURATION = 1.5 * 1000 // ms
 export const CONFETTI_DEFAULTS = {
   startVelocity: 30,
   spread: 360,

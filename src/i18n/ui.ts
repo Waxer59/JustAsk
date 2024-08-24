@@ -19,7 +19,7 @@ export const ui = {
     'steps.title': 'How it works?',
     'steps.1.title': '1. Find or create your ideal offer',
     'steps.1.desc':
-      'Discover job opportunities on platforms like InfoJobs, Indeed, Glassdoor, and many more. We tailor the questions to the offer you choose, or you can add it manually if you prefer!',
+      'Discover job opportunities on platforms like Indeed, Glassdoor, and many more. We tailor the questions to the offer you choose, or you can add it manually if you prefer!',
     'steps.2.title': '2. Customize it your way',
     'steps.2.desc':
       'Upload key documents like your CV, a SWOT analysis, or any material you consider essential to stand out in your interview.',
@@ -63,6 +63,8 @@ export const ui = {
     'feedback.error': 'Error when grading answers',
     'chat.error.emptyMessage': 'You cannot send an empty message',
     'chat.send': 'Send',
+    'error.creatingQuestions':
+      'An error occurred while creating the questions.',
     score: 'Score',
     restart: 'Try again',
     questions: 'Questions'
@@ -80,7 +82,7 @@ export const ui = {
     'steps.title': '¿Cómo funciona?',
     'steps.1.title': '1. Encuentra o crea tu oferta ideal',
     'steps.1.desc':
-      'Descubre oportunidades laborales en plataformas como InfoJobs, Indeed, Glassdoor, y muchas más. Adaptamos las preguntas a la oferta que elijas, ¡o también puedes agregarla manualmente si lo prefieres!',
+      'Descubre oportunidades laborales en plataformas como Indeed, Glassdoor, y muchas más. Adaptamos las preguntas a la oferta que elijas, ¡o también puedes agregarla manualmente si lo prefieres!',
     'steps.2.title': '2. Personalízalo a tu manera',
     'steps.2.desc':
       'Sube documentos clave como tu CV, una tabla DAFO o cualquier material que consideres esencial para destacar en tu entrevista.',
@@ -124,6 +126,7 @@ export const ui = {
     'feedback.error': 'Error al calificar las respuestas',
     'chat.error.emptyMessage': 'No puedes enviar un mensaje vacio',
     'chat.send': 'Enviar',
+    'error.creatingQuestions': 'Ocurrio un error al crear las preguntas.',
     score: 'Puntuación',
     questions: 'Preguntas',
     restart: 'Comenzar de nuevo'

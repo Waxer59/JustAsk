@@ -20,7 +20,9 @@ export const LanguagePicker = () => {
           {langsWithoutCurrentLang.map((l) => (
             <li key={l}>
               <Button asChild variant="ghost">
-                <a href={l !== defaultLang ? `/${l}` : '/'}>{l}</a>
+                <a href={l !== defaultLang ? `/${l}` : '/'} data-astro-reload>
+                  {l}
+                </a>
               </Button>
             </li>
           ))}

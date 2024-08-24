@@ -16,10 +16,24 @@ export const createQuestionsPrompt = ({
   * Description: ${description}
 - Interview Style: 
   * ${interviewStyle}
-- Additional Information (if any):
 
-${additionalInfo ? `* Additional Information: ${additionalInfo}` : ''}
+${
+  additionalInfo
+    ? `- Additional Information (You should take into account the following information): 
+* Additional Information: ${additionalInfo}`
+    : ''
+}
 
-- Documents Provided (if any):
-
-${filesContent ? filesContent.map((text, idx) => `Document ${idx}: ${text}`).join('\n') : ''}`
+${
+  filesContent
+    ? filesContent
+        .map(
+          (
+            text,
+            idx
+          ) => `- Documents Provided (You should be aware of and ask questions about these documents):
+Document ${idx}: ${text}`
+        )
+        .join('\n')
+    : ''
+}`

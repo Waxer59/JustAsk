@@ -24,5 +24,8 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: false
     }
+  },
+  security: {
+    checkOrigin: true
   }
 });

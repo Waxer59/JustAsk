@@ -15,7 +15,7 @@ export const LanguagePicker = () => {
           {lang}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto px-3 py-2">
+      <PopoverContent className="w-auto p-2">
         <ul className="flex flex-col items-center gap-2 uppercase">
           {langsWithoutCurrentLang.map((l) => (
             <li key={l}>

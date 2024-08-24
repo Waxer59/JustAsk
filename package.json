@@ -34,6 +34,7 @@
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
+    "file-type": "^19.4.1",
     "filepond": "^4.31.1",
     "filepond-plugin-file-encode": "^2.1.14",
     "filepond-plugin-file-validate-size": "^2.2.8",

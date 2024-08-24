@@ -28,10 +28,8 @@ const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 
 const formSchema = z.object({
-  type: z.enum(['interview', 'questions'], {
-    required_error: 'Tienes que seleccionar el tipo de simulacion'
-  }),
-  interviewStyle: z.string(),
+  type: z.enum(['interview', 'questions']),
+  interviewStyle: z.string().min(1, { message: '' }),
   additionalInfo: z.string().optional()
 })
 
@@ -109,7 +107,7 @@ export const ConfigureStep = () => {
       interviewStyle,
       additionalInfo,
       documents,
-      language: 'es'
+      language: lang
     })
   }
 
@@ -160,7 +158,7 @@ export const ConfigureStep = () => {
                     className="flex flex-col space-y-1">
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="questions" />
+                        <RadioGroupItem value="interview" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         {t('step3.simulation.option.1')}
@@ -168,7 +166,7 @@ export const ConfigureStep = () => {
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="interview" />
+                        <RadioGroupItem value="questions" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         {t('step3.simulation.option.2')}

@@ -9,6 +9,14 @@ export const ALLOWED_JOB_OFFERS_SITES_ARRAY = Object.values(
   ALLOWED_JOB_OFFERS_SITES
 ) as string[]
 
+export const ALLOWED_FILE_MIME_TYPES = [
+  'image/bmp',
+  'image/jpeg',
+  'image/png',
+  'image/pbm',
+  'image/webp'
+]
+
 export const NUMBER_OF_INTERVIEW_QUESTIONS = 5
 
 export const LANGUAGE_TEXT = {

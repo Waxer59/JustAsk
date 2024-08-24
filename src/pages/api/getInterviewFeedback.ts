@@ -119,6 +119,8 @@ export const POST: APIRoute = async ({ request }) => {
 
       ---
 
+      User input:
+
       ${createFeedbackPrompt({ offer, interviewQuestions, interviewResponses })}
         `,
       toolChoice: 'required',

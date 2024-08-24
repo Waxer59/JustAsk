@@ -17,6 +17,9 @@ export const createQuestionsPrompt = ({
 - Interview Style: 
   * ${interviewStyle}
 - Additional Information (if any):
+
 ${additionalInfo ? `* Additional Information: ${additionalInfo}` : ''}
+
 - Documents Provided (if any):
+
 ${filesContent ? filesContent.map((text, idx) => `Document ${idx}: ${text}`).join('\n') : ''}`

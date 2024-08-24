@@ -9,6 +9,7 @@ import 'filepond/dist/filepond.min.css'
 import { useEffect } from 'react'
 import { useInterviewStore } from '@store/interview'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { ALLOWED_FILE_MIME_TYPES } from '@/constants'
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -49,13 +50,7 @@ export const DocumentsStep = () => {
         allowMultiple={true}
         maxFiles={10}
         credits={false}
-        acceptedFileTypes={[
-          'image/bmp',
-          'image/jpeg',
-          'image/png',
-          'image/pbm',
-          'image/webp'
-        ]}
+        acceptedFileTypes={ALLOWED_FILE_MIME_TYPES}
         maxTotalFileSize="50MB"
       />
     </div>

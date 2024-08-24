@@ -40,7 +40,7 @@ export const FinalStep = () => {
           offer: currentOffer,
           interviewQuestions,
           interviewResponses: answers,
-          language: 'es'
+          language: lang
         })
       }).then((res) => res.json())
   })

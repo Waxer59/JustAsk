@@ -21,7 +21,7 @@ pnpm i
 3. Run the project with the command:
 
 ```bash
-pnnpm dev
+pnpm dev
 ```
 
 ## Technologies used

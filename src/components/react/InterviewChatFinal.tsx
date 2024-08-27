@@ -2,27 +2,37 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { useInterviewStore } from '@/store/interview'
 import { AutosizeTextarea } from '@ui/autosize-textarea'
 import { Button } from '@ui/button'
+import { Toggle } from '@ui/toggle'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
 } from '@ui/tooltip'
-import { Send } from 'lucide-react'
+import { Mic, Send } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
+
+const LANGS_CODES = {
+  en: 'en-US',
+  es: 'es-ES'
+}
 
 interface Props {
   questions: string[]
 }
+
+const SpeechRecognition =
+  // @ts-expect-error https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#javascript
+  window.SpeechRecognition || window.webkitSpeechRecognition
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 
 export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
   const t = useTranslations(lang)
-  const userMessages = useRef<string[]>([])
   const addAnswer = useInterviewStore((state) => state.addAnswer)
+  const [isTalking, setIsTalking] = useState<boolean>(false)
   const [allMessages, setAllMessages] = useState<MessageProps[]>([
     {
       message: questions[0],
@@ -32,13 +42,61 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
   const setHasInterviewFinished = useInterviewStore(
     (state) => state.setHasInterviewFinished
   )
-  const [currentMessage, setcurrentMessage] = useState<string>('')
+  const [currentMessage, setCurrentMessage] = useState<string>('')
+  const userMessages = useRef<string[]>([])
+  const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const messagesRef = useRef<HTMLUListElement>(null)
 
   const finishInterview = () => {
     setHasInterviewFinished(true)
   }
+
+  const onToggleClick = () => {
+    if (!recognitionRef.current) return
+
+    const newState = !isTalking
+
+    setIsTalking(newState)
+
+    if (newState) {
+      recognitionRef.current.start()
+    } else {
+      recognitionRef.current.stop()
+    }
+  }
+
+  useEffect(() => {
+    if (!SpeechRecognition) {
+      toast.error(t('chat.error.speechRecognition'))
+      return
+    }
+
+    const recognition = new SpeechRecognition()
+
+    recognition.lang = navigator.language
+    recognition.interimResults = true
+    recognition.lang = LANGS_CODES[lang]
+    recognition.maxAlternatives = 1
+    recognition.continuous = true
+
+    recognition.onresult = (event: any) => {
+      const speechToText = Object.keys(event.results)
+        .map((result: any) => event.results[result][0].transcript)
+        .join('')
+      setCurrentMessage(currentMessage + speechToText)
+    }
+
+    recognition.onend = () => {
+      setIsTalking(false)
+    }
+
+    recognitionRef.current = recognition
+
+    return () => {
+      recognition.stop()
+    }
+  }, [])
 
   useEffect(() => {
     messagesRef.current?.scrollTo({
@@ -68,7 +126,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
 
       if (formRef.current) {
         formRef.current.requestSubmit()
-        setcurrentMessage('')
+        setCurrentMessage('')
       }
     }
   }
@@ -102,11 +160,20 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
           onKeyDown={handleContentKeyDown}
           placeholder="..."
           value={currentMessage}
-          onChange={(e) => setcurrentMessage(e.target.value)}
+          onChange={(e) => setCurrentMessage(e.target.value)}
           name="message"
           maxHeight={200}
-          className="resize-none text-lg h-[54px] pr-[50px]"
+          className="resize-none text-lg h-[54px] pr-[50px] pl-[70px]"
         />
+        <Toggle
+          onClick={onToggleClick}
+          pressed={isTalking}
+          onPressedChange={() => setIsTalking(!isTalking)}
+          variant="outline"
+          aria-label={t('chat.talk')}
+          className="absolute top-2 left-2">
+          <Mic />
+        </Toggle>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger className="absolute top-2 right-2" asChild>

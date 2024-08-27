@@ -70,7 +70,10 @@ export const ui = {
     'fileUpload.success': 'File uploaded successfully',
     score: 'Score',
     restart: 'Try again',
-    questions: 'Questions'
+    questions: 'Questions',
+    'chat.talk': 'Talk',
+    'chat.error.speechRecognition':
+      'Your browser does not support speech recognition, please use a browser that supports this feature.'
   },
   es: {
     'meta.description':
@@ -135,6 +138,9 @@ export const ui = {
     restart: 'Comenzar de nuevo',
     'fileUpload.error': 'Ocurrio un error subiendo el archivo',
     'fileUpload.loading': 'Cargando archivo...',
-    'fileUpload.success': 'Archivo subido correctamente'
+    'fileUpload.success': 'Archivo subido correctamente',
+    'chat.talk': 'Hablar',
+    'chat.error.speechRecognition':
+      'Tu navegador no soporta el reconocimiento de voz, por favor utiliza un navegador compatible con esta característica.'
   }
 } as const

@@ -1,8 +1,13 @@
-import { createWorker } from 'tesseract.js'
+// @ts-expect-error no types
+import scribe from 'scribe.js-ocr'
 
-export const documentToText = async (buffer: Buffer): Promise<string> => {
-  const worker = await createWorker(['eng', 'spa'])
-  const ret = await worker.recognize(buffer)
-  await worker.terminate()
-  return ret.data.text
+let isScribeInitialized = false
+
+export const documentToText = async (file: File): Promise<string> => {
+  if (!isScribeInitialized) {
+    await scribe.init({ ocr: true, font: true })
+    isScribeInitialized = true
+  }
+  const text = await scribe.extractText([file])
+  return text
 }

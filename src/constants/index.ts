@@ -3,7 +3,8 @@ export const ALLOWED_FILE_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/pbm',
-  'image/webp'
+  'image/webp',
+  'application/pdf'
 ]
 
 export const NUMBER_OF_INTERVIEW_QUESTIONS = 5

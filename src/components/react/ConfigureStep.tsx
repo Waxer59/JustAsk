@@ -59,7 +59,7 @@ export const ConfigureStep = () => {
       queryKey: ['questions', sendData],
       enabled: false,
       retry: false,
-      queryFn: ({ queryKey }) => {
+      queryFn: async ({ queryKey }) => {
         const [, data] = queryKey
         return fetch('/api/createQuestions', {
           method: 'POST',

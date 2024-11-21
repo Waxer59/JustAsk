@@ -1,5 +1,5 @@
 // @ts-expect-error no types
-import scribe from 'scribe.js-ocr'
+import scribe from 'scribe.js-ocr/scribe.js'
 
 let isScribeInitialized = false
 

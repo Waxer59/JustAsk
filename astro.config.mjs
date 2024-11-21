@@ -14,15 +14,8 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ['scribe.js-ocr']
     },
-    build: {
-      target: 'esnext',
-      minify: false, 
-      esbuild: {
-        target: 'esnext', 
-        supported: {
-          'top-level-await': true,  
-        },
-      },
+    worker: {
+      format: 'es'
     }
   },
   site: cannonicalURL,

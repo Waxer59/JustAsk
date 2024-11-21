@@ -12,15 +12,17 @@ import {
 import { Mic, Send } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
-
-const LANGS_CODES = {
-  en: 'en-US',
-  es: 'es-ES'
-}
+import hark, { type Harker } from 'hark'
+import { getUserMicrophone } from '@/helpers/getUserMicrophone'
 
 interface Props {
   questions: string[]
 }
+
+// const LANGS_CODES = {
+//   en: 'en-US',
+//   es: 'es-ES'
+// }
 
 const SpeechRecognition =
   // @ts-expect-error https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#javascript
@@ -43,6 +45,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
     (state) => state.setHasInterviewFinished
   )
   const [currentMessage, setCurrentMessage] = useState<string>('')
+  const [mic, setMic] = useState<MediaStream | null>(null)
   const userMessages = useRef<string[]>([])
   const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -67,16 +70,21 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
   }
 
   useEffect(() => {
-    if (!SpeechRecognition) {
+    getMic()
+  }, [])
+
+  useEffect(() => {
+    if (!SpeechRecognition || !mic) {
       toast.error(t('chat.error.speechRecognition'))
       return
     }
 
     const recognition = new SpeechRecognition()
+    const speechEvents: Harker = hark(mic)
 
-    recognition.lang = navigator.language
+    // recognition.lang = LANGS_CODES[lang]
+    recognition.lang = 'es-ES'
     recognition.interimResults = true
-    recognition.lang = LANGS_CODES[lang]
     recognition.maxAlternatives = 1
     recognition.continuous = true
 
@@ -84,6 +92,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       const speechToText = Object.keys(event.results)
         .map((result: any) => event.results[result][0].transcript)
         .join('')
+      console.log(event.results)
       setCurrentMessage(currentMessage + speechToText)
     }
 
@@ -91,12 +100,16 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       setIsTalking(false)
     }
 
+    speechEvents.on('stopped_speaking', () => {
+      recognition.stop()
+    })
+
     recognitionRef.current = recognition
 
     return () => {
       recognition.stop()
     }
-  }, [])
+  }, [mic])
 
   useEffect(() => {
     messagesRef.current?.scrollTo({
@@ -104,6 +117,17 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       top: messagesRef.current?.scrollHeight
     })
   }, [allMessages])
+
+  const getMic = async () => {
+    const mic = await getUserMicrophone()
+
+    if (!mic) {
+      toast.error(t('chat.error.speechRecognition'))
+      return
+    }
+
+    setMic(mic)
+  }
 
   const nextQuestion = () => {
     const currentQuestionIdx = userMessages.current.length
@@ -146,6 +170,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       { message: currentMessage, isUser: true }
     ])
     userMessages.current.push(currentMessage)
+    setCurrentMessage('')
 
     nextQuestion()
   }

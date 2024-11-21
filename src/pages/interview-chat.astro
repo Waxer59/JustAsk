@@ -1,0 +1,22 @@
+---
+import { InterviewChatFinal } from '@/components/react/InterviewChatFinal'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+---
+
+<BaseLayout>
+  <InterviewChatFinal
+    questions={[
+      'What is your name?',
+      'What is your age?',
+      'What is your name?',
+      'What is your age?',
+      'What is your name?',
+      'What is your age?',
+      'What is your name?',
+      'What is your age?',
+      'What is your name?',
+      'What is your age?'
+    ]}
+    client:only="react"
+  />
+</BaseLayout>

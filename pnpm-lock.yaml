@@ -92,6 +92,9 @@ dependencies:
   framer-motion:
     specifier: 11.3.24
     version: 11.3.24(react-dom@18.3.1)(react@18.3.1)
+  hark:
+    specifier: ^1.2.3
+    version: 1.2.3
   lucide-react:
     specifier: 0.427.0
     version: 0.427.0(react@18.3.1)
@@ -154,6 +157,9 @@ devDependencies:
   '@types/canvas-confetti':
     specifier: 1.6.4
     version: 1.6.4
+  '@types/hark':
+    specifier: ^1.2.5
+    version: 1.2.5
   '@types/node':
     specifier: 22.2.0
     version: 22.2.0
@@ -2451,6 +2457,10 @@ packages:
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: false
+
+  /@types/hark@1.2.5:
+    resolution: {integrity: sha512-PyVF1PIrbKHeC1+6W/HZoMT40DLoQ0d1FAxuv7Vcg+XBfmpio8qr+y29chxYutJpra/K2MWXiXm/lScEv2E9pg==}
+    dev: true
 
   /@types/hast@3.0.4:
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
@@ -4843,6 +4853,12 @@ packages:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
+    dev: false
+
+  /hark@1.2.3:
+    resolution: {integrity: sha512-u68vz9SCa38ESiFJSDjqK8XbXqWzyot7Cj6Y2b6jk2NJ+II3MY2dIrLMg/kjtIAun4Y1DHF/20hfx4rq1G5GMg==}
+    dependencies:
+      wildemitter: 1.2.1
     dev: false
 
   /has-bigints@1.0.2:
@@ -8557,6 +8573,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       string-width: 5.1.2
+    dev: false
+
+  /wildemitter@1.2.1:
+    resolution: {integrity: sha512-UMmSUoIQSir+XbBpTxOTS53uJ8s/lVhADCkEbhfRjUGFDPme/XGOb0sBWLx5sTz7Wx/2+TlAw1eK9O5lw5PiEw==}
     dev: false
 
   /word-wrap@1.2.5:

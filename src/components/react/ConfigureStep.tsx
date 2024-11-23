@@ -73,9 +73,7 @@ export const ConfigureStep = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(
-        'Ocurrio un error al crear las preguntas, intenta de nuevo mas tarde.'
-      )
+      toast.error(t('error.creatingQuestions'))
     }
   }, [isError])
 

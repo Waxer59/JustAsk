@@ -12,14 +12,16 @@ import {
 import { Mic, Send } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
+import hark, { type Harker } from 'hark'
+import { getUserMicrophone } from '@/helpers/getUserMicrophone'
+import { LANG_CODES } from '@/constants'
+import { Card } from '@/ui/card'
 
-const LANGS_CODES = {
-  en: 'en-US',
-  es: 'es-ES'
-}
+const SILENCE_TIME = 3 * 1000 // 3 sec
 
 interface Props {
   questions: string[]
+  langRecognition?: LANG_CODES
 }
 
 const SpeechRecognition =
@@ -29,10 +31,14 @@ const SpeechRecognition =
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 
-export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
+export const InterviewChatFinal: React.FC<Props> = ({
+  questions,
+  langRecognition = LANG_CODES.es
+}) => {
   const t = useTranslations(lang)
   const addAnswer = useInterviewStore((state) => state.addAnswer)
   const [isTalking, setIsTalking] = useState<boolean>(false)
+  const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')
   const [allMessages, setAllMessages] = useState<MessageProps[]>([
     {
       message: questions[0],
@@ -43,6 +49,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
     (state) => state.setHasInterviewFinished
   )
   const [currentMessage, setCurrentMessage] = useState<string>('')
+  const [mic, setMic] = useState<MediaStream | null>(null)
   const userMessages = useRef<string[]>([])
   const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -67,36 +74,95 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
   }
 
   useEffect(() => {
+    getMic()
+  }, [])
+
+  useEffect(() => {
+    if (!mic) return
     if (!SpeechRecognition) {
       toast.error(t('chat.error.speechRecognition'))
       return
     }
 
     const recognition = new SpeechRecognition()
+    const speechEvents: Harker = hark(mic)
 
-    recognition.lang = navigator.language
+    let isSpeaking = false
+    let isRecognizing = false
+    let silenceTime: number | null = null
+    let timeCountInterval: NodeJS.Timeout | null = null
+
+    recognition.lang = langRecognition
     recognition.interimResults = true
-    recognition.lang = LANGS_CODES[lang]
     recognition.maxAlternatives = 1
     recognition.continuous = true
 
-    recognition.onresult = (event: any) => {
-      const speechToText = Object.keys(event.results)
-        .map((result: any) => event.results[result][0].transcript)
-        .join('')
-      setCurrentMessage(currentMessage + speechToText)
+    recognition.onstart = () => {
+      isRecognizing = true
     }
 
     recognition.onend = () => {
       setIsTalking(false)
+      setTalkingSubtitle('')
+      isRecognizing = false
+
+      if (timeCountInterval) {
+        clearInterval(timeCountInterval)
+      }
     }
+
+    recognition.onresult = (event: any) => {
+      const unfilteredTextToSpeech = Object.keys(event.results)
+        .map((result) => event.results[result][0].transcript)
+        .join('')
+      const finalTextToSpeech = Object.keys(event.results)
+        .filter((result) => event.results[result].isFinal)
+        .map((result: any) => event.results[result][0].transcript)
+        .join('')
+      setCurrentMessage((prev) => prev + finalTextToSpeech)
+      setTalkingSubtitle(unfilteredTextToSpeech)
+    }
+
+    speechEvents.on('stopped_speaking', () => {
+      isSpeaking = false
+
+      if (!isRecognizing) return
+
+      if (!silenceTime) {
+        silenceTime = Date.now()
+      }
+
+      if (timeCountInterval) {
+        return
+      }
+
+      timeCountInterval = setInterval(() => {
+        if (
+          silenceTime &&
+          !isSpeaking &&
+          Date.now() - silenceTime >= SILENCE_TIME
+        ) {
+          recognition.stop()
+          clearTimeout(timeCountInterval!)
+          timeCountInterval = null
+        }
+      }, SILENCE_TIME)
+    })
+
+    speechEvents.on('speaking', () => {
+      if (!isRecognizing) return
+
+      isSpeaking = true
+    })
 
     recognitionRef.current = recognition
 
     return () => {
-      recognition.stop()
+      if (timeCountInterval) {
+        clearInterval(timeCountInterval)
+      }
     }
-  }, [])
+  }, [mic])
 
   useEffect(() => {
     messagesRef.current?.scrollTo({
@@ -104,6 +170,17 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       top: messagesRef.current?.scrollHeight
     })
   }, [allMessages])
+
+  const getMic = async () => {
+    const mic = await getUserMicrophone()
+
+    if (!mic) {
+      toast.error(t('chat.error.speechRecognition'))
+      return
+    }
+
+    setMic(mic)
+  }
 
   const nextQuestion = () => {
     const currentQuestionIdx = userMessages.current.length
@@ -127,6 +204,7 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
       if (formRef.current) {
         formRef.current.requestSubmit()
         setCurrentMessage('')
+        setTalkingSubtitle('')
       }
     }
   }
@@ -141,11 +219,14 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
 
     // Add the user's message to the state
     addAnswer(currentMessage)
+    recognitionRef.current.stop()
     setAllMessages((prev) => [
       ...prev,
       { message: currentMessage, isUser: true }
     ])
     userMessages.current.push(currentMessage)
+    setCurrentMessage('')
+    setTalkingSubtitle('')
 
     nextQuestion()
   }
@@ -154,8 +235,13 @@ export const InterviewChatFinal: React.FC<Props> = ({ questions }) => {
     <div className="w-full">
       <form
         ref={formRef}
-        className="absolute bottom-16 max-w-5xl w-[90%]"
+        className="absolute bottom-16 max-w-5xl w-[90%] flex flex-col items-center"
         onSubmit={handleSendMessage}>
+        {talkingSubtitle.length > 0 && (
+          <Card className="absolute -top-14 max-w-3xl mx-auto p-2 overflow-hidden">
+            <p className="text-nowrap [direction:rtl]">{talkingSubtitle}</p>
+          </Card>
+        )}
         <AutosizeTextarea
           onKeyDown={handleContentKeyDown}
           placeholder="..."

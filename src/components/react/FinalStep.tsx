@@ -1,7 +1,7 @@
 import { useInterviewStore } from '@/store/interview'
 import { Questions } from './QuestionsFinal'
 import { InterviewChatFinal } from './InterviewChatFinal'
-import { NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
+import { LANG_CODES, NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
 import { Loading } from './Loading'
 import { InterviewFeedbackFinal } from './InterviewFeedbackFinal'
 import { useQuery } from '@tanstack/react-query'
@@ -55,7 +55,10 @@ export const FinalStep = () => {
     <>
       {!isSimulatingInterview && <Questions questions={questions} />}
       {isSimulatingInterview && !hasInterviewFinished && (
-        <InterviewChatFinal questions={interviewQuestions} />
+        <InterviewChatFinal
+          questions={interviewQuestions}
+          langRecognition={LANG_CODES[lang]}
+        />
       )}
 
       {/* Feedback */}

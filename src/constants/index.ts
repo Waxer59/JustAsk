@@ -7,6 +7,11 @@ export const ALLOWED_FILE_MIME_TYPES = [
   'application/pdf'
 ]
 
+export enum LANG_CODES {
+  en = 'en-US',
+  es = 'es-ES'
+}
+
 export const NUMBER_OF_INTERVIEW_QUESTIONS = 5
 
 export const LANGUAGE_TEXT = {

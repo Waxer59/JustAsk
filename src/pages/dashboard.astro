@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { CreateSurveyButton } from '@/components/react/CreateSurveyButton'
+import { LanguagePicker } from '@/components/react/LanguagePicker'
+import { ProfileButton } from '@/components/react/ProfileButton'
+import { Card } from '@/ui/card'
+---
+
+<BaseLayout>
+  <header class="mt-16 flex justify-between items-center w-full relative">
+    <LanguagePicker client:only="react" />
+    <ProfileButton client:only="react" />
+  </header>
+  <div class="flex justify-between items-end mt-8">
+    <h1 class="text-4xl font-bold">Dashboard</h1>
+    <CreateSurveyButton client:only="react" />
+  </div>
+  <main class="mt-20">
+    <ul class="flex">
+      <Card className="p-4 max-w-sm w-full">
+        <h2 class="text-2xl font-bold">Lorem ipsum</h2>
+      </Card>
+    </ul>
+  </main>
+</BaseLayout>

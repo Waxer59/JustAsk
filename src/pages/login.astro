@@ -1,0 +1,13 @@
+---
+import AuthLayout from '@/layouts/react/AuthLayout'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { LoginForm } from '@/components/react/LoginForm'
+---
+
+<BaseLayout>
+  <AuthLayout
+    title="Login"
+    description="Enter your email to receive a login link">
+    <LoginForm client:only="react" />
+  </AuthLayout>
+</BaseLayout>

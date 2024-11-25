@@ -1,13 +1,17 @@
-import { defaultLang, languages } from '@/i18n/ui'
+import { languages } from '@/i18n/ui'
 import { getLangFromUrl } from '@/i18n/utils'
 import { Button } from '@/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@ui/popover'
-
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const langsWithoutCurrentLang = Object.keys(languages).filter((l) => l !== lang)
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 export const LanguagePicker = () => {
+  const url = new URL(window.location.href)
+  const lang = getLangFromUrl(url)
+  const pathnameWithoutLocale = url.pathname.replace(`/${lang}`, '')
+  const langsWithoutCurrentLang = Object.keys(languages).filter(
+    (l) => l !== lang
+  )
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -20,7 +24,9 @@ export const LanguagePicker = () => {
           {langsWithoutCurrentLang.map((l) => (
             <li key={l}>
               <Button asChild variant="ghost">
-                <a href={l !== defaultLang ? `/${l}` : '/'} data-astro-reload>
+                <a
+                  href={getRelativeLocaleUrl(l, pathnameWithoutLocale)}
+                  data-astro-reload>
                   {l}
                 </a>
               </Button>

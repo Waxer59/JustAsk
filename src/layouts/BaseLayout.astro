@@ -6,11 +6,11 @@ import '@styles/globals.css'
 const lang = getLangFromUrl(Astro.url)
 ---
 
-<html lang={lang} class="dark h-full">
+<html lang={lang} class="dark">
   <head>
     <CommonHead />
   </head>
-  <body class="max-w-7xl mx-auto w-[90%] h-full">
+  <body class="max-w-7xl mx-auto w-[90%]">
     <slot />
   </body>
 </html>

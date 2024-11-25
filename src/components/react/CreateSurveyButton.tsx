@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/ui/dialog'
+import { Form, FormField } from '@/ui/form'
 
 export function CreateSurveyButton() {
   return (
@@ -22,6 +23,10 @@ export function CreateSurveyButton() {
               Create a survey to get instant feedback from your customers.
             </DialogDescription>
           </DialogHeader>
+          <Form>
+            <FormField label="Title" name="title" type="text" />
+            <FormField label="Description" name="description" type="text" />
+          </Form>
         </DialogContent>
       </Dialog>
     </>

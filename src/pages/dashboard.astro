@@ -3,7 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import { CreateSurveyButton } from '@/components/react/CreateSurveyButton'
 import { LanguagePicker } from '@/components/react/LanguagePicker'
 import { ProfileButton } from '@/components/react/ProfileButton'
-import { Card } from '@/ui/card'
+import { SurveyCard } from '@/components/react/SurveyCard'
 ---
 
 <BaseLayout>
@@ -11,15 +11,25 @@ import { Card } from '@/ui/card'
     <LanguagePicker client:only="react" />
     <ProfileButton client:only="react" />
   </header>
-  <div class="flex justify-between items-end mt-8">
+  <div
+    class="flex flex-col gap-4 items-center sm:flex-row justify-between sm:items-end mt-8">
     <h1 class="text-4xl font-bold">Dashboard</h1>
     <CreateSurveyButton client:only="react" />
   </div>
-  <main class="mt-20">
-    <ul class="flex">
-      <Card className="p-4 max-w-sm w-full">
-        <h2 class="text-2xl font-bold">Lorem ipsum</h2>
-      </Card>
+  <main class="my-20">
+    <ul class="grid grid-cols-6 gap-4">
+      {
+        Array.from({ length: 10 }).map(() => (
+          <li class="col-span-full md:col-span-3 xl:col-span-2">
+            <SurveyCard
+              title="Survey 1"
+              description="This is a description of the survey"
+              numberOfResponses={100}
+              client:only="react"
+            />
+          </li>
+        ))
+      }
     </ul>
   </main>
 </BaseLayout>

@@ -1,11 +1,22 @@
-import { Button } from '@/ui/button'
-import { Card } from '@/ui/card'
+import { Button } from '@ui/button'
+import { Card } from '@ui/card'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@ui/alert-dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from '@/ui/dropdown-menu'
+} from '@ui/dropdown-menu'
 import {
   EllipsisIcon,
   PencilIcon,
@@ -32,30 +43,47 @@ export const SurveyCard = ({
           <h2 className="text-2xl font-bold truncate" title={title}>
             {title}
           </h2>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost">
-                <EllipsisIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem asChild>
-                <button className="w-full cursor-pointer flex justify-between">
-                  Edit <PencilIcon />
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <button className="w-full cursor-pointer flex justify-between">
-                  Share <ShareIcon />
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <button className="w-full cursor-pointer text-red-500 flex justify-between">
-                  Delete <TrashIcon />
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AlertDialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="ghost">
+                  <EllipsisIcon />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <button className="w-full cursor-pointer flex justify-between">
+                    Edit <PencilIcon />
+                  </button>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <button className="w-full cursor-pointer flex justify-between">
+                    Share <ShareIcon />
+                  </button>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <AlertDialogTrigger asChild>
+                    <button className="w-full cursor-pointer text-red-500 flex justify-between">
+                      Delete <TrashIcon />
+                    </button>
+                  </AlertDialogTrigger>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  survey.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         {description && (
           <p className="italic text-pretty text-gray-300 text-ellipsis">

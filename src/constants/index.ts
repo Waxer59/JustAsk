@@ -26,3 +26,6 @@ export const CONFETTI_DEFAULTS = {
   ticks: 60,
   zIndex: 0
 }
+
+export const INTERVIEW_LANGUAGES = ['en', 'es'] as const
+export const MAX_NUMBER_OF_QUESTIONS = 10

@@ -1,4 +1,3 @@
-import { Button } from '@/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,15 +6,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/ui/dropdown-menu'
-import { User } from 'lucide-react'
+import { UserIcon } from 'lucide-react'
 
 export const ProfileButton = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <User />
-        </Button>
+      <DropdownMenuTrigger className="p-2 transition-colors duration-200 hover:bg-zinc-900 rounded-md">
+        <UserIcon size={24} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>

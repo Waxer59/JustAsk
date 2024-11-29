@@ -1,0 +1,14 @@
+---
+export const prerender = false
+
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { DashboardLayout } from '@/layouts/react/DashboardLayout'
+import { CandidatesTable } from '@/components/react/CandidatesTable'
+---
+
+<BaseLayout>
+  <DashboardLayout client:only="react">
+    <h1 class="text-3xl font-bold">Survey 1</h1>
+    <CandidatesTable client:only="react" />
+  </DashboardLayout>
+</BaseLayout>

@@ -1,4 +1,8 @@
-import { INTERVIEW_LANGUAGES } from '@/constants'
+import {
+  INTERVIEW_LANGUAGES,
+  LANGUAGE_TEXT,
+  MAX_NUMBER_OF_QUESTIONS
+} from '@/constants'
 import { Button } from '@/ui/button'
 import {
   Accordion,
@@ -28,6 +32,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Textarea } from '@/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@ui/select'
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),
@@ -70,43 +81,85 @@ export function CreateSurveyButton() {
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Students survey"
-                        className="text-lg"
-                        required
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="This survey is for students"
-                        className="text-lg"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>Optional</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Accordion type="single" collapsible>
+              <Accordion type="single" collapsible defaultValue="general">
+                <AccordionItem value="general">
+                  <AccordionTrigger>General</AccordionTrigger>
+                  <AccordionContent className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Students survey"
+                              className="text-lg"
+                              required
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="language"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Language</FormLabel>
+                          <FormControl>
+                            <Select {...field} required>
+                              <SelectTrigger className="w-full">
+                                <SelectValue
+                                  placeholder="Select a language"
+                                  defaultValue={INTERVIEW_LANGUAGES[0]}
+                                />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.keys(LANGUAGE_TEXT).map((key) => (
+                                  <SelectItem
+                                    key={key}
+                                    value={key}
+                                    className="capitalize">
+                                    {
+                                      LANGUAGE_TEXT[
+                                        key as keyof typeof LANGUAGE_TEXT
+                                      ]
+                                    }
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormDescription>
+                            Select the language of the interview
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="This survey is for students"
+                              className="text-lg"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>Optional</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
                 <AccordionItem value="offer">
                   <AccordionTrigger>Offer</AccordionTrigger>
                   <AccordionContent className="space-y-6">
@@ -192,71 +245,122 @@ export function CreateSurveyButton() {
                 <AccordionItem value="questions">
                   <AccordionTrigger>Questions</AccordionTrigger>
                   <AccordionContent className="space-y-6">
-                    <h3 className="text-lg">Soft skills</h3>
-                    <FormField
-                      control={form.control}
-                      name="numberOfSoftQuestions"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Number of soft skills questions</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="3"
-                              className="text-lg"
-                              min={1}
-                              type="number"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <h3 className="text-lg">Hard skills</h3>
-                    <FormField
-                      control={form.control}
-                      name="numberOfHardQuestions"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Number of hard skills questions</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="3"
-                              className="text-lg"
-                              min={1}
-                              type="number"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <h3 className="text-lg">Other</h3>
-                    <FormField
-                      control={form.control}
-                      name="numberOfOtherQuestions"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Number of other questions</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="1"
-                              className="text-lg"
-                              min={1}
-                              type="number"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <ul className="flex flex-col gap-4 [&>li]:flex [&>li]:gap-2 [&>li>h3]:text-lg [&>li]:flex-col">
+                      <li>
+                        <h3 className="text-lg">Soft skills</h3>
+                        <div className="flex flex-col gap-4">
+                          <FormField
+                            control={form.control}
+                            name="numberOfSoftQuestions"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Number of soft skills questions
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="3"
+                                    className="text-lg"
+                                    min={0}
+                                    max={MAX_NUMBER_OF_QUESTIONS}
+                                    type="number"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="numberOfSoftQuestions"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Custom questions</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="..."
+                                    className="text-lg"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Specify which questions should be included in
+                                  the survey survey
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </li>
+                      <li>
+                        <h3 className="text-lg">Hard skills</h3>
+                        <FormField
+                          control={form.control}
+                          name="numberOfHardQuestions"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                Number of hard skills questions
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="3"
+                                  className="text-lg"
+                                  min={0}
+                                  max={MAX_NUMBER_OF_QUESTIONS}
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </li>
+                      <li>
+                        <h3 className="text-lg">Other</h3>
+                        <FormField
+                          control={form.control}
+                          name="numberOfOtherQuestions"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Number of other questions</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="0"
+                                  className="text-lg"
+                                  min={0}
+                                  max={MAX_NUMBER_OF_QUESTIONS}
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </li>
+                    </ul>
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="categorization">
                   <AccordionTrigger>Categorization</AccordionTrigger>
-                  <AccordionContent className="space-y-6"></AccordionContent>
+                  <AccordionContent className="space-y-6">
+                    <p>
+                      Add categories to know what level your candidates are at.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="documents">
+                  <AccordionTrigger>Documents</AccordionTrigger>
+                  <AccordionContent className="space-y-6">
+                    <p>
+                      Specify the documents that will be used to evaluate the
+                      candidates.
+                    </p>
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
               <Button type="submit" className="w-full">

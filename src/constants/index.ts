@@ -1,3 +1,5 @@
+import type { Document } from '@/types'
+
 export const ALLOWED_FILE_MIME_TYPES = [
   'image/bmp',
   'image/jpeg',
@@ -29,3 +31,16 @@ export const CONFETTI_DEFAULTS = {
 
 export const INTERVIEW_LANGUAGES = ['en', 'es'] as const
 export const MAX_NUMBER_OF_QUESTIONS = 10
+
+export const DEFAULT_DOUMENTS: Document[] = [
+  {
+    id: 'cv',
+    name: 'Curriculum Vitae',
+    description: 'Professional resume detailing work experience and skills'
+  },
+  {
+    id: 'swot',
+    name: 'SWOT Analysis',
+    description: 'Analysis of Strengths, Weaknesses, Opportunities, and Threats'
+  }
+]

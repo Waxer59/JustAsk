@@ -39,6 +39,9 @@ import {
   SelectTrigger,
   SelectValue
 } from '@ui/select'
+import { CustomQuestionsInput } from './CustomQuestionsInput'
+import { CategoryCreationInput } from './CategoryCreationInput'
+import { DocumentSelector } from './DocumentSelector'
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),
@@ -110,8 +113,10 @@ export function CreateSurveyButton() {
                         <FormItem>
                           <FormLabel>Language</FormLabel>
                           <FormControl>
-                            <Select {...field} required>
-                              <SelectTrigger className="w-full">
+                            <Select required>
+                              <SelectTrigger
+                                className="w-full capitalize"
+                                {...field}>
                                 <SelectValue
                                   placeholder="Select a language"
                                   defaultValue={INTERVIEW_LANGUAGES[0]}
@@ -271,76 +276,62 @@ export function CreateSurveyButton() {
                               </FormItem>
                             )}
                           />
+                          <CustomQuestionsInput max={2} />
+                        </div>
+                      </li>
+                      <li>
+                        <div className="flex flex-col gap-4">
+                          <h3 className="text-lg">Hard skills</h3>
                           <FormField
                             control={form.control}
-                            name="numberOfSoftQuestions"
+                            name="numberOfHardQuestions"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Custom questions</FormLabel>
+                                <FormLabel>
+                                  Number of hard skills questions
+                                </FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder="..."
+                                    placeholder="3"
                                     className="text-lg"
+                                    min={0}
+                                    max={MAX_NUMBER_OF_QUESTIONS}
+                                    type="number"
                                     {...field}
                                   />
                                 </FormControl>
-                                <FormDescription>
-                                  Specify which questions should be included in
-                                  the survey survey
-                                </FormDescription>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
+                          <CustomQuestionsInput max={2} />
                         </div>
                       </li>
                       <li>
-                        <h3 className="text-lg">Hard skills</h3>
-                        <FormField
-                          control={form.control}
-                          name="numberOfHardQuestions"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>
-                                Number of hard skills questions
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="3"
-                                  className="text-lg"
-                                  min={0}
-                                  max={MAX_NUMBER_OF_QUESTIONS}
-                                  type="number"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </li>
-                      <li>
-                        <h3 className="text-lg">Other</h3>
-                        <FormField
-                          control={form.control}
-                          name="numberOfOtherQuestions"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Number of other questions</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="0"
-                                  className="text-lg"
-                                  min={0}
-                                  max={MAX_NUMBER_OF_QUESTIONS}
-                                  type="number"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        <div className="flex flex-col gap-4">
+                          <h3 className="text-lg">Other</h3>
+                          <FormField
+                            control={form.control}
+                            name="numberOfOtherQuestions"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Number of other questions</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="0"
+                                    className="text-lg"
+                                    min={0}
+                                    max={MAX_NUMBER_OF_QUESTIONS}
+                                    type="number"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <CustomQuestionsInput max={2} />
+                        </div>
                       </li>
                     </ul>
                   </AccordionContent>
@@ -351,6 +342,7 @@ export function CreateSurveyButton() {
                     <p>
                       Add categories to know what level your candidates are at.
                     </p>
+                    <CategoryCreationInput />
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="documents">
@@ -360,6 +352,7 @@ export function CreateSurveyButton() {
                       Specify the documents that will be used to evaluate the
                       candidates.
                     </p>
+                    <DocumentSelector />
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

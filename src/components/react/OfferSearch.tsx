@@ -12,9 +12,9 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const OfferSearch = () => {
-  const t = useTranslations(lang)
   const [search, setSearch] = useState<string>('')
   const [debouncedSearch] = useDebounce(search, 1000)
   const setIsCurrentOfferManual = useInterviewStore(

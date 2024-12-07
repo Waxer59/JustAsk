@@ -1,3 +1,5 @@
+'use client'
+
 import { Input } from '@ui/input'
 import {
   FormControl,
@@ -16,14 +18,19 @@ import {
 import { PlusIcon, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 interface CustomQuestion {
   id: string
   question: string
 }
 
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
+
 interface Props {
-  max: number
+  max?: number
   onAddQuestion?: (question: string) => void
 }
 
@@ -37,8 +44,19 @@ export const CustomQuestionsInput = ({ max, onAddQuestion }: Props) => {
       return
     }
 
-    if (questions.length >= max) {
+    if (max && questions.length >= max) {
       toast.error(`You can only add up to ${max} questions`)
+      return
+    }
+
+    const questionExists = questions.some(
+      (q) =>
+        q.question.replace(/\s+/g, ' ').toLowerCase() ===
+        question.replace(/\s+/g, ' ').toLowerCase()
+    )
+
+    if (questionExists) {
+      toast.error('Question already exists')
       return
     }
 
@@ -64,50 +82,64 @@ export const CustomQuestionsInput = ({ max, onAddQuestion }: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex gap-2 items-center">
-        <FormItem>
-          <FormLabel>Custom questions</FormLabel>
-          <FormControl>
+    <div className="flex flex-col gap-3 w-full">
+      <FormItem className="flex-1">
+        <FormLabel>{t('dashboard.createSurvey.questions.custom')}</FormLabel>
+        <FormControl>
+          <div className="flex gap-2 items-center">
             <Input
               name="question"
               placeholder="..."
-              className="text-lg"
+              className="text-lg flex-1"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
             />
-          </FormControl>
-          <FormDescription>
-            Specify which questions should be included in the survey survey
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="secondary"
-                type="button"
-                onClick={handleSubmit}>
-                <PlusIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add question</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    type="button"
+                    className="self-start"
+                    onClick={handleSubmit}>
+                    <PlusIcon />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('dashboard.createSurvey.questions.custom.tooltip')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </FormControl>
+        <FormDescription>
+          {t('dashboard.createSurvey.questions.custom.description')}
+        </FormDescription>
+        <FormMessage />
+      </FormItem>
       <ul className="flex flex-col gap-4">
         {questions.map(({ id, question }) => (
-          <li className="flex flex-wrap gap-4 items-center" key={id}>
-            <p className="bg-zinc-800 p-2 rounded-md flex-1 text-pretty">
-              {question}
-            </p>
+          <li className="grid grid-cols-12 gap-2" key={id}>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <p className="bg-zinc-800 p-2 rounded-md text-pretty truncate cursor-help col-span-10">
+                    {question}
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  align="start"
+                  className="max-w-[300px]">
+                  <p className="text-sm">{question}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Button
               variant="secondary"
               size="icon"
+              className="col-span-1"
               onClick={() => handleRemoveQuestion(id)}>
               <XIcon />
             </Button>

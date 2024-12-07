@@ -42,6 +42,11 @@ import {
 import { CustomQuestionsInput } from './CustomQuestionsInput'
 import { CategoryCreationInput } from './CategoryCreationInput'
 import { DocumentSelector } from './DocumentSelector'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),
@@ -52,8 +57,7 @@ const formSchema = z.object({
   offerDescription: z.string().optional(),
   offerAditionalInformation: z.string().optional(),
   numberOfHardQuestions: z.number().min(1, { message: '' }),
-  numberOfSoftQuestions: z.number().min(1, { message: '' }),
-  numberOfOtherQuestions: z.number().min(1, { message: '' })
+  numberOfSoftQuestions: z.number().min(1, { message: '' })
 })
 
 export function CreateSurveyButton() {
@@ -73,30 +77,36 @@ export function CreateSurveyButton() {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Create survey</Button>
+          <Button>{t('dashboard.createSurvey')}</Button>
         </DialogTrigger>
         <DialogContent className="max-h-[650px] overflow-auto">
           <DialogHeader>
-            <DialogTitle>Create survey</DialogTitle>
+            <DialogTitle>{t('dashboard.createSurvey')}</DialogTitle>
             <DialogDescription>
-              Create a survey to get instant feedback from your customers.
+              {t('dashboard.createSurvey.description')}
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <Accordion type="single" collapsible defaultValue="general">
                 <AccordionItem value="general">
-                  <AccordionTrigger>General</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dashboard.createSurvey.general')}
+                  </AccordionTrigger>
                   <AccordionContent className="space-y-6">
                     <FormField
                       control={form.control}
                       name="title"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title</FormLabel>
+                          <FormLabel>
+                            {t('dashboard.createSurvey.general.title')}
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Students survey"
+                              placeholder={t(
+                                'dashboard.createSurvey.general.title.placeholder'
+                              )}
                               className="text-lg"
                               required
                               {...field}
@@ -111,14 +121,18 @@ export function CreateSurveyButton() {
                       name="language"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Language</FormLabel>
+                          <FormLabel>
+                            {t('dashboard.createSurvey.general.language')}
+                          </FormLabel>
                           <FormControl>
                             <Select required>
                               <SelectTrigger
                                 className="w-full capitalize"
                                 {...field}>
                                 <SelectValue
-                                  placeholder="Select a language"
+                                  placeholder={t(
+                                    'dashboard.createSurvey.general.language.placeholder'
+                                  )}
                                   defaultValue={INTERVIEW_LANGUAGES[0]}
                                 />
                               </SelectTrigger>
@@ -139,7 +153,9 @@ export function CreateSurveyButton() {
                             </Select>
                           </FormControl>
                           <FormDescription>
-                            Select the language of the interview
+                            {t(
+                              'dashboard.createSurvey.general.language.description'
+                            )}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -150,15 +166,23 @@ export function CreateSurveyButton() {
                       name="description"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description</FormLabel>
+                          <FormLabel>
+                            {t('dashboard.createSurvey.general.description')}
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="This survey is for students"
+                              placeholder={t(
+                                'dashboard.createSurvey.general.description.placeholder'
+                              )}
                               className="text-lg"
                               {...field}
                             />
                           </FormControl>
-                          <FormDescription>Optional</FormDescription>
+                          <FormDescription>
+                            {t(
+                              'dashboard.createSurvey.general.description.description'
+                            )}
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -166,23 +190,31 @@ export function CreateSurveyButton() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="offer">
-                  <AccordionTrigger>Offer</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dashboard.createSurvey.offer')}
+                  </AccordionTrigger>
                   <AccordionContent className="space-y-6">
                     <FormField
                       control={form.control}
                       name="offerStyle"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Style</FormLabel>
+                          <FormLabel>
+                            {t('dashboard.createSurvey.offer.style')}
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Technical"
+                              placeholder={t(
+                                'dashboard.createSurvey.offer.style.placeholder'
+                              )}
                               className="text-lg"
                               {...field}
                             />
                           </FormControl>
                           <FormDescription>
-                            What person is interviewing?
+                            {t(
+                              'dashboard.createSurvey.offer.style.description'
+                            )}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -193,17 +225,23 @@ export function CreateSurveyButton() {
                       name="offerTitle"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title</FormLabel>
+                          <FormLabel>
+                            {t('dashboard.createSurvey.offer.title')}
+                          </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Frontend developer"
+                              placeholder={t(
+                                'dashboard.createSurvey.offer.title.placeholder'
+                              )}
                               className="text-lg"
                               required
                               {...field}
                             />
                           </FormControl>
                           <FormDescription>
-                            Provide a title for your offer
+                            {t(
+                              'dashboard.createSurvey.offer.title.description'
+                            )}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -214,16 +252,22 @@ export function CreateSurveyButton() {
                       name="offerDescription"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description</FormLabel>
+                          <FormLabel>
+                            {t('dashboard.createSurvey.offer.description')}
+                          </FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Frontend developer with 10 years of experience in react"
+                              placeholder={t(
+                                'dashboard.createSurvey.offer.description.placeholder'
+                              )}
                               required
                               {...field}
                             />
                           </FormControl>
                           <FormDescription>
-                            Describe the offer in detail
+                            {t(
+                              'dashboard.createSurvey.offer.description.description'
+                            )}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -234,12 +278,18 @@ export function CreateSurveyButton() {
                       name="offerAditionalInformation"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Aditional Information</FormLabel>
+                          <FormLabel>
+                            {t(
+                              'dashboard.createSurvey.offer.additionalInformation'
+                            )}
+                          </FormLabel>
                           <FormControl>
                             <Textarea placeholder="..." required {...field} />
                           </FormControl>
                           <FormDescription>
-                            Specify any additional information
+                            {t(
+                              'dashboard.createSurvey.offer.additionalInformation.description'
+                            )}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -248,19 +298,26 @@ export function CreateSurveyButton() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="questions">
-                  <AccordionTrigger>Questions</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dashboard.createSurvey.questions')}
+                  </AccordionTrigger>
                   <AccordionContent className="space-y-6">
+                    <p>{t('dashboard.createSurvey.questions.description')}</p>
                     <ul className="flex flex-col gap-4 [&>li]:flex [&>li]:gap-2 [&>li>h3]:text-lg [&>li]:flex-col">
                       <li>
-                        <h3 className="text-lg">Soft skills</h3>
-                        <div className="flex flex-col gap-4">
+                        <h3 className="text-lg">
+                          {t('dashboard.createSurvey.questions.softSkills')}
+                        </h3>
+                        <div className="flex flex-col gap-2">
                           <FormField
                             control={form.control}
                             name="numberOfSoftQuestions"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>
-                                  Number of soft skills questions
+                                  {t(
+                                    'dashboard.createSurvey.questions.softSkills.description'
+                                  )}
                                 </FormLabel>
                                 <FormControl>
                                   <Input
@@ -276,19 +333,22 @@ export function CreateSurveyButton() {
                               </FormItem>
                             )}
                           />
-                          <CustomQuestionsInput max={2} />
                         </div>
                       </li>
                       <li>
-                        <div className="flex flex-col gap-4">
-                          <h3 className="text-lg">Hard skills</h3>
+                        <div className="flex flex-col gap-2">
+                          <h3 className="text-lg">
+                            {t('dashboard.createSurvey.questions.hardSkills')}
+                          </h3>
                           <FormField
                             control={form.control}
                             name="numberOfHardQuestions"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>
-                                  Number of hard skills questions
+                                  {t(
+                                    'dashboard.createSurvey.questions.hardSkills.description'
+                                  )}
                                 </FormLabel>
                                 <FormControl>
                                   <Input
@@ -304,34 +364,10 @@ export function CreateSurveyButton() {
                               </FormItem>
                             )}
                           />
-                          <CustomQuestionsInput max={2} />
                         </div>
                       </li>
                       <li>
-                        <div className="flex flex-col gap-4">
-                          <h3 className="text-lg">Other</h3>
-                          <FormField
-                            control={form.control}
-                            name="numberOfOtherQuestions"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Number of other questions</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="0"
-                                    className="text-lg"
-                                    min={0}
-                                    max={MAX_NUMBER_OF_QUESTIONS}
-                                    type="number"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <CustomQuestionsInput max={2} />
-                        </div>
+                        <CustomQuestionsInput max={2} />
                       </li>
                     </ul>
                   </AccordionContent>
@@ -357,7 +393,7 @@ export function CreateSurveyButton() {
                 </AccordionItem>
               </Accordion>
               <Button type="submit" className="w-full">
-                Create
+                {t('dashboard.createSurvey.create')}
               </Button>
             </form>
           </Form>

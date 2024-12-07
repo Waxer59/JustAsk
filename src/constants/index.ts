@@ -32,15 +32,32 @@ export const CONFETTI_DEFAULTS = {
 export const INTERVIEW_LANGUAGES = ['en', 'es'] as const
 export const MAX_NUMBER_OF_QUESTIONS = 10
 
-export const DEFAULT_DOUMENTS: Document[] = [
-  {
-    id: 'cv',
-    name: 'Curriculum Vitae',
-    description: 'Professional resume detailing work experience and skills'
-  },
-  {
-    id: 'swot',
-    name: 'SWOT Analysis',
-    description: 'Analysis of Strengths, Weaknesses, Opportunities, and Threats'
-  }
-]
+export const DEFAULT_DOUMENTS: Record<string, Document[]> = {
+  en: [
+    {
+      id: 'cv',
+      name: 'Curriculum Vitae',
+      description: 'Professional resume detailing work experience and skills'
+    },
+    {
+      id: 'swot',
+      name: 'SWOT Analysis',
+      description:
+        'Analysis of Strengths, Weaknesses, Opportunities, and Threats'
+    }
+  ],
+  es: [
+    {
+      id: 'cv',
+      name: 'Curriculum Vitae',
+      description:
+        'Resumen profesional que detalla experiencia laboral y habilidades'
+    },
+    {
+      id: 'swot',
+      name: 'Análisis DAFO',
+      description:
+        'Análisis de fortalezas, debilidades, oportunidades y amenazas'
+    }
+  ]
+}

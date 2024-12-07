@@ -30,12 +30,12 @@ const SpeechRecognition =
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const InterviewChatFinal: React.FC<Props> = ({
   questions,
   langRecognition = LANG_CODES.es
 }) => {
-  const t = useTranslations(lang)
   const addAnswer = useInterviewStore((state) => state.addAnswer)
   const [isTalking, setIsTalking] = useState<boolean>(false)
   const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')

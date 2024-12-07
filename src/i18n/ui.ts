@@ -3,7 +3,7 @@ export const languages = {
   es: 'Spanish'
 }
 
-export const defaultLang = 'en'
+export const defaultLang = 'es'
 
 export const ui = {
   en: {
@@ -73,7 +73,66 @@ export const ui = {
     questions: 'Questions',
     'chat.talk': 'Talk',
     'chat.error.speechRecognition':
-      'Your browser does not support speech recognition, please use a browser that supports this feature.'
+      'Your browser does not support speech recognition, please use a browser that supports this feature.',
+    'tooltip.copyLink': 'Copy link',
+    'tooltip.options': 'Options',
+    'dashboard.options.edit': 'Edit',
+    'dashboard.options.share': 'Share',
+    'dashboard.options.delete': 'Delete',
+    'dashboard.options.delete.dialog.title': 'Are you absolutely sure?',
+    'dashboard.options.delete.dialog.description':
+      'This action cannot be undone. This will permanently delete the survey.',
+    'dashboard.options.delete.dialog.cancel': 'Cancel',
+    'dashboard.options.delete.dialog.confirm': 'Continue',
+    'dashboard.title': 'Dashboard',
+    'dashboard.createSurvey': 'Create Survey',
+    'dashboard.createSurvey.description':
+      'Create a survey to get instant feedback from your customers.',
+    'dashboard.createSurvey.general': 'General',
+    'dashboard.createSurvey.general.title': 'Title',
+    'dashboard.createSurvey.general.title.placeholder': 'Students survey',
+    'dashboard.createSurvey.general.language': 'Language',
+    'dashboard.createSurvey.general.language.placeholder': 'Select a language',
+    'dashboard.createSurvey.general.language.description':
+      'Select the language of the interview',
+    'dashboard.createSurvey.general.description': 'Description',
+    'dashboard.createSurvey.general.description.placeholder':
+      'This survey is for students',
+    'dashboard.createSurvey.general.description.description': 'Optional',
+    'dashboard.createSurvey.offer': 'Offer',
+    'dashboard.createSurvey.offer.style': 'Style',
+    'dashboard.createSurvey.offer.style.placeholder': 'Technical',
+    'dashboard.createSurvey.offer.style.description':
+      'What person is interviewing?',
+    'dashboard.createSurvey.offer.title': 'Title',
+    'dashboard.createSurvey.offer.title.placeholder': 'Frontend developer',
+    'dashboard.createSurvey.offer.title.description':
+      'Provide a title for your offer',
+    'dashboard.createSurvey.offer.description': 'Description',
+    'dashboard.createSurvey.offer.description.placeholder':
+      'Frontend developer with 10 years of experience in react',
+    'dashboard.createSurvey.offer.description.description':
+      'Describe the offer in detail',
+    'dashboard.createSurvey.offer.additionalInformation':
+      'Additional Information',
+    'dashboard.createSurvey.offer.additionalInformation.description':
+      'Specify any additional information',
+    'dashboard.createSurvey.questions': 'Questions',
+    'dashboard.createSurvey.questions.description':
+      'Specify the questions you want to include in the survey',
+    'dashboard.createSurvey.questions.softSkills': 'Soft skills',
+    'dashboard.createSurvey.questions.softSkills.description':
+      'Number of soft skills questions',
+    'dashboard.createSurvey.questions.hardSkills': 'Hard skills',
+    'dashboard.createSurvey.questions.hardSkills.description':
+      'Number of hard skills questions',
+    'dashboard.createSurvey.questions.custom': 'Custom questions',
+    'dashboard.createSurvey.questions.custom.tooltip': 'Add question',
+    'dashboard.createSurvey.questions.custom.description':
+      'Specify the custom questions you want to include in the survey',
+    'dashboard.createSurvey.categorization': 'Categorization',
+    'dashboard.createSurvey.documents': 'Documents',
+    'dashboard.createSurvey.create': 'Create'
   },
   es: {
     'meta.description':
@@ -141,6 +200,67 @@ export const ui = {
     'fileUpload.success': 'Archivo subido correctamente',
     'chat.talk': 'Hablar',
     'chat.error.speechRecognition':
-      'Tu navegador no soporta el reconocimiento de voz, por favor utiliza un navegador compatible con esta característica.'
+      'Tu navegador no soporta el reconocimiento de voz, por favor utiliza un navegador compatible con esta característica.',
+    'tooltip.copyLink': 'Copiar enlace',
+    'tooltip.options': 'Opciones',
+    'dashboard.options.edit': 'Editar',
+    'dashboard.options.share': 'Compartir',
+    'dashboard.options.delete': 'Eliminar',
+    'dashboard.options.delete.dialog.title': '¿Estás absolutamente seguro?',
+    'dashboard.options.delete.dialog.description':
+      'Esta acción no se puede deshacer. Esto eliminará permanentemente la encuesta.',
+    'dashboard.options.delete.dialog.cancel': 'Cancelar',
+    'dashboard.options.delete.dialog.confirm': 'Continuar',
+    'dashboard.title': 'Panel de Control',
+    'dashboard.createSurvey': 'Crear Encuesta',
+    'dashboard.createSurvey.description':
+      'Crea una encuesta para obtener retroalimentación instantánea de tus clientes.',
+    'dashboard.createSurvey.general': 'General',
+    'dashboard.createSurvey.general.title': 'Título',
+    'dashboard.createSurvey.general.title.placeholder':
+      'Encuesta de estudiantes',
+    'dashboard.createSurvey.general.language': 'Idioma',
+    'dashboard.createSurvey.general.language.placeholder':
+      'Selecciona un idioma',
+    'dashboard.createSurvey.general.language.description':
+      'Selecciona el idioma de la entrevista',
+    'dashboard.createSurvey.general.description': 'Descripción',
+    'dashboard.createSurvey.general.description.placeholder':
+      'Esta encuesta es para estudiantes',
+    'dashboard.createSurvey.general.description.description': 'Opcional',
+    'dashboard.createSurvey.offer': 'Oferta',
+    'dashboard.createSurvey.offer.style': 'Estilo',
+    'dashboard.createSurvey.offer.style.placeholder': 'Tecnica',
+    'dashboard.createSurvey.offer.style.description':
+      '¿Qué persona está entrevistando?',
+    'dashboard.createSurvey.offer.title': 'Título',
+    'dashboard.createSurvey.offer.title.placeholder': 'Desarrollador front-end',
+    'dashboard.createSurvey.offer.title.description':
+      'Proporciona un título para tu oferta',
+    'dashboard.createSurvey.offer.description': 'Descripción',
+    'dashboard.createSurvey.offer.description.placeholder':
+      'Desarrollador front-end con 10 años de experiencia en React',
+    'dashboard.createSurvey.offer.description.description':
+      'Describe la oferta en detalle',
+    'dashboard.createSurvey.offer.additionalInformation':
+      'Información adicional',
+    'dashboard.createSurvey.offer.additionalInformation.description':
+      'Especifica cualquier información adicional',
+    'dashboard.createSurvey.questions': 'Preguntas',
+    'dashboard.createSurvey.questions.description':
+      'Especifica las preguntas que se incluirán en la encuesta',
+    'dashboard.createSurvey.questions.softSkills': 'Habilidades Sociales',
+    'dashboard.createSurvey.questions.softSkills.description':
+      'Número de preguntas de habilidades sociales',
+    'dashboard.createSurvey.questions.hardSkills': 'Habilidades Técnicas',
+    'dashboard.createSurvey.questions.hardSkills.description':
+      'Número de preguntas de habilidades técnicas',
+    'dashboard.createSurvey.questions.custom': 'Preguntas personalizadas',
+    'dashboard.createSurvey.questions.custom.tooltip': 'Añadir pregunta',
+    'dashboard.createSurvey.questions.custom.description':
+      'Especifica las preguntas personalizadas que deseas incluir',
+    'dashboard.createSurvey.categorization': 'Categorización',
+    'dashboard.createSurvey.documents': 'Documentos',
+    'dashboard.createSurvey.create': 'Crear'
   }
 } as const

@@ -5,8 +5,6 @@ import { createOpenAI } from '@ai-sdk/openai'
 import { createQuestionsPrompt } from '@/helpers/createQuestionsPrompt'
 import { LANGUAGE_TEXT } from '@constants'
 
-export const prerender = false
-
 const groq = createOpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
   apiKey: import.meta.env.GROQ_API_KEY

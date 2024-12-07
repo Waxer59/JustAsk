@@ -9,10 +9,9 @@ interface Props {
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const ErrorMessage: React.FC<Props> = ({ text }) => {
-  const t = useTranslations(lang)
-
   return (
     <div className="flex flex-col gap-8 justify-center items-center">
       <Frown className="w-24 h-24" />

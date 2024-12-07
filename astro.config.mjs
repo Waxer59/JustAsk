@@ -7,9 +7,10 @@ import { defaultLang, languages } from './src/i18n/ui'
 import sitemap from '@astrojs/sitemap'
 import { cannonicalURL } from './src/constants/seo'
 
+import db from '@astrojs/db'
+
 // https://astro.build/config
 export default defineConfig({
-  output: 'hybrid',
   vite: {
     optimizeDeps: {
       exclude: ['scribe.js-ocr']
@@ -18,6 +19,7 @@ export default defineConfig({
       format: 'es'
     }
   },
+  output: 'server',
   site: cannonicalURL,
   adapter: netlify(),
   integrations: [
@@ -25,7 +27,8 @@ export default defineConfig({
       applyBaseStyles: false
     }),
     react(),
-    sitemap()
+    sitemap(),
+    db()
   ],
   devToolbar: {
     enabled: false

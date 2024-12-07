@@ -5,8 +5,6 @@ import { generateText } from 'ai'
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
 
-export const prerender = false
-
 const EXAMPLE_OUTPUT_TRANSLATED = {
   en: {
     question: 'Question',

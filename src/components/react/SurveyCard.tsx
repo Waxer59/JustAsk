@@ -32,6 +32,7 @@ import {
   TooltipContent
 } from '@ui/tooltip'
 import { toast } from 'sonner'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 interface Props {
   title: string
@@ -39,6 +40,10 @@ interface Props {
   description?: string
   numberOfResponses: number
 }
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const SurveyCard = ({
   title,
@@ -76,18 +81,18 @@ export const SurveyCard = ({
                       <DropdownMenuContent>
                         <DropdownMenuItem asChild>
                           <button className="w-full cursor-pointer flex justify-between">
-                            Edit <PencilIcon />
+                            {t('dashboard.options.edit')} <PencilIcon />
                           </button>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <button className="w-full cursor-pointer flex justify-between">
-                            Share <ShareIcon />
+                            {t('dashboard.options.share')} <ShareIcon />
                           </button>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <AlertDialogTrigger asChild>
                             <button className="w-full cursor-pointer text-red-500 flex justify-between">
-                              Delete <TrashIcon />
+                              {t('dashboard.options.delete')} <TrashIcon />
                             </button>
                           </AlertDialogTrigger>
                         </DropdownMenuItem>
@@ -96,21 +101,24 @@ export const SurveyCard = ({
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>
-                          Are you absolutely sure?
+                          {t('dashboard.options.delete.dialog.title')}
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the survey.
+                          {t('dashboard.options.delete.dialog.description')}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
+                        <AlertDialogCancel>
+                          {t('dashboard.options.delete.dialog.cancel')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction>
+                          {t('dashboard.options.delete.dialog.confirm')}
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
                   <TooltipContent>
-                    <p>Options</p>
+                    <p>{t('tooltip.options')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -131,7 +139,7 @@ export const SurveyCard = ({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Copy link</p>
+                    <p>{t('tooltip.copyLink')}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

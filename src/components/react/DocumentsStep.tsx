@@ -20,6 +20,7 @@ registerPlugin(
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const DocumentsStep = () => {
   const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
@@ -32,7 +33,6 @@ export const DocumentsStep = () => {
   const removeDocumentContentById = useInterviewStore(
     (state) => state.removeDocumentContentById
   )
-  const t = useTranslations(lang)
 
   const removeFile = (file: any) => {
     const deletedFileId = file.id

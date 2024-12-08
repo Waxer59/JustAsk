@@ -1,3 +1,4 @@
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { Button } from '@/ui/button'
 import { Textarea } from '@/ui/textarea'
 import { FormItem, FormLabel, FormControl, FormMessage } from '@ui/form'
@@ -15,6 +16,10 @@ interface Category {
 interface Props {
   onChange?: (categories: Category[]) => void
 }
+
+const url = new URL(window.location.href)
+const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
   const [name, setName] = useState('')
@@ -60,10 +65,14 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4">
         <FormItem>
-          <FormLabel>Category Name</FormLabel>
+          <FormLabel>
+            {t('dashboard.createSurvey.categorization.category.name')}
+          </FormLabel>
           <FormControl>
             <Input
-              placeholder="High"
+              placeholder={t(
+                'dashboard.createSurvey.categorization.category.name.placeholder'
+              )}
               className="text-lg"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -72,10 +81,14 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
           <FormMessage />
         </FormItem>
         <FormItem>
-          <FormLabel>Category Description</FormLabel>
+          <FormLabel>
+            {t('dashboard.createSurvey.categorization.category.description')}
+          </FormLabel>
           <FormControl>
             <Textarea
-              placeholder="High level of expertise..."
+              placeholder={t(
+                'dashboard.createSurvey.categorization.category.description.placeholder'
+              )}
               className="text-lg"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -87,8 +100,9 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
           type="button"
           variant="secondary"
           onClick={handleAddCategory}
-          className="w-full inline-flex justify-center">
-          <PlusIcon /> Add Category
+          className="w-full inline-flex justify-center items-center">
+          <PlusIcon />{' '}
+          <span>{t('dashboard.createSurvey.categorization.category.add')}</span>
         </Button>
       </div>
       <ul className="flex flex-col gap-4">

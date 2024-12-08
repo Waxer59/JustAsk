@@ -1,5 +1,5 @@
 import { DEFAULT_DOUMENTS } from '@/constants'
-import { getLangFromUrl } from '@/i18n/utils'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import type { Document } from '@/types'
 import { Button } from '@/ui/button'
 import { Checkbox } from '@/ui/checkbox'
@@ -23,7 +23,7 @@ interface Props {
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
-// const t = useTranslations(lang)
+const t = useTranslations(lang)
 
 export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
   const [documents, setDocuments] = useState<Document[]>([
@@ -102,20 +102,24 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
           variant="secondary"
           className="w-full inline-flex justify-center"
           onClick={() => setCustomDialogOpen(true)}>
-          <PlusIcon /> Add Custom Document
+          <PlusIcon /> <span>{t('dashboard.createSurvey.documents.add')}</span>
         </Button>
       </div>
       <Dialog open={customDialogOpen} onOpenChange={setCustomDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Custom Document</DialogTitle>
+            <DialogTitle>
+              {t('dashboard.createSurvey.documents.add')}
+            </DialogTitle>
             <DialogDescription>
-              Add a custom document to your survey
+              {t('dashboard.createSurvey.documents.add.description')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Document Name</Label>
+              <Label htmlFor="name">
+                {t('dashboard.createSurvey.documents.add.modal.name')}
+              </Label>
               <Input
                 id="name"
                 value={customDocument.name}
@@ -125,11 +129,15 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
                     name: e.target.value
                   }))
                 }
-                placeholder="Enter document name"
+                placeholder={t(
+                  'dashboard.createSurvey.documents.add.modal.name.placeholder'
+                )}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">
+                {t('dashboard.createSurvey.documents.add.modal.description')}
+              </Label>
               <Textarea
                 id="description"
                 value={customDocument.description}
@@ -139,7 +147,9 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
                     description: e.target.value
                   }))
                 }
-                placeholder="Enter document description"
+                placeholder={t(
+                  'dashboard.createSurvey.documents.add.modal.description.placeholder'
+                )}
                 className="resize-none"
               />
             </div>
@@ -151,12 +161,12 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
                 setCustomDialogOpen(false)
                 setCustomDocument({ name: '', description: '' })
               }}>
-              Cancel
+              {t('dashboard.createSurvey.documents.add.modal.cancel')}
             </Button>
             <Button
               onClick={handleAddCustomDocument}
               disabled={!customDocument.name || !customDocument.description}>
-              Add Document
+              {t('dashboard.createSurvey.documents.add.modal.submit')}
             </Button>
           </DialogFooter>
         </DialogContent>

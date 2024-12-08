@@ -33,6 +33,7 @@ import {
 } from '@ui/tooltip'
 import { toast } from 'sonner'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { Badge } from '@/ui/badge'
 
 interface Props {
   title: string
@@ -152,9 +153,12 @@ export const SurveyCard = ({
               {description}
             </p>
           )}
-          <div className="flex items-center gap-2">
-            <UserIcon />
-            <span>{numberOfResponses}</span>
+          <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
+              <UserIcon />
+              <span>{numberOfResponses}</span>
+            </div>
+            <Badge variant="secondary">ES</Badge>
           </div>
         </div>
       </div>

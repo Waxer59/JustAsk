@@ -373,21 +373,22 @@ export function CreateSurveyButton() {
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="categorization">
-                  <AccordionTrigger>Categorization</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dashboard.createSurvey.categorization')}
+                  </AccordionTrigger>
                   <AccordionContent className="space-y-6">
                     <p>
-                      Add categories to know what level your candidates are at.
+                      {t('dashboard.createSurvey.categorization.description')}
                     </p>
                     <CategoryCreationInput />
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="documents">
-                  <AccordionTrigger>Documents</AccordionTrigger>
+                  <AccordionTrigger>
+                    {t('dashboard.createSurvey.documents')}
+                  </AccordionTrigger>
                   <AccordionContent className="space-y-6">
-                    <p>
-                      Specify the documents that will be used to evaluate the
-                      candidates.
-                    </p>
+                    <p>{t('dashboard.createSurvey.documents.description')}</p>
                     <DocumentSelector />
                   </AccordionContent>
                 </AccordionItem>

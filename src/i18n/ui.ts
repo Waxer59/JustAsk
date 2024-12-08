@@ -131,7 +131,28 @@ export const ui = {
     'dashboard.createSurvey.questions.custom.description':
       'Specify the custom questions you want to include in the survey',
     'dashboard.createSurvey.categorization': 'Categorization',
+    'dashboard.createSurvey.categorization.description':
+      'Add categories to know what level your candidates are at.',
+    'dashboard.createSurvey.categorization.category.name': 'Category Name',
+    'dashboard.createSurvey.categorization.category.name.placeholder': 'High',
+    'dashboard.createSurvey.categorization.category.description':
+      'Category Description',
+    'dashboard.createSurvey.categorization.category.description.placeholder':
+      'High level of expertise...',
+    'dashboard.createSurvey.categorization.category.add': 'Add Category',
     'dashboard.createSurvey.documents': 'Documents',
+    'dashboard.createSurvey.documents.description':
+      'Specify the documents that will be used to evaluate the candidates.',
+    'dashboard.createSurvey.documents.add': 'Add Custom Document',
+    'dashboard.createSurvey.documents.add.description':
+      'Add a custom document to your survey',
+    'dashboard.createSurvey.documents.add.modal.name': 'Document Name',
+    'dashboard.createSurvey.documents.add.modal.name.placeholder': 'CV',
+    'dashboard.createSurvey.documents.add.modal.description': 'Description',
+    'dashboard.createSurvey.documents.add.modal.description.placeholder':
+      'Professional resume detailing work experience and skills',
+    'dashboard.createSurvey.documents.add.modal.submit': 'Add Document',
+    'dashboard.createSurvey.documents.add.modal.cancel': 'Cancel',
     'dashboard.createSurvey.create': 'Create'
   },
   es: {
@@ -260,7 +281,29 @@ export const ui = {
     'dashboard.createSurvey.questions.custom.description':
       'Especifica las preguntas personalizadas que deseas incluir',
     'dashboard.createSurvey.categorization': 'Categorización',
+    'dashboard.createSurvey.categorization.description':
+      'Agrega categorías para saber en qué nivel se encuentran tus candidatos.',
+    'dashboard.createSurvey.categorization.category.name':
+      'Nombre de la categoría',
+    'dashboard.createSurvey.categorization.category.name.placeholder': 'Alto',
+    'dashboard.createSurvey.categorization.category.description':
+      'Descripción de la categoría',
+    'dashboard.createSurvey.categorization.category.description.placeholder':
+      'Alto nivel de experiencia...',
+    'dashboard.createSurvey.categorization.category.add': 'Agregar categoría',
     'dashboard.createSurvey.documents': 'Documentos',
+    'dashboard.createSurvey.documents.description':
+      'Especifica los documentos que se utilizarán para evaluar a los candidatos.',
+    'dashboard.createSurvey.documents.add': 'Agregar documento personalizado',
+    'dashboard.createSurvey.documents.add.description':
+      'Agrega un documento personalizado a tu encuesta',
+    'dashboard.createSurvey.documents.add.modal.name': 'Nombre del documento',
+    'dashboard.createSurvey.documents.add.modal.name.placeholder': 'CV',
+    'dashboard.createSurvey.documents.add.modal.description': 'Descripción',
+    'dashboard.createSurvey.documents.add.modal.description.placeholder':
+      'Curriculum vitae profesional en el que se detallen la experiencia laboral y las competencias',
+    'dashboard.createSurvey.documents.add.modal.submit': 'Agregar documento',
+    'dashboard.createSurvey.documents.add.modal.cancel': 'Cancelar',
     'dashboard.createSurvey.create': 'Crear'
   }
 } as const

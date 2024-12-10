@@ -7,8 +7,6 @@ import { defaultLang, languages } from './src/i18n/ui'
 import sitemap from '@astrojs/sitemap'
 import { cannonicalURL } from './src/constants/seo'
 
-import db from '@astrojs/db'
-
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -22,14 +20,9 @@ export default defineConfig({
   output: 'server',
   site: cannonicalURL,
   adapter: netlify(),
-  integrations: [
-    tailwind({
-      applyBaseStyles: false
-    }),
-    react(),
-    sitemap(),
-    db()
-  ],
+  integrations: [tailwind({
+    applyBaseStyles: false
+  }), react(), sitemap()],
   devToolbar: {
     enabled: false
   },

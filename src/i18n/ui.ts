@@ -153,7 +153,22 @@ export const ui = {
       'Professional resume detailing work experience and skills',
     'dashboard.createSurvey.documents.add.modal.submit': 'Add Document',
     'dashboard.createSurvey.documents.add.modal.cancel': 'Cancel',
-    'dashboard.createSurvey.create': 'Create'
+    'dashboard.createSurvey.create': 'Create',
+    'dashboard.account.title': 'My Account',
+    'dashboard.account.signOut': 'Sign Out',
+    'email.magicLink.subject': 'JustAsk - Login Link',
+    'email.magicLink.title': 'Welcome back to JustAsk!',
+    'email.magicLink.subtitle':
+      'Access your AI interview dashboard with one click.',
+    'email.magicLink.btn': 'Log in',
+    'email.magicLink.footer':
+      'Manage your interviews, view results, and track your progress.',
+    'email.magicLink.footer.warn':
+      "If you didn't request this, please ignore this email.",
+    'login.title': 'Login',
+    'login.description': 'Enter your email to receive a login link',
+    'login.btn': 'Send magic link',
+    'login.toast.success': 'Check your email'
   },
   es: {
     'meta.description':
@@ -304,6 +319,22 @@ export const ui = {
       'Curriculum vitae profesional en el que se detallen la experiencia laboral y las competencias',
     'dashboard.createSurvey.documents.add.modal.submit': 'Agregar documento',
     'dashboard.createSurvey.documents.add.modal.cancel': 'Cancelar',
-    'dashboard.createSurvey.create': 'Crear'
+    'dashboard.createSurvey.create': 'Crear',
+    'dashboard.account.title': 'Mi cuenta',
+    'dashboard.account.signOut': 'Cerrar sesión',
+    'email.magicLink.subject': 'JustAsk - Enlace de inicio de sesión',
+    'email.magicLink.title': '¡Bienvenido de nuevo a JustAsk!',
+    'email.magicLink.btn': 'Acceder',
+    'email.magicLink.subtitle':
+      'Accede a tu panel de entrevistas con IA en un solo clic.',
+    'email.magicLink.footer':
+      'Gestiona tus entrevistas, consulta los resultados y sigue tus progresos.',
+    'email.magicLink.footer.warn':
+      'Si no lo has solicitado, ignora este email.',
+    'login.title': 'Iniciar sesión',
+    'login.description':
+      'Introduce tu correo para recibir un enlace de inicio de sesión',
+    'login.btn': 'Enviar enlace',
+    'login.toast.success': 'Revisa tu correo'
   }
 } as const

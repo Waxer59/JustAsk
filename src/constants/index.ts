@@ -32,6 +32,8 @@ export const CONFETTI_DEFAULTS = {
 export const INTERVIEW_LANGUAGES = ['en', 'es'] as const
 export const MAX_NUMBER_OF_QUESTIONS = 10
 
+export const PRIVATE_ROUTES = ['/dashboard']
+
 export const DEFAULT_DOUMENTS: Record<string, Document[]> = {
   en: [
     {

@@ -1,6 +1,6 @@
 import { LANGUAGE_TEXT } from '@/constants'
 import { createFeedbackPrompt } from '@/helpers/createFeedbackPrompt'
-import { createOpenAI } from '@ai-sdk/openai'
+import { createGroq } from '@ai-sdk/groq'
 import { generateText } from 'ai'
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
@@ -26,9 +26,8 @@ const EXAMPLE_OUTPUT_TRANSLATED = {
   }
 }
 
-const groq = createOpenAI({
-  baseURL: 'https://api.groq.com/openai/v1',
-  apiKey: import.meta.env.GROQ_API_KEY
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY
 })
 
 const bodySchema = z.object({

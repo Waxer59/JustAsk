@@ -8,10 +8,14 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "prepare": "husky"
+    "prepare": "husky",
+    "drizzle:migrate": "drizzle-kit migrate",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:push": "drizzle-kit push",
+    "drizzle:pull": "drizzle-kit pull"
   },
   "dependencies": {
-    "@ai-sdk/openai": "0.0.45",
+    "@ai-sdk/groq": "^1.0.8",
     "@astrojs/check": "0.9.4",
     "@astrojs/netlify": "6.0.0",
     "@astrojs/react": "4.0.0",
@@ -36,7 +40,7 @@
     "@tanstack/react-table": "^8.20.5",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "ai": "3.3.5",
+    "ai": "4.0.14",
     "astro": "5.0.3",
     "astro-capo": "0.0.1",
     "better-auth": "^1.0.14",

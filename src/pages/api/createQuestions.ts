@@ -1,13 +1,12 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
 import { generateText } from 'ai'
-import { createOpenAI } from '@ai-sdk/openai'
 import { createQuestionsPrompt } from '@/helpers/createQuestionsPrompt'
 import { LANGUAGE_TEXT } from '@constants'
+import { createGroq } from '@ai-sdk/groq'
 
-const groq = createOpenAI({
-  baseURL: 'https://api.groq.com/openai/v1',
-  apiKey: import.meta.env.GROQ_API_KEY
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY
 })
 
 const bodySchema = z.object({

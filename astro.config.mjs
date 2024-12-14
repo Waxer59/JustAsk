@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
-import netlify from '@astrojs/netlify'
+import vercel from '@astrojs/vercel'
 import react from '@astrojs/react'
 import { defaultLang, languages } from './src/i18n/ui'
 
@@ -19,7 +19,7 @@ export default defineConfig({
     }
   },
   site: cannonicalURL,
-  adapter: netlify(),
+  adapter: vercel(),
   integrations: [
     tailwind({
       applyBaseStyles: false

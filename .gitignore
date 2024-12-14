@@ -7,7 +7,7 @@ dist/
 node_modules/
 
 .netlify
-postgres
+postgres/
 
 # logs
 npm-debug.log*

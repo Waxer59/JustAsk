@@ -36,6 +36,33 @@ export enum InterviewProcessSteps {
 
 export const numberOfSteps = Object.keys(InterviewProcessSteps).length / 2 // We divide by two because Object.keys() in a enum returns an array of key names and key indexes e.g. enum X { OFFER } will return [0, 'OFFER']
 
+export interface SurveyCategory {
+  name: string
+  description: string
+}
+
+export interface SurveyDocument {
+  name: string
+  description: string
+}
+
+export interface CreateSurvey {
+  title: string
+  description: string
+  lang: 'es' | 'en'
+  offerStyle: string
+  offerTitle: string
+  offerDescription: string
+  offerAdditionalInfo: string
+  numberOfSoftSkillsQuestions: number
+  numberOfHardSkillsQuestions: number
+  customQuestions: string[]
+  categories: SurveyCategory[]
+  documents: SurveyDocument[]
+}
+
+export type UpdateSurvey = Partial<CreateSurvey>
+
 export interface Document {
   id: string
   name: string

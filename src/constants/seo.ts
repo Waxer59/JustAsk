@@ -1,1 +1,1 @@
-export const cannonicalURL = 'https://justask.hgo.one'
+export const cannonicalURL = 'https://justask.app'

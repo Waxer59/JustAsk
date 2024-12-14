@@ -8,6 +8,12 @@ export const surveyUser = pgTable('survey_user', {
 })
 
 export const surveyUsersToSurveys = pgTable('survey_users_to_surveys', {
-  surveyId: text('survey_id').references(() => survey.id),
-  surveyUserId: text('survey_user_id').references(() => surveyUser.id)
+  surveyId: text('survey_id').references(() => survey.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
+  }),
+  surveyUserId: text('survey_user_id').references(() => surveyUser.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
+  })
 })

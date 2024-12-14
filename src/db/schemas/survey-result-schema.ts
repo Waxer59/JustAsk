@@ -3,7 +3,10 @@ import { survey } from './survey-schema'
 
 export const surverResult = pgTable('survey_result', {
   id: text('id').primaryKey(),
-  surveyId: text('survey_id').references(() => survey.id),
+  surveyId: text('survey_id').references(() => survey.id, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
+  }),
   overallScore: decimal('overall_score'),
   scoreSoftSkills: decimal('score_soft_skills'),
   scoreHardSkills: decimal('score_hard_skills'),

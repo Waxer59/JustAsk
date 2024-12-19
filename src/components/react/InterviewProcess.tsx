@@ -21,10 +21,10 @@ const queryClient = new QueryClient()
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const InterviewProcess = () => {
   const currentStep = useInterviewStore((state) => state.currentStep)
-  const t = useTranslations(lang)
   const hideControlButtons = useUiStore((state) => state.hideControlButtons)
 
   return (

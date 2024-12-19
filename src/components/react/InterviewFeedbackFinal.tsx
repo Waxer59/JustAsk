@@ -18,12 +18,12 @@ interface Props {
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const InterviewFeedbackFinal: React.FC<Props> = ({
   feedback,
   score
 }) => {
-  const t = useTranslations(lang)
   useEffect(() => {
     const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION
 

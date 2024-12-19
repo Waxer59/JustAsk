@@ -11,9 +11,9 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const FinalStep = () => {
-  const t = useTranslations(lang)
   const isSimulatingInterview = useInterviewStore(
     (state) => state.isSimulatingInterview
   )

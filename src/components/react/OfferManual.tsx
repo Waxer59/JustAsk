@@ -18,6 +18,7 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),
@@ -25,7 +26,6 @@ const formSchema = z.object({
 })
 
 export const OfferManual = () => {
-  const t = useTranslations(lang)
   const isCurrentOfferManual = useInterviewStore(
     (state) => state.isCurrentOfferManual
   )

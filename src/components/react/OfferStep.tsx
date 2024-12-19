@@ -6,12 +6,12 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const OfferStep = () => {
   const isCurrentOfferManual = useInterviewStore(
     (state) => state.isCurrentOfferManual
   )
-  const t = useTranslations(lang)
 
   return (
     <Tabs

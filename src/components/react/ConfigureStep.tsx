@@ -26,6 +26,7 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 const formSchema = z.object({
   type: z.enum(['interview', 'questions']),
@@ -34,7 +35,6 @@ const formSchema = z.object({
 })
 
 export const ConfigureStep = () => {
-  const t = useTranslations(lang)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

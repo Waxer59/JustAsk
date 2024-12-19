@@ -17,6 +17,8 @@ pnpm i
    * `GROQ_API_KEY`: You will need a [Groq](https://console.groq.com/) API key.
    * `JSEARCH_API_KEY`: You will need a [Jsearch](https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch) API key. 
    * `RAPID_API_HOST`: Provide the Rapid API host.
+   * `ASTRO_DB_REMOTE_URL`: Provide the Turso remote URL.
+   * `ASTRO_DB_APP_TOKEN`: Provide the Turso app token.
 
 3. Run the project with the command:
 

@@ -7,12 +7,12 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
+const t = useTranslations(lang)
 
 export const ControlButtons = () => {
   const disableControlButtons = useUiStore(
     (state) => state.disableControlButtons
   )
-  const t = useTranslations(lang)
   const currentStep = useInterviewStore((state) => state.currentStep)
   const nextStep = useInterviewStore((state) => state.nextStep)
   const prevStep = useInterviewStore((state) => state.prevStep)

@@ -11,7 +11,14 @@ const t = useTranslations(lang)
 ---
 
 <div class="flex flex-col items-end mt-16">
-  <LanguagePicker client:only="react" />
+  <div class="flex items-center justify-between w-full">
+    <a
+      href={getRelativeLocaleUrl(lang, 'dashboard')}
+      class={buttonVariants({ variant: 'secondary' })}>
+      Dashboard
+    </a>
+    <LanguagePicker client:only="react" />
+  </div>
 
   <header
     class="relative h-[500px] w-full flex flex-col items-center justify-center overflow-hidden rounded-lg bg-background">

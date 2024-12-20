@@ -3,7 +3,8 @@ import {
   pgTable,
   text,
   integer,
-  uniqueIndex
+  uniqueIndex,
+  boolean
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 import { INTERVIEW_LANGUAGES } from '@/constants'
@@ -14,9 +15,7 @@ export const langEnum = pgEnum('lang', INTERVIEW_LANGUAGES)
 export const survey = pgTable(
   'survey',
   {
-    id: text('id')
-      .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
+    id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
     title: text('title').notNull(),
     description: text('description'),
     lang: langEnum().notNull(),
@@ -62,11 +61,10 @@ export const surveysToSurveyCategories = pgTable(
 )
 
 export const surveyCategory = pgTable('survey_category', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
   name: text('name').notNull(),
-  description: text('description')
+  description: text('description'),
+  isActive: boolean('is_active').notNull().default(true)
 })
 
 export const surveysToSurveysDocuments = pgTable(
@@ -87,9 +85,7 @@ export const surveysToSurveysDocuments = pgTable(
 )
 
 export const surveyDocument = pgTable('survey_document', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
   name: text('name').notNull(),
   description: text('description')
 })

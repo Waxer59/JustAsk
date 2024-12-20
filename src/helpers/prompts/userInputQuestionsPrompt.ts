@@ -1,15 +1,15 @@
-export const createQuestionsPrompt = ({
+export const userInputQuestionsPrompt = ({
   title,
   description,
   interviewStyle,
   additionalInfo,
-  filesContent
+  documentsContent
 }: {
   title: string
   description: string
   interviewStyle: string
   additionalInfo?: string
-  filesContent?: string[]
+  documentsContent?: string[]
 }): string => `
 - Job Description:
   * Title: ${title}
@@ -25,8 +25,8 @@ ${
 }
 
 ${
-  filesContent
-    ? filesContent
+  documentsContent
+    ? documentsContent
         .map(
           (
             text,

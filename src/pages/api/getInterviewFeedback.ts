@@ -1,5 +1,5 @@
 import { LANGUAGE_TEXT } from '@/constants'
-import { createFeedbackPrompt } from '@/helpers/createFeedbackPrompt'
+import { createFeedbackPrompt } from '@/helpers/prompts/createFeedbackPrompt'
 import { createGroq } from '@ai-sdk/groq'
 import { generateText } from 'ai'
 import type { APIRoute } from 'astro'
@@ -27,7 +27,7 @@ const EXAMPLE_OUTPUT_TRANSLATED = {
 }
 
 const groq = createGroq({
-  apiKey: process.env.GROQ_API_KEY
+  apiKey: import.meta.env.GROQ_API_KEY
 })
 
 const bodySchema = z.object({

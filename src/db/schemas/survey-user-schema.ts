@@ -2,7 +2,7 @@ import { pgTable, text } from 'drizzle-orm/pg-core'
 import { survey } from './survey-schema'
 
 export const surveyUser = pgTable('survey_user', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
   name: text('name').notNull(),
   email: text('email').notNull()
 })

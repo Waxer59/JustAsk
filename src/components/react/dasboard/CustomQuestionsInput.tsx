@@ -20,7 +20,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
-interface CustomQuestion {
+export interface CustomQuestion {
   id: string
   question: string
 }
@@ -31,10 +31,10 @@ const t = useTranslations(lang)
 
 interface Props {
   max?: number
-  onAddQuestion?: (question: string) => void
+  onChange?: (questions: CustomQuestion[]) => void
 }
 
-export const CustomQuestionsInput = ({ max, onAddQuestion }: Props) => {
+export const CustomQuestionsInput = ({ max, onChange }: Props) => {
   const [question, setQuestion] = useState<string>('')
   const [questions, setQuestions] = useState<CustomQuestion[]>([])
 
@@ -60,19 +60,17 @@ export const CustomQuestionsInput = ({ max, onAddQuestion }: Props) => {
       return
     }
 
-    if (question) {
-      setQuestions((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          question
-        }
-      ])
-    }
+    const newQuestions = [
+      ...questions,
+      {
+        id: crypto.randomUUID(),
+        question
+      }
+    ]
 
-    if (onAddQuestion) {
-      onAddQuestion(question)
-    }
+    setQuestions(newQuestions)
+
+    onChange?.(newQuestions)
 
     setQuestion('')
   }

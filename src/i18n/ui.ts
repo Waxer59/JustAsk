@@ -168,7 +168,9 @@ export const ui = {
     'login.title': 'Login',
     'login.description': 'Enter your email to receive a login link',
     'login.btn': 'Send magic link',
-    'login.toast.success': 'Check your email'
+    'login.toast.success': 'Check your email',
+    'createSurvey.error': 'An error occurred while creating the survey',
+    'createSurvey.success': 'Survey created successfully'
   },
   es: {
     'meta.description':
@@ -335,6 +337,9 @@ export const ui = {
     'login.description':
       'Introduce tu correo para recibir un enlace de inicio de sesión',
     'login.btn': 'Enviar enlace',
-    'login.toast.success': 'Revisa tu correo'
+    'login.toast.success': 'Revisa tu correo',
+    'createSurvey.error': 'Ha ocurrido un error al crear la encuesta',
+    'createSurvey.success': 'Encuesta creada correctamente',
+    'createSurvey.title.error': 'El título debe de tener al menos 3 caracteres'
   }
 } as const

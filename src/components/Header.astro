@@ -4,7 +4,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n'
 import { cn } from '@lib/utils'
 import { buttonVariants } from '@ui/button'
 import DotPattern from '@ui/magicui/dot-pattern'
-import { LanguagePicker } from './react/LanguagePicker'
+import { LanguagePicker } from './react/common/LanguagePicker'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)

@@ -18,7 +18,7 @@ import { PlusIcon } from 'lucide-react'
 import { useState } from 'react'
 
 interface Props {
-  onChange?: (documents: { name: string; description: string }[]) => void
+  onChange?: (documents: Document[]) => void
 }
 
 const url = new URL(window.location.href)
@@ -39,18 +39,10 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
     const newDocuments = documents.map((document) =>
       document.id === id ? { ...document, isChecked } : document
     )
-    const checkedDocuments = newDocuments.filter(({ isChecked }) => isChecked)
 
     setDocuments(newDocuments)
 
-    if (onChange) {
-      onChange(
-        checkedDocuments.map(({ name, description }) => ({
-          name,
-          description
-        }))
-      )
-    }
+    onChange?.(documents)
   }
 
   const handleAddCustomDocument = () => {

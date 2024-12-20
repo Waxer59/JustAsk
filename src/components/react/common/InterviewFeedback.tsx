@@ -13,17 +13,15 @@ import { getRelativeLocaleUrl } from 'astro:i18n'
 
 interface Props {
   feedback: string
-  score: number
+  score?: number
 }
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 const t = useTranslations(lang)
 
-export const InterviewFeedbackFinal: React.FC<Props> = ({
-  feedback,
-  score
-}) => {
+// TODO: REFACTOR
+export const InterviewFeedback: React.FC<Props> = ({ feedback, score }) => {
   useEffect(() => {
     const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION
 
@@ -51,12 +49,14 @@ export const InterviewFeedbackFinal: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col items-center gap-8 w-full">
-      <h2 className="italic flex items-center gap-8 text-6xl">
-        <span className="font-semibold">{t('score')}: </span>
-        <span className="whitespace-pre-wrap font-medium tracking-tighter text-black dark:text-white">
-          {score ? <NumberTicker value={score} /> : 0}
-        </span>
-      </h2>
+      {score && (
+        <h2 className="italic flex items-center gap-8 text-6xl">
+          <span className="font-semibold">{t('score')}: </span>
+          <span className="whitespace-pre-wrap font-medium tracking-tighter text-black dark:text-white">
+            {score ? <NumberTicker value={score} /> : 0}
+          </span>
+        </h2>
+      )}
       <Card className="text-lg p-4 w-full max-h-[500px] overflow-auto">
         <ReactMarkdown
           children={feedback}

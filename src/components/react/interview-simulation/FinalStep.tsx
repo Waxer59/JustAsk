@@ -1,13 +1,13 @@
 import { useInterviewStore } from '@/store/interview'
-import { Questions } from './QuestionsFinal'
-import { InterviewChatFinal } from './InterviewChatFinal'
+import { InterviewChat } from '../common/InterviewChat'
 import { LANG_CODES, NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
-import { Loading } from './Loading'
-import { InterviewFeedbackFinal } from './InterviewFeedbackFinal'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { ErrorMessage } from './ErrorMessage'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { ErrorMessage } from '../common/ErrorMessage'
+import { InterviewFeedback } from '../common/InterviewFeedback'
+import { Loading } from '../common/Loading'
+import { Questions } from './QuestionsFinal'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
@@ -55,7 +55,7 @@ export const FinalStep = () => {
     <>
       {!isSimulatingInterview && <Questions questions={questions} />}
       {isSimulatingInterview && !hasInterviewFinished && (
-        <InterviewChatFinal
+        <InterviewChat
           questions={interviewQuestions}
           langRecognition={LANG_CODES[lang]}
         />
@@ -63,7 +63,7 @@ export const FinalStep = () => {
 
       {/* Feedback */}
       {feedbackData && (
-        <InterviewFeedbackFinal
+        <InterviewFeedback
           feedback={feedbackData.evaluation.feedback}
           score={+feedbackData.evaluation.score}
         />

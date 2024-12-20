@@ -7,7 +7,7 @@ import { PlusIcon, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-interface Category {
+export interface Category {
   id: string
   name: string
   description: string
@@ -33,9 +33,7 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
 
     setCategories(filteredCategories)
 
-    if (onChange) {
-      onChange(filteredCategories)
-    }
+    onChange?.(filteredCategories)
   }
 
   const handleAddCategory = () => {

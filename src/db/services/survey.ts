@@ -7,15 +7,22 @@ import {
   surveysToSurveysDocuments
 } from '@/db/schemas/survey-schema'
 import { createSurveySchema } from '@/lib/validationSchemas/create-survey'
-import type { CreateSurvey } from '@/types'
+import type { Survey, UpdateSurvey } from '@/types'
+import { createId } from '@paralleldrive/cuid2'
+import { relations, sql } from 'drizzle-orm'
 
 type NewSurvey = typeof survey.$inferInsert
 type NewCategory = typeof surveyCategory.$inferInsert
 type NewDocument = typeof surveyDocument.$inferInsert
 
+export const surveyRelations = relations(survey, ({ many }) => ({
+  surveyToCategories: many(surveysToSurveyCategories),
+  surveyToDocuments: many(surveysToSurveysDocuments)
+}))
+
 export const createSurvey = async (
   userId: string,
-  createSurvey: CreateSurvey
+  createSurvey: Omit<Survey, 'id'>
 ): Promise<{
   survey: NewSurvey
   categories: NewCategory[]
@@ -47,7 +54,6 @@ export const createSurvey = async (
             numberOfSoftSkillsQuestions: data.numberOfSoftSkillsQuestions,
             numberOfHardSkillsQuestions: data.numberOfHardSkillsQuestions,
             customQuestions: data.customQuestions,
-            code: crypto.randomUUID(),
             userId
           })
           .returning()
@@ -112,17 +118,57 @@ export const createSurvey = async (
   return result
 }
 
-// export const updateSurvey = async (
-//   surveyId: string,
-//   updateSurvey: UpdateSurvey
-// ) => {
-//   throw new Error('Not implemented')
-// }
+export const updateSurvey = async (
+  surveyId: string,
+  updateSurvey: UpdateSurvey
+) => {
+  const { error } = createSurveySchema.partial().safeParse(updateSurvey)
 
-// export const deleteSurvey = async (surveyId: string) => {
-//   throw new Error('Not implemented')
-// }
+  if (error) {
+    return null
+  }
 
-// export const getAllUserSurveys = async (userId: string) => {
-//   throw new Error('Not implemented')
-// }
+  // TODO
+}
+
+export const getSurveyByShareCode = async (shareCode: string) => {
+  const findSurvey = await db
+    .select()
+    .from(survey)
+    .where(sql`shareCode = ${shareCode}`)
+
+  return findSurvey.length > 0 ? findSurvey[0] : null
+}
+
+export const deleteSurvey = async (userId: string, surveyId: string) => {
+  return await db
+    .delete(survey)
+    .where(sql`userId = ${userId} AND id = ${surveyId}`)
+}
+
+export const getAllUserSurveys = async (userId: string) => {
+  return await db.query.survey.findMany({
+    with: {
+      surveyToCategories: true,
+      surveyToDocuments: true
+    },
+    where: (survey, { eq }) => eq(survey.userId, userId)
+  })
+}
+
+export const createShareSurvey = async (surveyId: string, userId: string) => {
+  let shareCode
+
+  do {
+    shareCode = createId()
+  } while ((await getSurveyByShareCode(shareCode)) !== null)
+
+  const newSurvey = await db
+    .update(survey)
+    .set({
+      shareCode
+    })
+    .where(sql`id = ${surveyId} AND userId = ${userId}`)
+
+  return newSurvey
+}

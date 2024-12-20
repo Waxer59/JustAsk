@@ -46,7 +46,14 @@ export interface SurveyDocument {
   description: string
 }
 
-export interface CreateSurvey {
+export interface CreateSurveyUser {
+  name: string
+  email: string
+  surveyId: string
+}
+
+export interface Survey {
+  id: string
   title: string
   description: string
   lang: 'es' | 'en'
@@ -61,7 +68,7 @@ export interface CreateSurvey {
   documents: SurveyDocument[]
 }
 
-export type UpdateSurvey = Partial<CreateSurvey>
+export type UpdateSurvey = Partial<Survey>
 
 export interface Document {
   id: string

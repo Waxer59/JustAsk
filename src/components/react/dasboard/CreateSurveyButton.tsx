@@ -39,10 +39,17 @@ import {
   SelectTrigger,
   SelectValue
 } from '@ui/select'
-import { CustomQuestionsInput } from './CustomQuestionsInput'
-import { CategoryCreationInput } from './CategoryCreationInput'
+import {
+  CustomQuestionsInput,
+  type CustomQuestion
+} from './CustomQuestionsInput'
+import { CategoryCreationInput, type Category } from './CategoryCreationInput'
 import { DocumentSelector } from './DocumentSelector'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { useState } from 'react'
+import type { Document } from '@/types'
+import { toast } from 'sonner'
+import { useSurveyStore } from '@/store/survey'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
@@ -53,7 +60,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   language: z.enum(INTERVIEW_LANGUAGES),
   offerTitle: z.string().min(1, { message: '' }),
-  offerStyle: z.string(),
+  offerStyle: z.string().min(1, { message: '' }),
   offerDescription: z.string().optional(),
   offerAditionalInformation: z.string().optional(),
   numberOfHardQuestions: z.number().min(1, { message: '' }),
@@ -61,17 +68,57 @@ const formSchema = z.object({
 })
 
 export function CreateSurveyButton() {
+  const [questions, setQuestions] = useState<CustomQuestion[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [documents, setDocuments] = useState<Document[]>([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
-      description: ''
+      description: '',
+      language: lang,
+      offerTitle: '',
+      offerDescription: '',
+      offerAditionalInformation: '',
+      numberOfHardQuestions: 3,
+      numberOfSoftQuestions: 3
     }
   })
+  const { addSurvey } = useSurveyStore()
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+    const resp = await fetch('/api/survey', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...values,
+        categories: categories.map(({ name, description }) => ({
+          name,
+          description
+        })),
+        documents: documents.map(({ name, description }) => ({
+          name,
+          description
+        })),
+        questions: questions.map(({ question }) => question)
+      })
+    })
+
+    const body = await resp.json()
+
+    if (body.survey) {
+      addSurvey(body.survey)
+      toast.success(t('createSurvey.success'))
+    } else {
+      toast.error(t('createSurvey.error'))
+    }
   }
+
+  const totalOfQuestions =
+    form.getValues('numberOfHardQuestions') +
+    form.getValues('numberOfSoftQuestions')
 
   return (
     <>
@@ -367,7 +414,10 @@ export function CreateSurveyButton() {
                         </div>
                       </li>
                       <li>
-                        <CustomQuestionsInput max={2} />
+                        <CustomQuestionsInput
+                          max={totalOfQuestions}
+                          onChange={setQuestions}
+                        />
                       </li>
                     </ul>
                   </AccordionContent>
@@ -380,7 +430,7 @@ export function CreateSurveyButton() {
                     <p>
                       {t('dashboard.createSurvey.categorization.description')}
                     </p>
-                    <CategoryCreationInput />
+                    <CategoryCreationInput onChange={setCategories} />
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="documents">
@@ -389,7 +439,7 @@ export function CreateSurveyButton() {
                   </AccordionTrigger>
                   <AccordionContent className="space-y-6">
                     <p>{t('dashboard.createSurvey.documents.description')}</p>
-                    <DocumentSelector />
+                    <DocumentSelector onChange={setDocuments} />
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

@@ -1,7 +1,7 @@
 import { Toaster } from '@ui/sonner'
-import { LanguagePicker } from '@components/react/LanguagePicker'
-import { ProfileButton } from '@components/react/ProfileButton'
-import { CreateSurveyButton } from '@components/react/CreateSurveyButton'
+import { LanguagePicker } from '@/components/react/common/LanguagePicker'
+import { ProfileButton } from '@/components/react/dasboard/ProfileButton'
+import { CreateSurveyButton } from '@/components/react/dasboard/CreateSurveyButton'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 interface Props {

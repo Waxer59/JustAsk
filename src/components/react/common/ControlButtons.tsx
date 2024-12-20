@@ -1,7 +1,4 @@
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
-import { useUiStore } from '@/store/ui'
-import { numberOfSteps } from '@/types'
-import { useInterviewStore } from '@store/interview'
 import { Button } from '@ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
@@ -9,27 +6,38 @@ const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 const t = useTranslations(lang)
 
-export const ControlButtons = () => {
-  const disableControlButtons = useUiStore(
-    (state) => state.disableControlButtons
-  )
-  const currentStep = useInterviewStore((state) => state.currentStep)
-  const nextStep = useInterviewStore((state) => state.nextStep)
-  const prevStep = useInterviewStore((state) => state.prevStep)
+interface Props {
+  currentStep: number
+  totalSteps: number
+  hideNextControlButtonStep?: number
+  hidePrevControlButtonStep?: number
+  disableControlButtons?: boolean
+  onNext?: () => void
+  onPrev?: () => void
+}
 
+export const ControlButtons: React.FC<Props> = ({
+  currentStep,
+  totalSteps,
+  disableControlButtons,
+  hideNextControlButtonStep = totalSteps - 1,
+  hidePrevControlButtonStep = 0,
+  onNext,
+  onPrev
+}) => {
   return (
     <div className="flex items-center justify-center gap-4">
-      {currentStep > 0 && (
+      {currentStep > hidePrevControlButtonStep && (
         <Button
-          onClick={prevStep}
+          onClick={() => onPrev?.()}
           variant="secondary"
           disabled={disableControlButtons}>
           <ArrowLeft className="stroke-1" /> {t('controlButton.previous')}
         </Button>
       )}
-      {currentStep < numberOfSteps - 2 && (
+      {currentStep < hideNextControlButtonStep && (
         <Button
-          onClick={nextStep}
+          onClick={() => onNext?.()}
           variant="secondary"
           disabled={disableControlButtons}>
           {t('controlButton.next')} <ArrowRight className="stroke-1" />

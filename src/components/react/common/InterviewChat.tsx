@@ -32,7 +32,8 @@ const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
 const t = useTranslations(lang)
 
-export const InterviewChatFinal: React.FC<Props> = ({
+// TODO: REFACTOR
+export const InterviewChat: React.FC<Props> = ({
   questions,
   langRecognition = LANG_CODES.es
 }) => {

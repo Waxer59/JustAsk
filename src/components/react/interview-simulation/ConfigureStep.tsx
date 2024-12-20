@@ -20,8 +20,8 @@ import { useEffect, useState } from 'react'
 import type { CreateQuestionsData, CreateQuestionsResponse } from '@/types'
 import { useUiStore } from '@/store/ui'
 import { toast } from 'sonner'
-import { Loading } from './Loading'
-import { ErrorMessage } from './ErrorMessage'
+import { Loading } from '../common/Loading'
+import { ErrorMessage } from '../common/ErrorMessage'
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const url = new URL(window.location.href)

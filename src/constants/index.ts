@@ -19,7 +19,7 @@ export const NUMBER_OF_INTERVIEW_QUESTIONS = 5
 export const LANGUAGE_TEXT = {
   es: 'español',
   en: 'english'
-}
+} as const
 
 export const CONFETTI_DURATION = 1.5 * 1000 // ms
 export const CONFETTI_DEFAULTS = {

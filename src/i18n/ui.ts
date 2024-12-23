@@ -172,7 +172,8 @@ export const ui = {
     'createSurvey.error': 'An error occurred while creating the survey',
     'createSurvey.success': 'Survey created successfully',
     '404.title': 'Page not found :(',
-    '404.return': 'Return to the homepage'
+    '404.return': 'Return to the homepage',
+    'createSurvey.title.error': 'The title must have at least 3 characters'
   },
   es: {
     'meta.description':

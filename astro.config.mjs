@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
-import vercel from '@astrojs/vercel'
+import vercel from '@astrojs/vercel/serverless'
 import react from '@astrojs/react'
 import { defaultLang, languages } from './src/i18n/ui'
 import sitemap from '@astrojs/sitemap'

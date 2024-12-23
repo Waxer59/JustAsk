@@ -49,7 +49,7 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { useState } from 'react'
 import type { Document } from '@/types'
 import { toast } from 'sonner'
-import { useSurveyStore } from '@/store/survey'
+import { useDashboardStore } from '@/store/dashboard'
 
 const url = new URL(window.location.href)
 const lang = getLangFromUrl(url)
@@ -84,7 +84,7 @@ export function CreateSurveyButton() {
       numberOfSoftQuestions: 3
     }
   })
-  const { addSurvey } = useSurveyStore()
+  const { addSurvey } = useDashboardStore()
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const resp = await fetch('/api/survey', {

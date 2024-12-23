@@ -1,8 +1,10 @@
 ---
 import { Survey } from '@/components/react/survey/Survey'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+
+const { id } = Astro.params
 ---
 
 <BaseLayout>
-  <Survey />
+  <Survey client:only="react" surveyId={id!} />
 </BaseLayout>

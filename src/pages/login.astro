@@ -6,6 +6,12 @@ import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
+
+const user = Astro.locals.user
+
+if (user) {
+  return Astro.redirect('/dashboard')
+}
 ---
 
 <BaseLayout>

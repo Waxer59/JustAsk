@@ -12,6 +12,8 @@ interface Props {
   hideNextControlButtonStep?: number
   hidePrevControlButtonStep?: number
   disableControlButtons?: boolean
+  disableNextControlButton?: boolean
+  disablePrevControlButton?: boolean
   onNext?: () => void
   onPrev?: () => void
 }
@@ -22,6 +24,8 @@ export const ControlButtons: React.FC<Props> = ({
   disableControlButtons,
   hideNextControlButtonStep = totalSteps - 1,
   hidePrevControlButtonStep = 0,
+  disableNextControlButton,
+  disablePrevControlButton,
   onNext,
   onPrev
 }) => {
@@ -31,7 +35,7 @@ export const ControlButtons: React.FC<Props> = ({
         <Button
           onClick={() => onPrev?.()}
           variant="secondary"
-          disabled={disableControlButtons}>
+          disabled={disableControlButtons || disablePrevControlButton}>
           <ArrowLeft className="stroke-1" /> {t('controlButton.previous')}
         </Button>
       )}
@@ -39,7 +43,7 @@ export const ControlButtons: React.FC<Props> = ({
         <Button
           onClick={() => onNext?.()}
           variant="secondary"
-          disabled={disableControlButtons}>
+          disabled={disableControlButtons || disableNextControlButton}>
           {t('controlButton.next')} <ArrowRight className="stroke-1" />
         </Button>
       )}

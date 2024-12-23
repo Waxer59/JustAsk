@@ -3,6 +3,8 @@ export interface OfferDetails {
   description: string
 }
 
+export type SuportLanguages = 'en' | 'es'
+
 export interface CreateQuestionsResponse {
   questions: string[]
 }
@@ -25,6 +27,7 @@ export interface CreateQuestionsData {
 export interface DocumentContent {
   id: string
   content: string
+  file: File
 }
 
 export enum InterviewProcessSteps {
@@ -34,7 +37,16 @@ export enum InterviewProcessSteps {
   COMPLETE
 }
 
-export const numberOfSteps = Object.keys(InterviewProcessSteps).length / 2 // We divide by two because Object.keys() in a enum returns an array of key names and key indexes e.g. enum X { OFFER } will return [0, 'OFFER']
+export enum SurveySteps {
+  USER,
+  DOCUMENTS,
+  INTERVIEW
+}
+
+export const numberOfInterviewSteps =
+  Object.keys(InterviewProcessSteps).length / 2 // We divide by two because Object.keys() in a enum returns an array of key names and key indexes e.g. enum X { OFFER } will return [0, 'OFFER']
+
+export const numberOfSurveySteps = Object.keys(SurveySteps).length / 2 // Refer to the comment above
 
 export interface SurveyCategory {
   name: string
@@ -56,7 +68,7 @@ export interface Survey {
   id: string
   title: string
   description: string
-  lang: 'es' | 'en'
+  lang: SuportLanguages
   offerStyle: string
   offerTitle: string
   offerDescription: string

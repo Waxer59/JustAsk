@@ -35,6 +35,9 @@ export const InterviewProcess = () => {
   const nextStep = useInterviewStore((state) => state.nextStep)
   const prevStep = useInterviewStore((state) => state.prevStep)
   const hideControlButtons = useUiStore((state) => state.hideControlButtons)
+  const disableControlButtons = useUiStore(
+    (state) => state.disableControlButtons
+  )
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -50,6 +53,7 @@ export const InterviewProcess = () => {
           {!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) &&
             !hideControlButtons && (
               <ControlButtons
+                disableControlButtons={disableControlButtons}
                 currentStep={currentStep}
                 totalSteps={steps.length}
                 hideNextControlButtonStep={steps.length - 2}

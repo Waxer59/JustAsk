@@ -87,7 +87,7 @@ export const ui = {
     'dashboard.title': 'Dashboard',
     'dashboard.createSurvey': 'Create Survey',
     'dashboard.createSurvey.description':
-      'Create a survey to get instant feedback from your customers.',
+      'Create a survey to get instant feedback from your users.',
     'dashboard.createSurvey.general': 'General',
     'dashboard.createSurvey.general.title': 'Title',
     'dashboard.createSurvey.general.title.placeholder': 'Students survey',
@@ -170,7 +170,9 @@ export const ui = {
     'login.btn': 'Send magic link',
     'login.toast.success': 'Check your email',
     'createSurvey.error': 'An error occurred while creating the survey',
-    'createSurvey.success': 'Survey created successfully'
+    'createSurvey.success': 'Survey created successfully',
+    '404.title': 'Page not found :(',
+    '404.return': 'Return to the homepage'
   },
   es: {
     'meta.description':
@@ -252,7 +254,7 @@ export const ui = {
     'dashboard.title': 'Panel de Control',
     'dashboard.createSurvey': 'Crear Encuesta',
     'dashboard.createSurvey.description':
-      'Crea una encuesta para obtener retroalimentación instantánea de tus clientes.',
+      'Crea una encuesta para obtener retroalimentación instantánea de tus usuarios.',
     'dashboard.createSurvey.general': 'General',
     'dashboard.createSurvey.general.title': 'Título',
     'dashboard.createSurvey.general.title.placeholder':
@@ -340,6 +342,8 @@ export const ui = {
     'login.toast.success': 'Revisa tu correo',
     'createSurvey.error': 'Ha ocurrido un error al crear la encuesta',
     'createSurvey.success': 'Encuesta creada correctamente',
-    'createSurvey.title.error': 'El título debe de tener al menos 3 caracteres'
+    'createSurvey.title.error': 'El título debe de tener al menos 3 caracteres',
+    '404.title': 'Página no encontrada :(',
+    '404.return': 'Volver a la página principal'
   }
 } as const

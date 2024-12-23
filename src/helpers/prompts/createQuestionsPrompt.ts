@@ -1,5 +1,5 @@
-import type { OfferDetails } from '@/types'
-import { userInputQuestionsPrompt } from './UserInputQuestionsPrompt'
+import type { OfferDetails, SuportLanguages } from '@/types'
+import { userInputQuestionsPrompt } from './userInputQuestionsPrompt'
 
 export const createQuestionsPrompt = ({
   language,
@@ -8,7 +8,7 @@ export const createQuestionsPrompt = ({
   additionalInfo,
   documentsContent
 }: {
-  language: string
+  language: SuportLanguages
   offer: OfferDetails
   interviewStyle: string
   additionalInfo?: string

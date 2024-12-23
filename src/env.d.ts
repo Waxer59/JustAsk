@@ -1,5 +1,7 @@
 /// <reference types="astro/client" />
 
+type EdgeLocals = import('@astrojs/vercel').EdgeLocals
+
 interface ImportMetaEnv {
   readonly JSEARCH_API_KEY: string
   readonly RAPID_API_HOST: string
@@ -14,7 +16,7 @@ interface ImportMeta {
 
 declare namespace App {
   // Note: 'import {} from ""' syntax does not work in .d.ts files.
-  interface Locals {
+  interface Locals extends EdgeLocals {
     user: import('better-auth').User | null
     session: import('better-auth').Session | null
   }

@@ -18,7 +18,9 @@ export default defineConfig({
   },
   output: 'server',
   site: cannonicalURL,
-  adapter: vercel(),
+  adapter: vercel({
+    edgeMiddleware: true
+  }),
   integrations: [
     tailwind({
       applyBaseStyles: false

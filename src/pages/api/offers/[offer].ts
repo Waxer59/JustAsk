@@ -1,5 +1,9 @@
 import type { APIRoute } from 'astro'
 
+export const config = {
+  runtime: 'nodejs'
+}
+
 const JSEARCH_API_KEY = import.meta.env.JSEARCH_API_KEY
 const RAPID_API_HOST = import.meta.env.RAPID_API_HOST
 

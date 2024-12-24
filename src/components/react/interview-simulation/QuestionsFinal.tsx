@@ -5,16 +5,14 @@ import { Card } from '@ui/card'
 import confetti from 'canvas-confetti'
 import { RefreshCw } from 'lucide-react'
 import { useEffect } from 'react'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getUiTranslations } from '@/i18n/utils'
 
 interface Props {
   questions: string[]
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 export const Questions: React.FC<Props> = ({ questions }) => {
   useEffect(() => {

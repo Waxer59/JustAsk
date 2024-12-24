@@ -1,13 +1,11 @@
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 import { authClient } from '@/lib/auth-client'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { useRef } from 'react'
 import { toast } from 'sonner'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 export const LoginForm = () => {
   const formRef = useRef<HTMLFormElement>(null)

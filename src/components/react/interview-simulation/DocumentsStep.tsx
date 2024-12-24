@@ -1,14 +1,12 @@
 import { useInterviewStore } from '@store/interview'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { useUiStore } from '@/store/ui'
 import { documentToText } from '@/helpers/documentToText'
 import { toast } from 'sonner'
 import { FileUploader } from '../common/FileUploader'
 import { useState } from 'react'
+import { getUiTranslations } from '@/i18n/utils'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t } = getUiTranslations()
 
 export const DocumentsStep = () => {
   const [isUploading, setIsUploading] = useState(false)
@@ -26,6 +24,7 @@ export const DocumentsStep = () => {
   const removeFile = async (file: any) => {
     const deletedFileId = file.id
     removeDocumentContentById(deletedFileId)
+    toast.success(t('fileRemove.success'))
   }
 
   const addFile = async (file: any) => {

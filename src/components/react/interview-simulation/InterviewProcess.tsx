@@ -8,9 +8,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from '@ui/sonner'
 import { ConfigureStep } from './ConfigureStep'
 import { useUiStore } from '@store/ui'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { OfferStep } from './OfferStep'
 import { FinalStep } from './FinalStep'
+import { getUiTranslations } from '@/i18n/utils'
 
 const HIDE_CONTROL_BUTTONS_STEPS = [
   InterviewProcessSteps.OFFER,
@@ -19,9 +19,7 @@ const HIDE_CONTROL_BUTTONS_STEPS = [
 
 const queryClient = new QueryClient()
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t } = getUiTranslations()
 
 const steps = [
   t('stepper.step.1'),
@@ -44,7 +42,7 @@ export const InterviewProcess = () => {
       <div className="mt-16">
         <Stepper steps={steps} currentStep={currentStep} />
 
-        <div className="mt-28 flex flex-col gap-12 items-center justify-center max-w-5xl mx-auto pb-5">
+        <div className="mt-28 flex flex-col gap-12 items-center justify-center max-w-3xl mx-auto pb-5">
           {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
           {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}
           {currentStep === InterviewProcessSteps.SETUP && <ConfigureStep />}

@@ -22,11 +22,9 @@ import { useUiStore } from '@/store/ui'
 import { toast } from 'sonner'
 import { Loading } from '../common/Loading'
 import { ErrorMessage } from '../common/ErrorMessage'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 const formSchema = z.object({
   type: z.enum(['interview', 'questions']),

@@ -57,6 +57,8 @@ export const FileUploader: React.FC<Props> = ({
       oninit={() => {
         if (defaultFiles) {
           defaultFiles.forEach((file) => {
+            if (!file) return
+
             // Mark file as default to prevent it from being processed
             filepondRef.current?.addFile(file, {
               metadata: { isDefault: true }

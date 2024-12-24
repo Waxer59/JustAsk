@@ -14,11 +14,9 @@ import { Input } from '@ui/input'
 import { Textarea } from '@ui/textarea'
 import { Button } from '@ui/button'
 import { useInterviewStore } from '@store/interview'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t } = getUiTranslations()
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),

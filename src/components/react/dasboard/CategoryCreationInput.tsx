@@ -1,4 +1,4 @@
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 import { Button } from '@/ui/button'
 import { Textarea } from '@/ui/textarea'
 import { FormItem, FormLabel, FormControl, FormMessage } from '@ui/form'
@@ -17,9 +17,7 @@ interface Props {
   onChange?: (categories: Category[]) => void
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t } = getUiTranslations()
 
 export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
   const [name, setName] = useState('')

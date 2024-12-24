@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm'
 import { Card } from '@ui/card'
 import { randomInRange } from '@helpers/randomInRange'
 import { CONFETTI_DEFAULTS, CONFETTI_DURATION } from '@constants'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 
 interface Props {
@@ -16,9 +16,7 @@ interface Props {
   score?: number
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 // TODO: REFACTOR
 export const InterviewFeedback: React.FC<Props> = ({ feedback, score }) => {

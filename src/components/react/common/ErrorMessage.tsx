@@ -1,15 +1,13 @@
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { Button } from '@ui/button'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { Frown, RefreshCw } from 'lucide-react'
+import { getUiTranslations } from '@/i18n/utils'
 
 interface Props {
   text: string
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 export const ErrorMessage: React.FC<Props> = ({ text }) => {
   return (

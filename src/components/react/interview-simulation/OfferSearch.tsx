@@ -8,11 +8,9 @@ import { Button } from '@ui/button'
 import type { OffersResponse } from '@/types'
 import { useInterviewStore } from '@store/interview'
 import { BounceLoader } from 'react-spinners'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t } = getUiTranslations()
 
 export const OfferSearch = () => {
   const [search, setSearch] = useState<string>('')

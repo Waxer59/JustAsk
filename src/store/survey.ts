@@ -1,4 +1,4 @@
-import { numberOfSurveySteps, SurveySteps } from '@/types'
+import { numberOfSurveySteps, SurveySteps, type DocumentContent } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
@@ -7,16 +7,18 @@ interface State {
   name: string
   email: string
   currentStep: SurveySteps
-  files: File[]
+  files: DocumentContent[]
+  haveRequiredDocuments: boolean
 }
 
 interface Actions {
   setCurrentSurveyId: (id: string) => void
   setName: (name: string) => void
   setEmail: (email: string) => void
-  addFile: (file: File) => void
-  removeFile: (file: File) => void
+  addFile: (file: DocumentContent) => void
+  removeFile: (fileId: string) => void
   setCurrentStep: (step: SurveySteps) => void
+  setHaveRequiredDocuments: (haveRequiredDocuments: boolean) => void
   nextStep: () => void
   prevStep: () => void
   clear: () => void
@@ -27,7 +29,8 @@ const initialState: State = {
   name: '',
   email: '',
   currentStep: SurveySteps.USER,
-  files: []
+  files: [],
+  haveRequiredDocuments: false
 }
 
 export const useSurveyStore = create<State & Actions>()(
@@ -42,16 +45,22 @@ export const useSurveyStore = create<State & Actions>()(
         set({
           name: name
         }),
+      setHaveRequiredDocuments: (haveRequiredDocuments) =>
+        set({
+          haveRequiredDocuments: haveRequiredDocuments
+        }),
       setEmail: (email) => set({ email: email }),
       addFile: (file) => set({ files: [...get().files, file] }),
-      removeFile: (file) =>
-        set({ files: get().files.filter((f) => f !== file) }),
+      removeFile: (fileId) =>
+        set({ files: get().files.filter((f) => f.id !== fileId) }),
       setCurrentStep: (step) => set({ currentStep: step }),
       nextStep: () => {
         const nextStep = get().currentStep + 1
-        const haveDocumentsStep = get().files.length > 0
 
-        if (!haveDocumentsStep && nextStep === SurveySteps.DOCUMENTS) {
+        if (
+          !get().haveRequiredDocuments &&
+          nextStep === SurveySteps.DOCUMENTS
+        ) {
           set({ currentStep: nextStep + 1 }) // Skip step
         } else {
           set({
@@ -63,10 +72,12 @@ export const useSurveyStore = create<State & Actions>()(
         }
       },
       prevStep: () => {
-        const haveDocumentsStep = get().files.length > 0
         const prevStep = get().currentStep - 1
 
-        if (!haveDocumentsStep && prevStep === SurveySteps.DOCUMENTS) {
+        if (
+          !get().haveRequiredDocuments &&
+          prevStep === SurveySteps.DOCUMENTS
+        ) {
           set({ currentStep: prevStep - 1 }) // Skip step
         } else {
           set({

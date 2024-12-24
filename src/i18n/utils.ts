@@ -11,3 +11,14 @@ export function useTranslations(lang: keyof typeof ui) {
     return ui[lang][key] || ui[defaultLang][key]
   }
 }
+
+export const getUiTranslations = () => {
+  const url = new URL(window.location.href)
+  const lang = getLangFromUrl(url)
+  const t = useTranslations(lang)
+
+  return {
+    t,
+    lang
+  }
+}

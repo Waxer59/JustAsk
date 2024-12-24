@@ -45,15 +45,13 @@ import {
 } from './CustomQuestionsInput'
 import { CategoryCreationInput, type Category } from './CategoryCreationInput'
 import { DocumentSelector } from './DocumentSelector'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { useState } from 'react'
 import type { Document } from '@/types'
 import { toast } from 'sonner'
 import { useDashboardStore } from '@/store/dashboard'
+import { getUiTranslations } from '@/i18n/utils'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),

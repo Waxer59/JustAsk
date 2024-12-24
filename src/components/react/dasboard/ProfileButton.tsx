@@ -1,4 +1,4 @@
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 import { authClient } from '@/lib/auth-client'
 import {
   DropdownMenu,
@@ -11,9 +11,7 @@ import {
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { UserIcon } from 'lucide-react'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 export const ProfileButton = () => {
   const handleSignOut = () => {

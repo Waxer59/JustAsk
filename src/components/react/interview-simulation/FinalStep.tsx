@@ -3,15 +3,13 @@ import { InterviewChat } from '../common/InterviewChat'
 import { LANG_CODES, NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { ErrorMessage } from '../common/ErrorMessage'
 import { InterviewFeedback } from '../common/InterviewFeedback'
 import { Loading } from '../common/Loading'
 import { Questions } from './QuestionsFinal'
+import { getUiTranslations } from '@/i18n/utils'
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 export const FinalStep = () => {
   const isSimulatingInterview = useInterviewStore(

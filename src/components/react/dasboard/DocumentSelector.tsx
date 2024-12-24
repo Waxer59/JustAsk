@@ -1,5 +1,5 @@
 import { DEFAULT_DOUMENTS } from '@/constants'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 import type { Document } from '@/types'
 import { Button } from '@/ui/button'
 import { Checkbox } from '@/ui/checkbox'
@@ -21,9 +21,7 @@ interface Props {
   onChange?: (documents: Document[]) => void
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t, lang } = getUiTranslations()
 
 export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
   const [documents, setDocuments] = useState<Document[]>([

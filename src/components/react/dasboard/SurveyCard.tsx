@@ -32,8 +32,8 @@ import {
   TooltipContent
 } from '@ui/tooltip'
 import { toast } from 'sonner'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { Badge } from '@/ui/badge'
+import { getUiTranslations } from '@/i18n/utils'
 
 interface Props {
   title: string
@@ -42,9 +42,7 @@ interface Props {
   numberOfResponses: number
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+const { t } = getUiTranslations()
 
 export const SurveyCard = ({
   title,

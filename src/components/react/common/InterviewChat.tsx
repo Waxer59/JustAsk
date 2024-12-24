@@ -1,4 +1,3 @@
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { useInterviewStore } from '@/store/interview'
 import { AutosizeTextarea } from '@ui/autosize-textarea'
 import { Button } from '@ui/button'
@@ -16,6 +15,9 @@ import hark, { type Harker } from 'hark'
 import { getUserMicrophone } from '@/helpers/getUserMicrophone'
 import { LANG_CODES } from '@/constants'
 import { Card } from '@/ui/card'
+import { getUiTranslations } from '@/i18n/utils'
+
+const { t } = getUiTranslations()
 
 const SILENCE_TIME = 3 * 1000 // 3 sec
 
@@ -27,10 +29,6 @@ interface Props {
 const SpeechRecognition =
   // @ts-expect-error https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#javascript
   window.SpeechRecognition || window.webkitSpeechRecognition
-
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
 
 // TODO: REFACTOR
 export const InterviewChat: React.FC<Props> = ({

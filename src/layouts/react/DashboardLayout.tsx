@@ -2,14 +2,13 @@ import { Toaster } from '@ui/sonner'
 import { LanguagePicker } from '@/components/react/common/LanguagePicker'
 import { ProfileButton } from '@/components/react/dasboard/ProfileButton'
 import { CreateSurveyButton } from '@/components/react/dasboard/CreateSurveyButton'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 
 interface Props {
   children: React.ReactNode
 }
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
+
+const { t } = getUiTranslations()
 
 export function DashboardLayout({ children }: Props) {
   return (

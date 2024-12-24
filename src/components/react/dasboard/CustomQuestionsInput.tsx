@@ -1,5 +1,3 @@
-'use client'
-
 import { Input } from '@ui/input'
 import {
   FormControl,
@@ -18,21 +16,19 @@ import {
 import { PlusIcon, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+import { getUiTranslations } from '@/i18n/utils'
 
 export interface CustomQuestion {
   id: string
   question: string
 }
 
-const url = new URL(window.location.href)
-const lang = getLangFromUrl(url)
-const t = useTranslations(lang)
-
 interface Props {
   max?: number
   onChange?: (questions: CustomQuestion[]) => void
 }
+
+const { t } = getUiTranslations()
 
 export const CustomQuestionsInput = ({ max, onChange }: Props) => {
   const [question, setQuestion] = useState<string>('')

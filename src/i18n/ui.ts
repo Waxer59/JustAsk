@@ -68,6 +68,7 @@ export const ui = {
     'fileUpload.error': 'An error occurred while uploading the file.',
     'fileUpload.loading': 'Loading file...',
     'fileUpload.success': 'File uploaded successfully',
+    'fileRemove.success': 'File removed successfully',
     score: 'Score',
     restart: 'Try again',
     questions: 'Questions',
@@ -239,6 +240,7 @@ export const ui = {
     'fileUpload.error': 'Ocurrio un error subiendo el archivo',
     'fileUpload.loading': 'Cargando archivo...',
     'fileUpload.success': 'Archivo subido correctamente',
+    'fileRemove.success': 'Archivo eliminado correctamente',
     'chat.talk': 'Hablar',
     'chat.error.speechRecognition':
       'Tu navegador no soporta el reconocimiento de voz, por favor utiliza un navegador compatible con esta característica.',

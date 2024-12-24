@@ -1,0 +1,24 @@
+---
+import AuthLayout from '@/layouts/react/AuthLayout'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { LoginForm } from '@/components/react/dasboard/LoginForm'
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const user = Astro.locals.user
+
+if (user) {
+  return Astro.redirect('/dashboard')
+}
+---
+
+<BaseLayout>
+  <AuthLayout
+    client:only="react"
+    title={t('login.title')}
+    description={t('login.description')}>
+    <LoginForm client:only="react" />
+  </AuthLayout>
+</BaseLayout>

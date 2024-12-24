@@ -1,6 +1,6 @@
 import {
   InterviewProcessSteps,
-  numberOfSteps,
+  numberOfInterviewSteps,
   type DocumentContent,
   type OfferDetails
 } from '@/types'
@@ -55,7 +55,7 @@ export const useInterviewStore = create<State & Actions>()(
     nextStep: () => {
       const currentStep = get().currentStep
 
-      if (currentStep < numberOfSteps - 1) {
+      if (currentStep < numberOfInterviewSteps - 1) {
         set({ currentStep: currentStep + 1 })
       }
     },

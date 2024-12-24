@@ -1,3 +1,5 @@
+import type { Document } from '@/types'
+
 export const ALLOWED_FILE_MIME_TYPES = [
   'image/bmp',
   'image/jpeg',
@@ -17,7 +19,7 @@ export const NUMBER_OF_INTERVIEW_QUESTIONS = 5
 export const LANGUAGE_TEXT = {
   es: 'español',
   en: 'english'
-}
+} as const
 
 export const CONFETTI_DURATION = 1.5 * 1000 // ms
 export const CONFETTI_DEFAULTS = {
@@ -25,4 +27,39 @@ export const CONFETTI_DEFAULTS = {
   spread: 360,
   ticks: 60,
   zIndex: 0
+}
+
+export const INTERVIEW_LANGUAGES = ['en', 'es'] as const
+export const MAX_NUMBER_OF_QUESTIONS = 10
+
+export const PRIVATE_ROUTES = ['/dashboard']
+
+export const DEFAULT_DOUMENTS: Record<string, Document[]> = {
+  en: [
+    {
+      id: 'cv',
+      name: 'Curriculum Vitae',
+      description: 'Professional resume detailing work experience and skills'
+    },
+    {
+      id: 'swot',
+      name: 'SWOT Analysis',
+      description:
+        'Analysis of Strengths, Weaknesses, Opportunities, and Threats'
+    }
+  ],
+  es: [
+    {
+      id: 'cv',
+      name: 'Curriculum Vitae',
+      description:
+        'Resumen profesional que detalla experiencia laboral y habilidades'
+    },
+    {
+      id: 'swot',
+      name: 'Análisis DAFO',
+      description:
+        'Análisis de fortalezas, debilidades, oportunidades y amenazas'
+    }
+  ]
 }

@@ -3,13 +3,11 @@ import tailwind from '@astrojs/tailwind'
 import vercel from '@astrojs/vercel'
 import react from '@astrojs/react'
 import { defaultLang, languages } from './src/i18n/ui'
-
 import sitemap from '@astrojs/sitemap'
 import { cannonicalURL } from './src/constants/seo'
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'hybrid',
   vite: {
     optimizeDeps: {
       exclude: ['scribe.js-ocr']
@@ -18,6 +16,7 @@ export default defineConfig({
       format: 'es'
     }
   },
+  output: 'server',
   site: cannonicalURL,
   adapter: vercel(),
   integrations: [

@@ -1,23 +1,26 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import Footer from '@/components/Footer.astro'
 import { DashboardLayout } from '@layouts/react/DashboardLayout'
 import { SurveyCard } from '@/components/react/dasboard/SurveyCard'
-import Footer from '@/components/Footer.astro'
+import { getAllUserSurveys } from '@/db/services/survey'
+
+const surveys = await getAllUserSurveys(Astro.locals.user!.id)
 ---
 
 <BaseLayout>
   <DashboardLayout client:only="react">
     <div class="flex flex-col justify-between">
-      <main class="">
+      <main>
         <ul class="grid grid-cols-6 gap-4">
           {
-            Array.from({ length: 10 }).map(() => (
+            surveys.map((survey) => (
               <li class="col-span-full md:col-span-3 xl:col-span-2">
                 <SurveyCard
-                  title="Survey 1"
-                  url="https://www.justask.com"
-                  description="This is a description of the survey"
-                  numberOfResponses={100}
+                  title={survey.title}
+                  url={`${Astro.site!.origin}/${survey.code}`}
+                  description={survey.description ?? undefined}
+                  numberOfResponses={survey.numberOfResponses}
                   client:only="react"
                 />
               </li>

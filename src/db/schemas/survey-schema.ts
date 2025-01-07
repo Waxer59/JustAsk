@@ -7,7 +7,13 @@ import {
   boolean
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
-import { INTERVIEW_LANGUAGES } from '@/constants'
+import {
+  DEFAULT_ATTEMPTS,
+  DEFAULT_HARD_SKILLS_QUESTIONS,
+  DEFAULT_MAX_SUBMISSIONS,
+  DEFAULT_SOFT_SKILLS_QUESTIONS,
+  INTERVIEW_LANGUAGES
+} from '@/constants'
 import { createId } from '@paralleldrive/cuid2'
 
 export const langEnum = pgEnum('lang', INTERVIEW_LANGUAGES)
@@ -25,11 +31,13 @@ export const survey = pgTable(
     offerAdditionalInfo: text('offer_additional_info'),
     numberOfSoftSkillsQuestions: integer(
       'number_of_soft_skills_questions'
-    ).default(3),
+    ).default(DEFAULT_SOFT_SKILLS_QUESTIONS),
     numberOfHardSkillsQuestions: integer(
       'number_of_hard_skills_questions'
-    ).default(3),
+    ).default(DEFAULT_HARD_SKILLS_QUESTIONS),
     customQuestions: text('custom_questions').array().default([]),
+    maxSubmissions: integer('max_submissions').default(DEFAULT_MAX_SUBMISSIONS),
+    maxAttempts: integer('max_attempts').default(DEFAULT_ATTEMPTS),
     code: text('code').$defaultFn(createId),
     shareCode: text('share_code'),
     userId: text('user_id').references(() => user.id, {

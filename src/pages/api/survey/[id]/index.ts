@@ -42,7 +42,7 @@ export const PATCH: APIRoute = async ({ params, locals, request }) => {
     return new Response(JSON.stringify({ error }), { status: 400 })
   }
 
-  const survey = await updateSurvey(id, data)
+  const survey = await updateSurvey(id, data, user.id)
 
   if (!survey) {
     return new Response('Survey not found', { status: 404 })

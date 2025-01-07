@@ -75,6 +75,8 @@ export interface Survey {
   offerAdditionalInfo: string
   numberOfSoftSkillsQuestions: number
   numberOfHardSkillsQuestions: number
+  maxSubmissions: number
+  maxAttempts: number
   customQuestions: string[]
   categories: SurveyCategory[]
   documents: SurveyDocument[]

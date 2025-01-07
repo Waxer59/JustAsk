@@ -156,6 +156,17 @@ export const ui = {
     'dashboard.createSurvey.documents.add.modal.cancel': 'Cancel',
     'dashboard.createSurvey.create': 'Create',
     'dashboard.account.title': 'My Account',
+    'dashboard.createSurvey.additionalConfig': 'Additional Configuration',
+    'dashboard.createSurvey.additionalConfig.description':
+      'Specify any additional configuration',
+    'dashboard.createSurvey.additionalConfig.numberOfAttemps':
+      'Number of attempts',
+    'dashboard.createSurvey.additionalConfig.numberOfAttemps.description':
+      'Number of attempts to practice the interview',
+    'dashboard.createSurvey.additionalConfig.numberOfSubmissions':
+      'Number of submissions',
+    'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description':
+      'Number of submissions to evaluate the interview',
     'dashboard.account.signOut': 'Sign Out',
     'email.magicLink.subject': 'JustAsk - Login Link',
     'email.magicLink.title': 'Welcome back to JustAsk!',
@@ -329,6 +340,17 @@ export const ui = {
     'dashboard.createSurvey.create': 'Crear',
     'dashboard.account.title': 'Mi cuenta',
     'dashboard.account.signOut': 'Cerrar sesión',
+    'dashboard.createSurvey.additionalConfig': 'Configuración adicional',
+    'dashboard.createSurvey.additionalConfig.description':
+      'Especifica cualquier configuración adicional',
+    'dashboard.createSurvey.additionalConfig.numberOfAttemps':
+      'Número de intentos',
+    'dashboard.createSurvey.additionalConfig.numberOfAttemps.description':
+      'Número de intentos para practicar la entrevista',
+    'dashboard.createSurvey.additionalConfig.numberOfSubmissions':
+      'Número de envíos',
+    'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description':
+      'Número de envíos para evaluar la entrevista',
     'email.magicLink.subject': 'JustAsk - Enlace de inicio de sesión',
     'email.magicLink.title': '¡Bienvenido de nuevo a JustAsk!',
     'email.magicLink.btn': 'Acceder',

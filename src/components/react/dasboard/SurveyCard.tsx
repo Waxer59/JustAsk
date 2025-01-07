@@ -34,12 +34,19 @@ import {
 import { toast } from 'sonner'
 import { Badge } from '@/ui/badge'
 import { getUiTranslations } from '@/i18n/utils'
+import {
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger
+} from '@radix-ui/react-dropdown-menu'
 
 interface Props {
   title: string
   url: string
   description?: string
   numberOfResponses: number
+  shareCode?: string
 }
 
 const { t } = getUiTranslations()
@@ -48,7 +55,8 @@ export const SurveyCard = ({
   title,
   url,
   description,
-  numberOfResponses
+  numberOfResponses,
+  shareCode
 }: Props) => {
   const handleClickCopy = () => {
     navigator.clipboard.writeText(url)
@@ -83,11 +91,35 @@ export const SurveyCard = ({
                             {t('dashboard.options.edit')} <PencilIcon />
                           </button>
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <button className="w-full cursor-pointer flex justify-between">
-                            {t('dashboard.options.share')} <ShareIcon />
-                          </button>
-                        </DropdownMenuItem>
+                        {shareCode ? (
+                          <DropdownMenuItem asChild>
+                            <button className="w-full cursor-pointer flex justify-between">
+                              {t('dashboard.options.share')} <ShareIcon />
+                            </button>
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuSub>
+                            <DropdownMenuSubTrigger asChild>
+                              <button className="w-full cursor-pointer flex justify-between">
+                                {t('dashboard.options.share')} <ShareIcon />
+                              </button>
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                              <DropdownMenuSubContent>
+                                <DropdownMenuItem asChild>
+                                  <button className="w-full cursor-pointer flex justify-between">
+                                    Copy link <CopyIcon />
+                                  </button>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                  <button className="w-full cursor-pointer flex justify-between">
+                                    Delete share <TrashIcon />
+                                  </button>
+                                </DropdownMenuItem>
+                              </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                          </DropdownMenuSub>
+                        )}
                         <DropdownMenuItem>
                           <AlertDialogTrigger asChild>
                             <button className="w-full cursor-pointer text-red-500 flex justify-between">

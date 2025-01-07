@@ -6,6 +6,9 @@ import {
 import { createSurveyUserSchema } from '@/lib/validationSchemas/create-survey-user'
 import type { CreateSurveyUser } from '@/types'
 import { sql } from 'drizzle-orm'
+import type { UserSurveyData } from '../types'
+import { getSurveyByShareCode } from './survey'
+import { getUserSurveyResults } from './surveyResult'
 
 type NewSurveyUser = typeof surveyUser.$inferInsert
 
@@ -52,5 +55,37 @@ export const createSurveyUser = async (
 }
 
 export const deleteSurveyUser = async (userId: string): Promise<void> => {
-  await db.delete(surveyUser).where(sql`id = ${userId}`)
+  try {
+    await db.delete(surveyUser).where(sql`id = ${userId}`)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getUserSurveyData = async (
+  userId: string,
+  surveyCode: string
+): Promise<UserSurveyData | null> => {
+  const survey = await getSurveyByShareCode(surveyCode)
+
+  if (!survey) {
+    return null
+  }
+
+  const userSurveyResults = await getUserSurveyResults(userId, survey.id)
+
+  const attempts = userSurveyResults.reduce((acc, { isAttempt }) => {
+    if (isAttempt) {
+      acc++
+    }
+
+    return acc
+  }, 0)
+
+  const submissions = userSurveyResults.length - attempts
+
+  return {
+    attempts,
+    submissions
+  }
 }

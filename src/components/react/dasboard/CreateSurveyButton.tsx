@@ -1,4 +1,8 @@
 import {
+  DEFAULT_ATTEMPTS,
+  DEFAULT_HARD_SKILLS_QUESTIONS,
+  DEFAULT_MAX_SUBMISSIONS,
+  DEFAULT_SOFT_SKILLS_QUESTIONS,
   INTERVIEW_LANGUAGES,
   LANGUAGE_TEXT,
   MAX_NUMBER_OF_QUESTIONS
@@ -62,7 +66,9 @@ const formSchema = z.object({
   offerDescription: z.string().optional(),
   offerAditionalInformation: z.string().optional(),
   numberOfHardQuestions: z.number().min(1, { message: '' }),
-  numberOfSoftQuestions: z.number().min(1, { message: '' })
+  numberOfSoftQuestions: z.number().min(1, { message: '' }),
+  numberOfAttemps: z.number().min(1, { message: '' }),
+  numberOfSubmissions: z.number().min(1, { message: '' })
 })
 
 export function CreateSurveyButton() {
@@ -78,8 +84,10 @@ export function CreateSurveyButton() {
       offerTitle: '',
       offerDescription: '',
       offerAditionalInformation: '',
-      numberOfHardQuestions: 3,
-      numberOfSoftQuestions: 3
+      numberOfHardQuestions: DEFAULT_HARD_SKILLS_QUESTIONS,
+      numberOfSoftQuestions: DEFAULT_SOFT_SKILLS_QUESTIONS,
+      numberOfAttemps: DEFAULT_ATTEMPTS,
+      numberOfSubmissions: DEFAULT_MAX_SUBMISSIONS
     }
   })
   const { addSurvey } = useDashboardStore()
@@ -353,63 +361,59 @@ export function CreateSurveyButton() {
                         <h3 className="text-lg">
                           {t('dashboard.createSurvey.questions.softSkills')}
                         </h3>
-                        <div className="flex flex-col gap-2">
-                          <FormField
-                            control={form.control}
-                            name="numberOfSoftQuestions"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  {t(
-                                    'dashboard.createSurvey.questions.softSkills.description'
-                                  )}
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="3"
-                                    className="text-lg"
-                                    min={0}
-                                    max={MAX_NUMBER_OF_QUESTIONS}
-                                    type="number"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
+                        <FormField
+                          control={form.control}
+                          name="numberOfSoftQuestions"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t(
+                                  'dashboard.createSurvey.questions.softSkills.description'
+                                )}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="3"
+                                  className="text-lg"
+                                  min={0}
+                                  max={MAX_NUMBER_OF_QUESTIONS}
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </li>
                       <li>
-                        <div className="flex flex-col gap-2">
-                          <h3 className="text-lg">
-                            {t('dashboard.createSurvey.questions.hardSkills')}
-                          </h3>
-                          <FormField
-                            control={form.control}
-                            name="numberOfHardQuestions"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>
-                                  {t(
-                                    'dashboard.createSurvey.questions.hardSkills.description'
-                                  )}
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="3"
-                                    className="text-lg"
-                                    min={0}
-                                    max={MAX_NUMBER_OF_QUESTIONS}
-                                    type="number"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
+                        <h3 className="text-lg">
+                          {t('dashboard.createSurvey.questions.hardSkills')}
+                        </h3>
+                        <FormField
+                          control={form.control}
+                          name="numberOfHardQuestions"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t(
+                                  'dashboard.createSurvey.questions.hardSkills.description'
+                                )}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="3"
+                                  className="text-lg"
+                                  min={0}
+                                  max={MAX_NUMBER_OF_QUESTIONS}
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </li>
                       <li>
                         <CustomQuestionsInput
@@ -438,6 +442,78 @@ export function CreateSurveyButton() {
                   <AccordionContent className="space-y-6">
                     <p>{t('dashboard.createSurvey.documents.description')}</p>
                     <DocumentSelector onChange={setDocuments} />
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="additional-config">
+                  <AccordionTrigger>
+                    {t('dashboard.createSurvey.additionalConfig')}
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-6">
+                    <p>
+                      {t('dashboard.createSurvey.additionalConfig.description')}
+                    </p>
+                    <ul className="flex flex-col gap-4 [&>li]:flex [&>li]:gap-2 [&>li>h3]:text-lg [&>li]:flex-col">
+                      <li>
+                        <h3 className="text-lg">
+                          {t(
+                            'dashboard.createSurvey.additionalConfig.numberOfAttemps'
+                          )}
+                        </h3>
+                        <FormField
+                          control={form.control}
+                          name="numberOfAttemps"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t(
+                                  'dashboard.createSurvey.additionalConfig.numberOfAttemps.description'
+                                )}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="3"
+                                  className="text-lg"
+                                  min={0}
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </li>
+                      <li>
+                        <h3 className="text-lg">
+                          {t(
+                            'dashboard.createSurvey.additionalConfig.numberOfSubmissions'
+                          )}
+                        </h3>
+                        <FormField
+                          control={form.control}
+                          name="numberOfSubmissions"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {t(
+                                  'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description'
+                                )}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="1"
+                                  className="text-lg"
+                                  min={0}
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </li>
+                    </ul>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

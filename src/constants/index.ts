@@ -68,3 +68,5 @@ export const DEFAULT_ATTEMPTS = 2
 export const DEFAULT_MAX_SUBMISSIONS = 1
 export const DEFAULT_HARD_SKILLS_QUESTIONS = 3
 export const DEFAULT_SOFT_SKILLS_QUESTIONS = 3
+
+export const CODE_LENGTH = 10

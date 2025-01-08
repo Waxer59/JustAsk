@@ -8,14 +8,19 @@ import {
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 import {
+  CODE_LENGTH,
   DEFAULT_ATTEMPTS,
   DEFAULT_HARD_SKILLS_QUESTIONS,
   DEFAULT_MAX_SUBMISSIONS,
   DEFAULT_SOFT_SKILLS_QUESTIONS,
   INTERVIEW_LANGUAGES
 } from '@/constants'
-import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
+import { init } from '@paralleldrive/cuid2'
+
+const createId = init({
+  length: CODE_LENGTH
+})
 
 export const langEnum = pgEnum('lang', INTERVIEW_LANGUAGES)
 

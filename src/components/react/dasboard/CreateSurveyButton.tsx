@@ -60,7 +60,7 @@ const { t, lang } = getUiTranslations()
 const formSchema = z.object({
   title: z.string().min(1, { message: '' }),
   description: z.string().optional(),
-  language: z.enum(INTERVIEW_LANGUAGES),
+  lang: z.enum(INTERVIEW_LANGUAGES),
   offerTitle: z.string().min(1, { message: '' }),
   offerStyle: z.string().min(1, { message: '' }),
   offerDescription: z.string().optional(),
@@ -75,12 +75,13 @@ export function CreateSurveyButton() {
   const [questions, setQuestions] = useState<CustomQuestion[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [documents, setDocuments] = useState<Document[]>([])
+  const [dialogState, setDialogState] = useState<boolean>(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: '',
-      language: lang,
+      lang,
       offerTitle: '',
       offerDescription: '',
       offerAditionalInformation: '',
@@ -93,33 +94,50 @@ export function CreateSurveyButton() {
   const { addSurvey } = useDashboardStore()
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const resp = await fetch('/api/survey', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        ...values,
-        categories: categories.map(({ name, description }) => ({
-          name,
-          description
-        })),
-        documents: documents.map(({ name, description }) => ({
-          name,
-          description
-        })),
-        questions: questions.map(({ question }) => question)
+    try {
+      const resp = await fetch('/api/survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...values,
+          categories: categories.map(({ name, description }) => ({
+            name,
+            description
+          })),
+          documents: documents.map(({ name, description }) => ({
+            name,
+            description
+          })),
+          questions: questions.map(({ question }) => question)
+        })
       })
-    })
 
-    const body = await resp.json()
+      const body = await resp.json()
 
-    if (body.survey) {
-      addSurvey(body.survey)
-      toast.success(t('createSurvey.success'))
-    } else {
+      if (body.survey) {
+        addSurvey(body.survey)
+        setDialogState(false)
+        toast.success(t('createSurvey.success'))
+      } else {
+        toast.error(t('createSurvey.error'))
+      }
+    } catch (error) {
+      console.log(error)
       toast.error(t('createSurvey.error'))
     }
+  }
+
+  const onCloseDialog = (open: boolean) => {
+    if (!open) {
+      form.reset()
+      setQuestions([])
+      setCategories([])
+      setDocuments([])
+    }
+
+    setDialogState(open)
   }
 
   const totalOfQuestions =
@@ -128,7 +146,7 @@ export function CreateSurveyButton() {
 
   return (
     <>
-      <Dialog>
+      <Dialog onOpenChange={onCloseDialog} open={dialogState}>
         <DialogTrigger asChild>
           <Button>{t('dashboard.createSurvey')}</Button>
         </DialogTrigger>
@@ -171,14 +189,14 @@ export function CreateSurveyButton() {
                     />
                     <FormField
                       control={form.control}
-                      name="language"
+                      name="lang"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>
                             {t('dashboard.createSurvey.general.language')}
                           </FormLabel>
                           <FormControl>
-                            <Select required>
+                            <Select required defaultValue={lang}>
                               <SelectTrigger
                                 className="w-full capitalize"
                                 {...field}>
@@ -186,7 +204,6 @@ export function CreateSurveyButton() {
                                   placeholder={t(
                                     'dashboard.createSurvey.general.language.placeholder'
                                   )}
-                                  defaultValue={INTERVIEW_LANGUAGES[0]}
                                 />
                               </SelectTrigger>
                               <SelectContent>
@@ -337,7 +354,7 @@ export function CreateSurveyButton() {
                             )}
                           </FormLabel>
                           <FormControl>
-                            <Textarea placeholder="..." required {...field} />
+                            <Textarea placeholder="..." {...field} />
                           </FormControl>
                           <FormDescription>
                             {t(

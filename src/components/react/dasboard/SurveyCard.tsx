@@ -40,8 +40,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger
 } from '@radix-ui/react-dropdown-menu'
+import { useDashboardStore } from '@/store/dashboard'
 
 interface Props {
+  id: string
   title: string
   url: string
   description?: string
@@ -52,12 +54,29 @@ interface Props {
 const { t } = getUiTranslations()
 
 export const SurveyCard = ({
+  id,
   title,
   url,
   description,
   numberOfResponses,
   shareCode
 }: Props) => {
+  const removeSurvey = useDashboardStore((state) => state.removeSurvey)
+
+  const handleDeleteSurvey = async () => {
+    try {
+      await fetch(`/api/survey/${id}`, {
+        method: 'DELETE'
+      })
+
+      // toast.success(t('dashboard.options.delete.success'))
+      removeSurvey(id)
+    } catch (error) {
+      console.log(error)
+      // toast.error(t('dashboard.options.delete.error'))
+    }
+  }
+
   const handleClickCopy = () => {
     navigator.clipboard.writeText(url)
     toast.success('Copied to clipboard!')
@@ -72,7 +91,7 @@ export const SurveyCard = ({
               <h2
                 className="text-2xl font-bold truncate hover:underline"
                 title={title}>
-                <a href="/dashboard/a">{title}</a>
+                <a href={`/dashboard/${id}`}>{title}</a>
               </h2>
               <TooltipProvider>
                 <Tooltip>
@@ -92,12 +111,6 @@ export const SurveyCard = ({
                           </button>
                         </DropdownMenuItem>
                         {shareCode ? (
-                          <DropdownMenuItem asChild>
-                            <button className="w-full cursor-pointer flex justify-between">
-                              {t('dashboard.options.share')} <ShareIcon />
-                            </button>
-                          </DropdownMenuItem>
-                        ) : (
                           <DropdownMenuSub>
                             <DropdownMenuSubTrigger asChild>
                               <button className="w-full cursor-pointer flex justify-between">
@@ -119,6 +132,12 @@ export const SurveyCard = ({
                               </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                           </DropdownMenuSub>
+                        ) : (
+                          <DropdownMenuItem asChild>
+                            <button className="w-full cursor-pointer flex justify-between">
+                              {t('dashboard.options.share')} <ShareIcon />
+                            </button>
+                          </DropdownMenuItem>
                         )}
                         <DropdownMenuItem>
                           <AlertDialogTrigger asChild>
@@ -142,7 +161,7 @@ export const SurveyCard = ({
                         <AlertDialogCancel>
                           {t('dashboard.options.delete.dialog.cancel')}
                         </AlertDialogCancel>
-                        <AlertDialogAction>
+                        <AlertDialogAction onClick={handleDeleteSurvey}>
                           {t('dashboard.options.delete.dialog.confirm')}
                         </AlertDialogAction>
                       </AlertDialogFooter>

@@ -15,13 +15,16 @@ import {
   INTERVIEW_LANGUAGES
 } from '@/constants'
 import { createId } from '@paralleldrive/cuid2'
+import { relations } from 'drizzle-orm'
 
 export const langEnum = pgEnum('lang', INTERVIEW_LANGUAGES)
 
 export const survey = pgTable(
   'survey',
   {
-    id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     title: text('title').notNull(),
     description: text('description'),
     lang: langEnum().notNull(),
@@ -69,7 +72,9 @@ export const surveysToSurveyCategories = pgTable(
 )
 
 export const surveyCategory = pgTable('survey_category', {
-  id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
   description: text('description'),
   isActive: boolean('is_active').notNull().default(true)
@@ -93,7 +98,56 @@ export const surveysToSurveysDocuments = pgTable(
 )
 
 export const surveyDocument = pgTable('survey_document', {
-  id: text('id').primaryKey().$defaultFn(crypto.randomUUID),
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
   description: text('description')
 })
+
+export const surveyCategoriesRelations = relations(
+  surveyCategory,
+  ({ many }) => ({
+    surveysToCategories: many(surveysToSurveyCategories)
+  })
+)
+
+export const surveyDocumentsRelations = relations(
+  surveyDocument,
+  ({ many }) => ({
+    surveysToDocuments: many(surveysToSurveysDocuments)
+  })
+)
+
+export const surveyRelations = relations(survey, ({ many }) => ({
+  surveysToSurveyCategories: many(surveysToSurveyCategories),
+  surveysToSurveysDocuments: many(surveysToSurveysDocuments)
+}))
+
+export const surveysToSurveysDocumentsRelations = relations(
+  surveysToSurveysDocuments,
+  ({ one }) => ({
+    survey: one(survey, {
+      fields: [surveysToSurveysDocuments.surveyId],
+      references: [survey.id]
+    }),
+    document: one(surveyDocument, {
+      fields: [surveysToSurveysDocuments.surveyDocumentId],
+      references: [surveyDocument.id]
+    })
+  })
+)
+
+export const surveysToSurveysCategories = relations(
+  surveysToSurveyCategories,
+  ({ one }) => ({
+    survey: one(survey, {
+      fields: [surveysToSurveyCategories.surveyId],
+      references: [survey.id]
+    }),
+    category: one(surveyCategory, {
+      fields: [surveysToSurveyCategories.surveyCategoryId],
+      references: [surveyCategory.id]
+    })
+  })
+)

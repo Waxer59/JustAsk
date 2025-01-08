@@ -8,7 +8,7 @@ export const createSurveySchema = z.object({
   offerStyle: z.string(),
   offerTitle: z.string(),
   offerDescription: z.string(),
-  offerAdditionalInfo: z.string(),
+  offerAdditionalInfo: z.string().optional(),
   numberOfSoftSkillsQuestions: z.number().default(3),
   numberOfHardSkillsQuestions: z.number().default(3),
   customQuestions: z.string().array().default([]),

@@ -66,6 +66,7 @@ export interface CreateSurveyUser {
 
 export interface Survey {
   id: string
+  code: string
   title: string
   description: string
   lang: SuportLanguages
@@ -80,6 +81,7 @@ export interface Survey {
   customQuestions: string[]
   categories: SurveyCategory[]
   documents: SurveyDocument[]
+  numberOfResponses: number
 }
 
 export type UpdateSurvey = Partial<Survey>

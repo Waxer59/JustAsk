@@ -9,7 +9,7 @@ import {
 import { createSurveySchema } from '@/lib/validationSchemas/create-survey'
 import type { Survey, UpdateSurvey } from '@/types'
 import { createId } from '@paralleldrive/cuid2'
-import { relations, sql } from 'drizzle-orm'
+import { inArray, relations, sql } from 'drizzle-orm'
 import { getAllResultsBySurveyId } from './surveyResult'
 
 type NewSurvey = typeof survey.$inferInsert
@@ -141,13 +141,13 @@ export const updateSurvey = async (
   updateSurvey: UpdateSurvey,
   userId: string
 ) => {
-  // const { error, data } = createSurveySchema.partial().safeParse(updateSurvey)
+  const { error, data } = createSurveySchema.partial().safeParse(updateSurvey)
 
-  // if (error) {
-  //   return null
-  // }
+  if (error) {
+    return null
+  }
 
-  // const { categories, documents, ...rest } = data
+  const { categories, ...rest } = data
 
   const surveyToUpdate = await getSurveyById(surveyId)
 
@@ -155,47 +155,73 @@ export const updateSurvey = async (
     return null
   }
 
-  // const result = await db.transaction(async (tx) => {
-  //   try {
-  //     if (data.categories && data.categories.length > 0) {
-  //       const existingCategories = await tx
-  //         .select()
-  //         .from(surveysToSurveyCategories)
-  //         .where(sql`surveyId = ${surveyId}`)
+  const result = await db.transaction(async (tx) => {
+    try {
+      if (categories && categories.length > 0) {
+        const existingCategories = await tx
+          .select()
+          .from(surveysToSurveyCategories)
+          .where(sql`surveyId = ${surveyId}`)
 
-  //       const existingCategoryIds = existingCategories.map(
-  //         ({ surveyCategoryId }) => surveyCategoryId
-  //       )
+        const existingCategoryIds = existingCategories.reduce(
+          (acc, { surveyCategoryId }) => {
+            if (surveyCategoryId) {
+              acc.push(surveyCategoryId)
+            }
+            return acc
+          },
+          [] as string[]
+        )
 
-  //       await tx.delete(surveysToSurveyCategories).where(
-  //         sql`surveyId = ${surveyId} AND surveyCategoryId IN ${existingCategoryIds}`
-  //       )
-  //     }
+        await tx
+          .delete(surveyCategory)
+          .where(inArray(surveyCategory.id, existingCategoryIds))
 
-  //     if (data.documents && data.documents.length > 0) {
-  //     }
+        // Insert new categories
+        await Promise.all(
+          categories.map(async (category) => {
+            const newCategory = await tx
+              .insert(surveyCategory)
+              .values({
+                name: category.name,
+                description: category.description
+              })
+              .returning()
 
-  //     await tx
-  //       .update(survey)
-  //       .set({
-  //         ...rest
-  //       })
-  //       .where(sql`id = ${surveyId}`)
+            await tx.insert(surveysToSurveyCategories).values({
+              surveyId: surveyId,
+              surveyCategoryId: newCategory[0].id
+            })
+          })
+        )
+      }
 
-  //     const newSurvey = await tx.query.survey.findMany({
-  //       where: (survey, { eq }) => eq(survey.id, surveyId),
-  //       with: {
-  //         surveyToCategories: true,
-  //         surveyToDocuments: true
-  //       }
-  //     })
+      // if (documents && documents.length > 0) {
+      // }
 
-  //     return newSurvey[0]
-  //   } catch (error) {
-  //     console.log(error)
-  //     tx.rollback()
-  //   }
-  // })
+      await tx
+        .update(survey)
+        .set({
+          ...rest
+        })
+        .where(sql`id = ${surveyId}`)
+
+      const newSurvey = await tx.query.survey.findMany({
+        where: (survey, { eq }) => eq(survey.id, surveyId),
+        with: {
+          surveysToSurveyCategories: true,
+          surveysToSurveysDocuments: true
+        }
+      })
+
+      return newSurvey[0]
+    } catch (error) {
+      console.log(error)
+      tx.rollback()
+    }
+  })
+
+  return result
 }
 
 export const getSurveyByShareCode = async (shareCode: string) => {
@@ -217,7 +243,7 @@ export const deleteSurvey = async (userId: string, surveyId: string) => {
   try {
     return await db
       .delete(survey)
-      .where(sql`userId = ${userId} AND id = ${surveyId}`)
+      .where(sql`user_id = ${userId} AND id = ${surveyId}`)
   } catch (error) {
     console.log(error)
   }
@@ -229,8 +255,8 @@ export const getAllUserSurveys = async (userId: string) => {
   try {
     const surveys = await db.query.survey.findMany({
       with: {
-        surveyToCategories: true,
-        surveyToDocuments: true
+        surveysToSurveyCategories: true,
+        surveysToSurveysDocuments: true
       },
       where: (survey, { eq }) => eq(survey.userId, userId)
     })

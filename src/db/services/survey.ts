@@ -8,9 +8,15 @@ import {
 } from '@/db/schemas/survey-schema'
 import { createSurveySchema } from '@/lib/validationSchemas/create-survey'
 import type { Survey, UpdateSurvey } from '@/types'
-import { createId } from '@paralleldrive/cuid2'
 import { inArray, relations, sql } from 'drizzle-orm'
 import { getAllResultsBySurveyId } from './surveyResult'
+import { init } from '@paralleldrive/cuid2'
+import { CODE_LENGTH } from '@/constants'
+import { updateSurveySchema } from '@/lib/validationSchemas/update-survey'
+
+const createId = init({
+  length: CODE_LENGTH
+})
 
 type NewSurvey = typeof survey.$inferInsert
 type NewCategory = typeof surveyCategory.$inferInsert
@@ -24,11 +30,7 @@ export const surveyRelations = relations(survey, ({ many }) => ({
 export const createSurvey = async (
   userId: string,
   createSurvey: Omit<Survey, 'id'>
-): Promise<{
-  survey: NewSurvey
-  categories: NewCategory[]
-  documents: NewDocument[]
-} | null> => {
+): Promise<Survey | null> => {
   const { error, data } = createSurveySchema.safeParse(createSurvey)
 
   if (error) {
@@ -107,7 +109,7 @@ export const createSurvey = async (
       }
 
       return {
-        survey: newSurvey,
+        ...newSurvey,
         categories: newCategories,
         documents: newDocuments
       }
@@ -118,7 +120,7 @@ export const createSurvey = async (
     }
   })
 
-  return result
+  return result as Survey
 }
 
 export const getSurveyById = async (surveyId: string) => {
@@ -141,7 +143,7 @@ export const updateSurvey = async (
   updateSurvey: UpdateSurvey,
   userId: string
 ) => {
-  const { error, data } = createSurveySchema.partial().safeParse(updateSurvey)
+  const { error, data } = updateSurveySchema.partial().safeParse(updateSurvey)
 
   if (error) {
     return null
@@ -161,7 +163,7 @@ export const updateSurvey = async (
         const existingCategories = await tx
           .select()
           .from(surveysToSurveyCategories)
-          .where(sql`surveyId = ${surveyId}`)
+          .where(sql`survey_id = ${surveyId}`)
 
         const existingCategoryIds = existingCategories.reduce(
           (acc, { surveyCategoryId }) => {
@@ -209,8 +211,16 @@ export const updateSurvey = async (
       const newSurvey = await tx.query.survey.findMany({
         where: (survey, { eq }) => eq(survey.id, surveyId),
         with: {
-          surveysToSurveyCategories: true,
-          surveysToSurveysDocuments: true
+          surveysToSurveyCategories: {
+            with: {
+              category: true
+            }
+          },
+          surveysToSurveysDocuments: {
+            with: {
+              document: true
+            }
+          }
         }
       })
 
@@ -229,7 +239,7 @@ export const getSurveyByShareCode = async (shareCode: string) => {
     const findSurvey = await db
       .select()
       .from(survey)
-      .where(sql`shareCode = ${shareCode}`)
+      .where(sql`share_code = ${shareCode}`)
 
     return findSurvey.length > 0 ? findSurvey[0] : null
   } catch (error) {
@@ -255,8 +265,16 @@ export const getAllUserSurveys = async (userId: string) => {
   try {
     const surveys = await db.query.survey.findMany({
       with: {
-        surveysToSurveyCategories: true,
-        surveysToSurveysDocuments: true
+        surveysToSurveyCategories: {
+          with: {
+            category: true
+          }
+        },
+        surveysToSurveysDocuments: {
+          with: {
+            document: true
+          }
+        }
       },
       where: (survey, { eq }) => eq(survey.userId, userId)
     })
@@ -286,12 +304,31 @@ export const createShareSurvey = async (surveyId: string, userId: string) => {
       shareCode = createId()
     } while ((await getSurveyByShareCode(shareCode)) !== null)
 
-    const newSurvey = await db
-      .update(survey)
-      .set({
+    const newSurvey = await updateSurvey(
+      surveyId,
+      {
         shareCode
-      })
-      .where(sql`id = ${surveyId} AND userId = ${userId}`)
+      },
+      userId
+    )
+
+    return newSurvey
+  } catch (error) {
+    console.log(error)
+  }
+
+  return null
+}
+
+export const deleteShareSurvey = async (userId: string, surveyId: string) => {
+  try {
+    const newSurvey = await updateSurvey(
+      surveyId,
+      {
+        shareCode: null
+      },
+      userId
+    )
 
     return newSurvey
   } catch (error) {

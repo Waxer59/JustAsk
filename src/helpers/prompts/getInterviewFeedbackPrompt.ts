@@ -1,4 +1,4 @@
-import type { OfferDetails, SuportLanguages } from '@/types'
+import type { OfferDetails, SupportedLanguages } from '@/types'
 import { createFeedbackPrompt } from './createFeedbackPrompt'
 
 const EXAMPLE_OUTPUT_TRANSLATED = {
@@ -28,7 +28,7 @@ export const getInterviewFeedbackPrompt = ({
   interviewQuestions,
   interviewResponses
 }: {
-  language: SuportLanguages
+  language: SupportedLanguages
   offer: OfferDetails
   interviewQuestions: string[]
   interviewResponses: string[]

@@ -5,6 +5,9 @@ import { CreateSurveyButton } from '@/components/react/dasboard/CreateSurveyButt
 import { getUiTranslations } from '@/i18n/utils'
 import { useEffect } from 'react'
 import { useDashboardStore } from '@/store/dashboard'
+import type { Survey, SurveysResponse } from '@/types'
+import { useUiStore } from '@/store/ui'
+import { CreateSurveyDialog } from '@/components/react/dasboard/CreateSurveyDialog'
 
 interface Props {
   children: React.ReactNode
@@ -14,14 +17,33 @@ const { t } = getUiTranslations()
 
 export function DashboardLayout({ children }: Props) {
   const setSurveys = useDashboardStore((state) => state.setSurveys)
+  const surveys = useDashboardStore((state) => state.surveys)
+  const editingSurveyId = useUiStore((state) => state.editingSurveyId)
+  const isCreatingSurvey = useUiStore((state) => state.isCreatingSurvey)
+  const editingSurvey = surveys.find((survey) => survey.id === editingSurveyId)
 
   useEffect(() => {
     const initStore = async () => {
       try {
         const surveysResp = await fetch('/api/survey')
-        const surveys = await surveysResp.json()
+        const data = await surveysResp.json()
 
-        setSurveys(surveys)
+        const surveys: SurveysResponse[] = data.surveys
+
+        const mappedSurveys: Survey[] = surveys.map(
+          ({
+            surveysToSurveyCategories,
+            surveysToSurveysDocuments,
+            ...survey
+          }) => ({
+            ...survey,
+            categories: surveysToSurveyCategories.map(
+              ({ category }) => category
+            ),
+            documents: surveysToSurveysDocuments.map(({ document }) => document)
+          })
+        )
+        setSurveys(mappedSurveys)
       } catch (error) {
         console.log(error)
       }
@@ -44,6 +66,9 @@ export function DashboardLayout({ children }: Props) {
       </div>
       {children}
       <Toaster />
+      {(isCreatingSurvey || Boolean(editingSurveyId)) && (
+        <CreateSurveyDialog isOpen editingSurvey={editingSurvey} />
+      )}
     </>
   )
 }

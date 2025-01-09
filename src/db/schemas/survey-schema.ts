@@ -81,8 +81,7 @@ export const surveyCategory = pgTable('survey_category', {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
-  description: text('description'),
-  isActive: boolean('is_active').notNull().default(true)
+  description: text('description')
 })
 
 export const surveysToSurveysDocuments = pgTable(
@@ -107,7 +106,8 @@ export const surveyDocument = pgTable('survey_document', {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
-  description: text('description')
+  description: text('description'),
+  isActive: boolean('is_active').notNull().default(true)
 })
 
 export const surveyCategoriesRelations = relations(
@@ -143,7 +143,7 @@ export const surveysToSurveysDocumentsRelations = relations(
   })
 )
 
-export const surveysToSurveysCategories = relations(
+export const surveysToSurveysCategoriesRelations = relations(
   surveysToSurveyCategories,
   ({ one }) => ({
     survey: one(survey, {

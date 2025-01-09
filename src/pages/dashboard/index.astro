@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import Footer from '@/components/Footer.astro'
 import { DashboardLayout } from '@layouts/react/DashboardLayout'
 import { Surveys } from '@/components/react/dasboard/Surveys'
 ---
@@ -9,7 +8,6 @@ import { Surveys } from '@/components/react/dasboard/Surveys'
   <DashboardLayout client:only="react">
     <div class="flex flex-col justify-between">
       <Surveys client:only="react" />
-      <Footer />
     </div>
   </DashboardLayout>
 </BaseLayout>

@@ -3,7 +3,7 @@ export interface OfferDetails {
   description: string
 }
 
-export type SuportLanguages = 'en' | 'es'
+export type SupportedLanguages = 'en' | 'es'
 
 export interface CreateQuestionsResponse {
   questions: string[]
@@ -68,12 +68,13 @@ export interface Survey {
   id: string
   code: string
   title: string
+  shareCode?: string | null
   description: string
-  lang: SuportLanguages
+  lang: SupportedLanguages
   offerStyle: string
   offerTitle: string
   offerDescription: string
-  offerAdditionalInfo: string
+  offerAdditionalInfo?: string | null
   numberOfSoftSkillsQuestions: number
   numberOfHardSkillsQuestions: number
   maxSubmissions: number
@@ -134,4 +135,45 @@ export interface OfferResponseData {
   job_naics_code?: string
   job_naics_name?: string
   job_occupational_categories?: string[]
+}
+
+export interface SurveysResponse {
+  id: string
+  title: string
+  description: string
+  lang: SupportedLanguages
+  offerStyle: string
+  offerTitle: string
+  offerDescription: string
+  offerAdditionalInfo?: string | null
+  numberOfSoftSkillsQuestions: number
+  numberOfHardSkillsQuestions: number
+  customQuestions: string[]
+  maxSubmissions: number
+  maxAttempts: number
+  code: string
+  shareCode: null
+  userId: string
+  surveysToSurveyCategories: SurveysToSurveyCategory[]
+  surveysToSurveysDocuments: SurveysToSurveysDocument[]
+  numberOfResponses: number
+}
+
+export interface SurveysToSurveyCategory {
+  surveyId: string
+  surveyCategoryId: string
+  category: Category
+}
+
+export interface Category {
+  id: string
+  name: string
+  description: string
+  isActive?: boolean
+}
+
+export interface SurveysToSurveysDocument {
+  surveyId: string
+  surveyDocumentId: string
+  document: Category
 }

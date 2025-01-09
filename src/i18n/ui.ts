@@ -185,7 +185,17 @@ export const ui = {
     'createSurvey.success': 'Survey created successfully',
     '404.title': 'Page not found :(',
     '404.return': 'Return to the homepage',
-    'createSurvey.title.error': 'The title must have at least 3 characters'
+    'createSurvey.title.error': 'The title must have at least 3 characters',
+    'dashboard.options.delete.success': 'Survey deleted successfully',
+    'dashboard.options.delete.error':
+      'An error occurred while deleting the survey',
+    'dashboard.options.share.success': 'Share code updated successfully',
+    'dashboard.options.share.error':
+      'An error occurred while updating the share code',
+    'dashboard.options.share.copy': 'Copy link',
+    'dashboard.options.share.delete': 'Delete',
+    'dashboard.clipBoard.success': 'Copied to clipboard!',
+    'dashboard.survey.edit.save': 'Save'
   },
   es: {
     'meta.description':
@@ -369,6 +379,17 @@ export const ui = {
     'createSurvey.success': 'Encuesta creada correctamente',
     'createSurvey.title.error': 'El título debe de tener al menos 3 caracteres',
     '404.title': 'Página no encontrada :(',
-    '404.return': 'Volver a la página principal'
+    '404.return': 'Volver a la página principal',
+    'dashboard.options.delete.success': 'Encuesta eliminada correctamente',
+    'dashboard.options.delete.error':
+      'Ha ocurrido un error al eliminar la encuesta',
+    'dashboard.options.share.success':
+      'Código de compartir actualizado correctamente',
+    'dashboard.options.share.error':
+      'Ha ocurrido un error al actualizar el código de compartir',
+    'dashboard.options.share.copy': 'Copiar enlace',
+    'dashboard.options.share.delete': 'Eliminar',
+    'dashboard.clipBoard.success': 'Copiado al portapapeles!',
+    'dashboard.survey.edit.save': 'Guardar'
   }
 } as const

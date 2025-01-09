@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ locals }) => {
 
   const surveys = await getAllUserSurveys(user.id)
 
-  return new Response(JSON.stringify(surveys), { status: 200 })
+  return new Response(JSON.stringify({ surveys }), { status: 200 })
 }
 
 export const POST: APIRoute = async ({ locals, request }) => {

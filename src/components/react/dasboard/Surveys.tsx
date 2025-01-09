@@ -10,13 +10,17 @@ export const Surveys = () => {
     <main>
       <ul className="grid grid-cols-6 gap-4">
         {surveys.map((survey) => (
-          <li className="col-span-full md:col-span-3 xl:col-span-2">
+          <li
+            className="col-span-full md:col-span-3 xl:col-span-2"
+            key={survey.id}>
             <SurveyCard
               id={survey.id}
               title={survey.title}
               url={`${url.origin}/${survey.code}`}
               description={survey.description ?? undefined}
-              numberOfResponses={survey.numberOfResponses}
+              shareCode={survey?.shareCode}
+              numberOfResponses={survey.numberOfResponses ?? 0}
+              lang={survey.lang}
             />
           </li>
         ))}

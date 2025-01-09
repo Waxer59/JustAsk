@@ -15,7 +15,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger
 } from '@ui/dropdown-menu'
 import {
   CopyIcon,
@@ -34,21 +38,17 @@ import {
 import { toast } from 'sonner'
 import { Badge } from '@/ui/badge'
 import { getUiTranslations } from '@/i18n/utils'
-import {
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger
-} from '@radix-ui/react-dropdown-menu'
 import { useDashboardStore } from '@/store/dashboard'
+import { useUiStore } from '@/store/ui'
 
 interface Props {
   id: string
   title: string
   url: string
+  lang: string
   description?: string
   numberOfResponses: number
-  shareCode?: string
+  shareCode?: string | null
 }
 
 const { t } = getUiTranslations()
@@ -59,9 +59,12 @@ export const SurveyCard = ({
   url,
   description,
   numberOfResponses,
-  shareCode
+  shareCode,
+  lang
 }: Props) => {
   const removeSurvey = useDashboardStore((state) => state.removeSurvey)
+  const updateSurvey = useDashboardStore((state) => state.updateSurvey)
+  const setEditingSurveyId = useUiStore((state) => state.setEditingSurveyId)
 
   const handleDeleteSurvey = async () => {
     try {
@@ -69,17 +72,59 @@ export const SurveyCard = ({
         method: 'DELETE'
       })
 
-      // toast.success(t('dashboard.options.delete.success'))
+      toast.success(t('dashboard.options.delete.success'))
       removeSurvey(id)
     } catch (error) {
       console.log(error)
-      // toast.error(t('dashboard.options.delete.error'))
+      toast.error(t('dashboard.options.delete.error'))
     }
+  }
+
+  const handleShareCode = async () => {
+    try {
+      const resp = await fetch(`/api/survey/share/${id}`, {
+        method: 'POST'
+      })
+
+      const body = await resp.json()
+
+      updateSurvey(id, body.survey)
+
+      toast.success(t('dashboard.options.share.success'))
+    } catch (error) {
+      console.log(error)
+      toast.error(t('dashboard.options.share.error'))
+    }
+  }
+
+  const handleDeleteShareCode = async () => {
+    try {
+      await fetch(`/api/survey/share/${id}`, {
+        method: 'DELETE'
+      })
+
+      toast.success(t('dashboard.options.share.success'))
+      updateSurvey(id, { shareCode: null })
+    } catch (error) {
+      console.log(error)
+      toast.error(t('dashboard.options.share.error'))
+    }
+  }
+
+  const handleCopyShareCode = async () => {
+    navigator.clipboard.writeText(
+      `${window.location.origin}/${lang}/survey/share/${shareCode}`
+    )
+    toast.success(t('dashboard.clipBoard.success'))
   }
 
   const handleClickCopy = () => {
     navigator.clipboard.writeText(url)
-    toast.success('Copied to clipboard!')
+    toast.success(t('dashboard.clipBoard.success'))
+  }
+
+  const handleEditSurvey = () => {
+    setEditingSurveyId(id)
   }
 
   return (
@@ -105,45 +150,37 @@ export const SurveyCard = ({
                         </TooltipTrigger>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem asChild>
-                          <button className="w-full cursor-pointer flex justify-between">
-                            {t('dashboard.options.edit')} <PencilIcon />
-                          </button>
+                        <DropdownMenuItem onClick={handleEditSurvey}>
+                          <PencilIcon /> {t('dashboard.options.edit')}
                         </DropdownMenuItem>
                         {shareCode ? (
                           <DropdownMenuSub>
-                            <DropdownMenuSubTrigger asChild>
-                              <button className="w-full cursor-pointer flex justify-between">
-                                {t('dashboard.options.share')} <ShareIcon />
-                              </button>
+                            <DropdownMenuSubTrigger>
+                              <ShareIcon /> {t('dashboard.options.share')}
                             </DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
                               <DropdownMenuSubContent>
-                                <DropdownMenuItem asChild>
-                                  <button className="w-full cursor-pointer flex justify-between">
-                                    Copy link <CopyIcon />
-                                  </button>
+                                <DropdownMenuItem onClick={handleCopyShareCode}>
+                                  <CopyIcon />{' '}
+                                  {t('dashboard.options.share.copy')}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                  <button className="w-full cursor-pointer flex justify-between">
-                                    Delete share <TrashIcon />
-                                  </button>
+                                <DropdownMenuItem
+                                  className="text-red-500"
+                                  onClick={handleDeleteShareCode}>
+                                  <TrashIcon />{' '}
+                                  {t('dashboard.options.share.delete')}
                                 </DropdownMenuItem>
                               </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                           </DropdownMenuSub>
                         ) : (
-                          <DropdownMenuItem asChild>
-                            <button className="w-full cursor-pointer flex justify-between">
-                              {t('dashboard.options.share')} <ShareIcon />
-                            </button>
+                          <DropdownMenuItem onClick={handleShareCode}>
+                            <ShareIcon /> {t('dashboard.options.share')}
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuItem>
-                          <AlertDialogTrigger asChild>
-                            <button className="w-full cursor-pointer text-red-500 flex justify-between">
-                              {t('dashboard.options.delete')} <TrashIcon />
-                            </button>
+                          <AlertDialogTrigger className="text-red-500 flex gap-2 items-center">
+                            <TrashIcon /> {t('dashboard.options.delete')}
                           </AlertDialogTrigger>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -207,7 +244,9 @@ export const SurveyCard = ({
               <UserIcon />
               <span>{numberOfResponses}</span>
             </div>
-            <Badge variant="secondary">ES</Badge>
+            <Badge variant="secondary" className="uppercase">
+              {lang}
+            </Badge>
           </div>
         </div>
       </div>

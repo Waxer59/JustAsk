@@ -209,9 +209,9 @@ export default {
   'dashboard.createSurvey.additionalConfig': 'Additional Configuration',
   'dashboard.createSurvey.additionalConfig.description':
     'Specify any additional configuration',
-  'dashboard.createSurvey.additionalConfig.numberOfAttemps':
+  'dashboard.createSurvey.additionalConfig.numberOfAttempts':
     'Number of attempts',
-  'dashboard.createSurvey.additionalConfig.numberOfAttemps.description':
+  'dashboard.createSurvey.additionalConfig.numberOfAttempts.description':
     'Number of attempts to practice the interview',
   'dashboard.createSurvey.additionalConfig.numberOfSubmissions':
     'Number of submissions',
@@ -242,6 +242,8 @@ export default {
   'createSurvey.error': 'An error occurred while creating the survey',
   'createSurvey.success': 'Survey created successfully',
   'dashboard.clipBoard.success': 'Copied to clipboard!',
+  'updatedSurvey.success': 'Survey updated successfully',
+  'updatedSurvey.error': 'An error occurred while updating the survey',
 
   // 404
   '404.title': 'Page not found :(',

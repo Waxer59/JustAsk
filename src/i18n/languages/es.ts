@@ -210,9 +210,9 @@ export default {
   'dashboard.createSurvey.additionalConfig': 'Configuración adicional',
   'dashboard.createSurvey.additionalConfig.description':
     'Especifica cualquier configuración adicional',
-  'dashboard.createSurvey.additionalConfig.numberOfAttemps':
+  'dashboard.createSurvey.additionalConfig.numberOfAttempts':
     'Número de intentos',
-  'dashboard.createSurvey.additionalConfig.numberOfAttemps.description':
+  'dashboard.createSurvey.additionalConfig.numberOfAttempts.description':
     'Número de intentos para practicar la entrevista',
   'dashboard.createSurvey.additionalConfig.numberOfSubmissions':
     'Número de envíos',
@@ -243,6 +243,8 @@ export default {
   'createSurvey.error': 'Ha ocurrido un error al crear la encuesta',
   'createSurvey.success': 'Encuesta creada correctamente',
   'dashboard.clipBoard.success': 'Copiado al portapapeles!',
+  'updatedSurvey.success': 'Encuesta actualizada correctamente',
+  'updatedSurvey.error': 'Ha ocurrido un error al actualizar la encuesta',
 
   // 404
   '404.title': 'Página no encontrada :(',

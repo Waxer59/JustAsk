@@ -3,7 +3,7 @@ import { SurveyCard } from './SurveyCard'
 
 const url = new URL(window.location.href)
 
-export const Surveys = () => {
+export const SurveysCards = () => {
   const surveys = useDashboardStore((state) => state.surveys)
 
   return (
@@ -16,7 +16,7 @@ export const Surveys = () => {
             <SurveyCard
               id={survey.id}
               title={survey.title}
-              url={`${url.origin}/${survey.code}`}
+              url={`${url.origin}/survey/${survey.code}`}
               description={survey.description ?? undefined}
               shareCode={survey?.shareCode}
               numberOfResponses={survey.numberOfResponses ?? 0}

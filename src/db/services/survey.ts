@@ -234,12 +234,49 @@ export const updateSurvey = async (
   return result
 }
 
+export const getSurveyByCode = async (code: string) => {
+  try {
+    const findSurvey = await db.query.survey.findMany({
+      with: {
+        surveysToSurveyCategories: {
+          with: {
+            category: true
+          }
+        },
+        surveysToSurveysDocuments: {
+          with: {
+            document: true
+          }
+        }
+      },
+      where: (survey, { eq }) => eq(survey.code, code)
+    })
+
+    return findSurvey.length > 0 ? findSurvey[0] : null
+  } catch (error) {
+    console.log(error)
+  }
+
+  return null
+}
+
 export const getSurveyByShareCode = async (shareCode: string) => {
   try {
-    const findSurvey = await db
-      .select()
-      .from(survey)
-      .where(sql`share_code = ${shareCode}`)
+    const findSurvey = await db.query.survey.findMany({
+      with: {
+        surveysToSurveyCategories: {
+          with: {
+            category: true
+          }
+        },
+        surveysToSurveysDocuments: {
+          with: {
+            document: true
+          }
+        }
+      },
+      where: (survey, { eq }) => eq(survey.shareCode, shareCode)
+    })
 
     return findSurvey.length > 0 ? findSurvey[0] : null
   } catch (error) {

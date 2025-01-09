@@ -23,14 +23,18 @@ export interface Category {
 
 interface Props {
   onChange?: (categories: Category[]) => void
+  categories?: Category[]
 }
 
 const { t } = getUiTranslations()
 
-export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
+export const CategoryCreationInput: React.FC<Props> = ({
+  onChange,
+  categories: categoriesProp
+}) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<Category[]>(categoriesProp ?? [])
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
 
   const handleRemoveCategory = (id: string) => {

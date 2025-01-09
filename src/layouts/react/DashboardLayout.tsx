@@ -20,6 +20,7 @@ export function DashboardLayout({ children }: Props) {
   const surveys = useDashboardStore((state) => state.surveys)
   const editingSurveyId = useUiStore((state) => state.editingSurveyId)
   const isCreatingSurvey = useUiStore((state) => state.isCreatingSurvey)
+  const isEditingSurvey = Boolean(editingSurveyId)
   const editingSurvey = surveys.find((survey) => survey.id === editingSurveyId)
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export function DashboardLayout({ children }: Props) {
       </div>
       {children}
       <Toaster />
-      {(isCreatingSurvey || Boolean(editingSurveyId)) && (
+      {(isCreatingSurvey || isEditingSurvey) && (
         <CreateSurveyDialog isOpen editingSurvey={editingSurvey} />
       )}
     </>

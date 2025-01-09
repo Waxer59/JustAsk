@@ -1,56 +1,61 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
 import { generateText } from 'ai'
-import { LANGUAGE_TEXT } from '@constants'
+// import { LANGUAGE_TEXT } from '@constants'
 import { createGroq } from '@ai-sdk/groq'
-import { createQuestionsPrompt } from '@/helpers/prompts/createQuestionsPrompt'
 import { shuffleArray } from '@/helpers/shuffleArray'
+// import { getSurveyByCode } from '@/db/services/survey'
+import { createHmac, isHmacValid } from '@/lib/hmac'
 
 const groq = createGroq({
   apiKey: import.meta.env.GROQ_API_KEY
 })
 
 const bodySchema = z.object({
-  offer: z.object({
-    title: z.string(),
-    description: z.string()
-  }),
-  interviewStyle: z.string(),
-  documentsContent: z.string().array().optional(),
-  additionalInfo: z.string().optional(),
-  language: z.enum(['es', 'en'])
+  questions: z
+    .object({
+      question: z.string(),
+      answer: z.string()
+    })
+    .array(),
+  key: z.string(),
+  timestamp: z.number()
 })
 
 export const POST: APIRoute = async ({ request }) => {
-  const body = await request.json()
-  const parsedBody = bodySchema.safeParse(body)
+  //   const { code } = params
 
-  if (!parsedBody.success) {
-    return new Response(
-      JSON.stringify({
-        error: 'Invalid request body'
-      }),
-      {
-        status: 400
-      }
-    )
+  const body = await request.json()
+
+  const { error, data } = bodySchema.safeParse(body)
+
+  if (error) {
+    return new Response(JSON.stringify(error), {
+      status: 400
+    })
   }
 
-  const { documentsContent, offer, interviewStyle, additionalInfo, language } =
-    parsedBody.data
+  const allQuestions = data.questions.map(({ question }) => question)
 
-  const languageText = LANGUAGE_TEXT[language]
+  const isKeyValid = isHmacValid(
+    JSON.stringify({ payload: allQuestions, timestamp: data.timestamp }),
+    data.key
+  )
+
+  if (!isKeyValid) {
+    return new Response(null, {
+      status: 401
+    })
+  }
 
   try {
+    // const survey = await getSurveyByCode(code!)
+
+    // const languageText = LANGUAGE_TEXT[survey?.lang ?? 'es']
+
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),
-      prompt: createQuestionsPrompt({
-        language: languageText,
-        offer,
-        interviewStyle,
-        additionalInfo,
-        documentsContent
-      }),
+      prompt: 'TODO',
       toolChoice: 'required',
       tools: {
         generateQuestions: {
@@ -65,11 +70,14 @@ export const POST: APIRoute = async ({ request }) => {
 
     const questions = toolResults[0].result.questions
 
+    const hmac = createHmac(JSON.stringify({ questions }))
+
     const shuffledQuestions = shuffleArray(questions)
 
     return new Response(
       JSON.stringify({
-        questions: shuffledQuestions
+        questions: shuffledQuestions,
+        ...hmac
       }),
       {
         status: 200

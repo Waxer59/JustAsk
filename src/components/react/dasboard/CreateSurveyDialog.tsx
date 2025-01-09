@@ -1,5 +1,6 @@
 import {
   DEFAULT_ATTEMPTS,
+  DEFAULT_DOUMENTS,
   DEFAULT_HARD_SKILLS_QUESTIONS,
   DEFAULT_MAX_SUBMISSIONS,
   DEFAULT_SOFT_SKILLS_QUESTIONS,
@@ -64,10 +65,10 @@ const formSchema = z.object({
   offerTitle: z.string().min(1, { message: '' }),
   offerStyle: z.string().min(1, { message: '' }),
   offerDescription: z.string().optional(),
-  offerAditionalInformation: z.string().optional(),
+  offerAdditionalInfo: z.string().optional(),
   numberOfHardQuestions: z.number().min(1, { message: '' }),
   numberOfSoftQuestions: z.number().min(1, { message: '' }),
-  numberOfAttemps: z.number().min(1, { message: '' }),
+  numberOfAttempts: z.number().min(0, { message: '' }),
   numberOfSubmissions: z.number().min(1, { message: '' })
 })
 
@@ -95,7 +96,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
     editingSurvey?.documents.map((document) => ({
       id: crypto.randomUUID(),
       ...document
-    })) ?? []
+    })) ?? DEFAULT_DOUMENTS[lang]
   )
   const [dialogState, setDialogState] = useState<boolean>(isOpen)
   const form = useForm<z.infer<typeof formSchema>>({
@@ -104,70 +105,103 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
       title: editingSurvey?.title ?? '',
       description: editingSurvey?.description ?? '',
       lang: editingSurvey?.lang ?? lang,
+      offerStyle: editingSurvey?.offerStyle ?? '',
       offerTitle: editingSurvey?.offerTitle ?? '',
       offerDescription: editingSurvey?.offerDescription ?? '',
-      offerAditionalInformation: editingSurvey?.offerAdditionalInfo ?? '',
+      offerAdditionalInfo: editingSurvey?.offerAdditionalInfo ?? '',
       numberOfHardQuestions:
         editingSurvey?.numberOfHardSkillsQuestions ??
         DEFAULT_HARD_SKILLS_QUESTIONS,
       numberOfSoftQuestions:
         editingSurvey?.numberOfSoftSkillsQuestions ??
         DEFAULT_SOFT_SKILLS_QUESTIONS,
-      numberOfAttemps: editingSurvey?.maxAttempts ?? DEFAULT_ATTEMPTS,
+      numberOfAttempts: editingSurvey?.maxAttempts ?? DEFAULT_ATTEMPTS,
       numberOfSubmissions:
         editingSurvey?.maxSubmissions ?? DEFAULT_MAX_SUBMISSIONS
     }
   })
 
+  const editingSurveyId = useUiStore((state) => state.editingSurveyId)
   const addSurvey = useDashboardStore((state) => state.addSurvey)
   const setIsCreatingSurvey = useUiStore((state) => state.setIsCreatingSurvey)
   const setEditingSurveyId = useUiStore((state) => state.setEditingSurveyId)
+  const updateSurvey = useDashboardStore((state) => state.updateSurvey)
+
+  const createToastMessage = isEditing
+    ? t('updatedSurvey.success')
+    : t('createSurvey.success')
+  const errorToastMessage = isEditing
+    ? t('updatedSurvey.error')
+    : t('createSurvey.error')
+
+  const resetForm = () => {
+    form.reset()
+    setCustomQuestions([])
+    setCategories([])
+    setDocuments([])
+    setEditingSurveyId(null)
+    setIsCreatingSurvey(false)
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const resp = await fetch('/api/survey', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...values,
-          categories: categories.map(({ name, description }) => ({
-            name,
-            description
-          })),
-          documents: documents.map(({ name, description }) => ({
-            name,
-            description
-          })),
-          customQuestions: customQuestions.map(({ question }) => question)
-        })
+      let resp
+
+      const requestBody = JSON.stringify({
+        ...values,
+        categories: categories.map(({ name, description }) => ({
+          name,
+          description
+        })),
+        documents: documents.map(({ name, description }) => ({
+          name,
+          description
+        })),
+        customQuestions: customQuestions.map(({ question }) => question)
       })
+
+      if (isEditing) {
+        resp = await fetch(`/api/survey/${editingSurveyId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: requestBody
+        })
+      } else {
+        resp = await fetch('/api/survey', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: requestBody
+        })
+      }
 
       const body = await resp.json()
 
       if (body.survey) {
-        addSurvey(body.survey)
-        setDialogState(false)
-        toast.success(t('createSurvey.success'))
+        if (isEditing) {
+          updateSurvey(editingSurveyId!, body.survey)
+        } else {
+          addSurvey(body.survey)
+        }
+
+        toast.success(createToastMessage)
+        resetForm()
       } else {
-        toast.error(t('createSurvey.error'))
+        toast.error(errorToastMessage)
       }
       form.reset()
     } catch (error) {
       console.log(error)
-      toast.error(t('createSurvey.error'))
+      toast.error(errorToastMessage)
     }
   }
 
   const onCloseDialog = (open: boolean) => {
     if (!open) {
-      form.reset()
-      setCustomQuestions([])
-      setCategories([])
-      setDocuments([])
-      setEditingSurveyId(null)
-      setIsCreatingSurvey(false)
+      resetForm()
     }
 
     setDialogState(open)
@@ -311,6 +345,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                               'dashboard.createSurvey.offer.style.placeholder'
                             )}
                             className="text-lg"
+                            required
                             {...field}
                           />
                         </FormControl>
@@ -359,6 +394,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                             placeholder={t(
                               'dashboard.createSurvey.offer.description.placeholder'
                             )}
+                            className="text-lg"
                             required
                             {...field}
                           />
@@ -374,7 +410,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                   />
                   <FormField
                     control={form.control}
-                    name="offerAditionalInformation"
+                    name="offerAdditionalInfo"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
@@ -383,7 +419,11 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                           )}
                         </FormLabel>
                         <FormControl>
-                          <Textarea placeholder="..." {...field} />
+                          <Textarea
+                            placeholder="..."
+                            className="text-lg"
+                            {...field}
+                          />
                         </FormControl>
                         <FormDescription>
                           {t(
@@ -419,12 +459,15 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                             </FormLabel>
                             <FormControl>
                               <Input
+                                {...field}
                                 placeholder="3"
                                 className="text-lg"
                                 min={0}
                                 max={MAX_NUMBER_OF_QUESTIONS}
                                 type="number"
-                                {...field}
+                                onChange={(event) =>
+                                  field.onChange(+event.target.value)
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -448,12 +491,15 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                             </FormLabel>
                             <FormControl>
                               <Input
+                                {...field}
                                 placeholder="3"
                                 className="text-lg"
                                 min={0}
                                 max={MAX_NUMBER_OF_QUESTIONS}
                                 type="number"
-                                {...field}
+                                onChange={(event) =>
+                                  field.onChange(+event.target.value)
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -465,6 +511,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                       <CustomQuestionsInput
                         max={totalOfQuestions}
                         onChange={setCustomQuestions}
+                        questions={customQuestions}
                       />
                     </li>
                   </ul>
@@ -478,7 +525,10 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                   <p>
                     {t('dashboard.createSurvey.categorization.description')}
                   </p>
-                  <CategoryCreationInput onChange={setCategories} />
+                  <CategoryCreationInput
+                    onChange={setCategories}
+                    categories={categories}
+                  />
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="documents">
@@ -487,7 +537,10 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                 </AccordionTrigger>
                 <AccordionContent className="space-y-6">
                   <p>{t('dashboard.createSurvey.documents.description')}</p>
-                  <DocumentSelector onChange={setDocuments} />
+                  <DocumentSelector
+                    onChange={setDocuments}
+                    documents={documents}
+                  />
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="additional-config">
@@ -502,26 +555,29 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                     <li>
                       <h3 className="text-lg">
                         {t(
-                          'dashboard.createSurvey.additionalConfig.numberOfAttemps'
+                          'dashboard.createSurvey.additionalConfig.numberOfAttempts'
                         )}
                       </h3>
                       <FormField
                         control={form.control}
-                        name="numberOfAttemps"
+                        name="numberOfAttempts"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>
                               {t(
-                                'dashboard.createSurvey.additionalConfig.numberOfAttemps.description'
+                                'dashboard.createSurvey.additionalConfig.numberOfAttempts.description'
                               )}
                             </FormLabel>
                             <FormControl>
                               <Input
+                                {...field}
                                 placeholder="3"
                                 className="text-lg"
                                 min={0}
                                 type="number"
-                                {...field}
+                                onChange={(event) =>
+                                  field.onChange(+event.target.value)
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -547,11 +603,14 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                             </FormLabel>
                             <FormControl>
                               <Input
+                                {...field}
                                 placeholder="1"
                                 className="text-lg"
-                                min={0}
+                                min={1}
                                 type="number"
-                                {...field}
+                                onChange={(event) =>
+                                  field.onChange(+event.target.value)
+                                }
                               />
                             </FormControl>
                             <FormMessage />

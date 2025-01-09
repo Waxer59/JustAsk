@@ -1,26 +1,27 @@
 ---
 import { Survey } from '@/components/react/survey/Survey'
+import { getSurveyByCode } from '@/db/services/survey'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
 const { id } = Astro.params
+
+const survey = await getSurveyByCode(id!)
+
+if (!survey) {
+  return Astro.redirect('/404')
+}
 ---
 
 <BaseLayout>
   <Survey
     client:only="react"
     surveyId={id!}
-    requiredDocuments={[
-      // {
-      //   id: 'cv',
-      //   name: 'Curriculum Vitae',
-      //   description: 'Professional resume detailing work experience and skills'
-      // },
-      // {
-      //   id: 'swot',
-      //   name: 'SWOT Analysis',
-      //   description:
-      //     'Analysis of Strengths, Weaknesses, Opportunities, and Threats'
-      // }
-    ]}
+    requiredDocuments={survey?.surveysToSurveysDocuments.map(
+      ({ document }) => ({
+        id: document!.id,
+        name: document!.name,
+        description: document!.description ?? ''
+      })
+    ) ?? []}
   />
 </BaseLayout>

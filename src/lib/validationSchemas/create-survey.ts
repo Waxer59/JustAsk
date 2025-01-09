@@ -26,6 +26,6 @@ export const createSurveySchema = z.object({
     })
     .array()
     .default([]),
-  maxSubmissions: z.number().default(1),
-  maxAttempts: z.number().default(3)
+  maxAttempts: z.number().min(0).default(2),
+  maxSubmissions: z.number().min(1).default(1)
 })

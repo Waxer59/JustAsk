@@ -20,6 +20,7 @@ pnpm i
    * `DATABASE_URL`: Provide a postgres database url.
    * `BETTER_AUTH_SECRET`: Provide a secret key for the better auth. run `openssl rand -hex 32` to generate a random key.
    * `AUTH_RESEND_KEY`: Provide a resend API key.
+   * `HMAC_KEY`: Provide a secret key for the HMAC. run `openssl rand -hex 32` to generate a random key.
 
 3. Run the project with the command:
 

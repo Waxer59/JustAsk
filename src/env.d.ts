@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly GROQ_API_KEY: string
   readonly AUTH_RESEND_KEY: string
   readonly BETTER_AUTH_SECRET: string
+  readonly HMAC_KEY: string
 }
 
 interface ImportMeta {

@@ -26,13 +26,20 @@ export interface CustomQuestion {
 interface Props {
   max?: number
   onChange?: (questions: CustomQuestion[]) => void
+  questions?: CustomQuestion[]
 }
 
 const { t } = getUiTranslations()
 
-export const CustomQuestionsInput = ({ max, onChange }: Props) => {
+export const CustomQuestionsInput = ({
+  max,
+  onChange,
+  questions: questionsProp
+}: Props) => {
   const [question, setQuestion] = useState<string>('')
-  const [questions, setQuestions] = useState<CustomQuestion[]>([])
+  const [questions, setQuestions] = useState<CustomQuestion[]>(
+    questionsProp ?? []
+  )
 
   const handleSubmit = () => {
     if (question.trim().length === 0) {
@@ -114,7 +121,7 @@ export const CustomQuestionsInput = ({ max, onChange }: Props) => {
       </FormItem>
       <ul className="flex flex-col gap-4">
         {questions.map(({ id, question }) => (
-          <li className="grid grid-cols-12 gap-2" key={id}>
+          <li className="grid grid-cols-12 gap-2 text-lg" key={id}>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -126,7 +133,7 @@ export const CustomQuestionsInput = ({ max, onChange }: Props) => {
                   side="bottom"
                   align="start"
                   className="max-w-[300px]">
-                  <p className="text-sm">{question}</p>
+                  <p>{question}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

@@ -1,4 +1,3 @@
-import { DEFAULT_DOUMENTS } from '@/constants'
 import { getUiTranslations } from '@/i18n/utils'
 import type { Document } from '@/types'
 import { Button } from '@/ui/button'
@@ -19,14 +18,16 @@ import { useState } from 'react'
 
 interface Props {
   onChange?: (documents: Document[]) => void
+  documents?: Document[]
 }
 
-const { t, lang } = getUiTranslations()
+const { t } = getUiTranslations()
 
-export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
-  const [documents, setDocuments] = useState<Document[]>([
-    ...DEFAULT_DOUMENTS[lang]
-  ])
+export const DocumentSelector: React.FC<Props> = ({
+  onChange,
+  documents: documentsProp
+}) => {
+  const [documents, setDocuments] = useState<Document[]>(documentsProp ?? [])
   const [customDialogOpen, setCustomDialogOpen] = useState(false)
   const [customDocument, setCustomDocument] = useState({
     name: '',
@@ -56,13 +57,23 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
       isChecked: true
     }
 
-    setDocuments((prev) => [...prev, newDocument])
+    const newDocuments = [...documents, newDocument]
+
+    setDocuments(newDocuments)
+    onChange?.(newDocuments)
     setCustomDocument({ name: '', description: '' })
     setCustomDialogOpen(false)
   }
 
   return (
     <>
+      <Button
+        type="button"
+        variant="secondary"
+        className="w-full inline-flex justify-center"
+        onClick={() => setCustomDialogOpen(true)}>
+        <PlusIcon /> <span>{t('dashboard.createSurvey.documents.add')}</span>
+      </Button>
       <div className="flex flex-col gap-6">
         <ul className="flex flex-col gap-4">
           {documents.map(({ id, name, description, isCustom }) => (
@@ -87,13 +98,6 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
             </li>
           ))}
         </ul>
-        <Button
-          type="button"
-          variant="secondary"
-          className="w-full inline-flex justify-center"
-          onClick={() => setCustomDialogOpen(true)}>
-          <PlusIcon /> <span>{t('dashboard.createSurvey.documents.add')}</span>
-        </Button>
       </div>
       <Dialog open={customDialogOpen} onOpenChange={setCustomDialogOpen}>
         <DialogContent>
@@ -112,6 +116,7 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
               </Label>
               <Input
                 id="name"
+                className="text-lg"
                 value={customDocument.name}
                 onChange={(e) =>
                   setCustomDocument((prev) => ({
@@ -140,7 +145,7 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
                 placeholder={t(
                   'dashboard.createSurvey.documents.add.modal.description.placeholder'
                 )}
-                className="resize-none"
+                className="resize-none text-lg"
               />
             </div>
           </div>

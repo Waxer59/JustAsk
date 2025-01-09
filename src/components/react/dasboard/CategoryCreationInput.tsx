@@ -1,5 +1,13 @@
 import { getUiTranslations } from '@/i18n/utils'
 import { Button } from '@/ui/button'
+import {
+  DialogHeader,
+  DialogFooter,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription
+} from '@/ui/dialog'
 import { Textarea } from '@/ui/textarea'
 import { FormItem, FormLabel, FormControl, FormMessage } from '@ui/form'
 import { Input } from '@ui/input'
@@ -23,6 +31,7 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [categories, setCategories] = useState<Category[]>([])
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
 
   const handleRemoveCategory = (id: string) => {
     const filteredCategories = categories.filter(
@@ -55,52 +64,20 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
     if (onChange) {
       onChange(newCategories)
     }
+
+    setIsDialogOpen(false)
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <FormItem>
-          <FormLabel>
-            {t('dashboard.createSurvey.categorization.category.name')}
-          </FormLabel>
-          <FormControl>
-            <Input
-              placeholder={t(
-                'dashboard.createSurvey.categorization.category.name.placeholder'
-              )}
-              className="text-lg"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-        <FormItem>
-          <FormLabel>
-            {t('dashboard.createSurvey.categorization.category.description')}
-          </FormLabel>
-          <FormControl>
-            <Textarea
-              placeholder={t(
-                'dashboard.createSurvey.categorization.category.description.placeholder'
-              )}
-              className="text-lg"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={handleAddCategory}
-          className="w-full inline-flex justify-center items-center">
-          <PlusIcon />{' '}
-          <span>{t('dashboard.createSurvey.categorization.category.add')}</span>
-        </Button>
-      </div>
+    <>
+      <Button
+        type="button"
+        variant="secondary"
+        onClick={() => setIsDialogOpen(true)}
+        className="w-full inline-flex justify-center items-center">
+        <PlusIcon />{' '}
+        <span>{t('dashboard.createSurvey.categorization.category.add')}</span>
+      </Button>
       <ul className="flex flex-col gap-4">
         {categories.map(({ id, name, description }) => (
           <li className="flex flex-col border p-2 rounded-md" key={id}>
@@ -118,6 +95,72 @@ export const CategoryCreationInput: React.FC<Props> = ({ onChange }) => {
           </li>
         ))}
       </ul>
-    </div>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {t('dashboard.createSurvey.categorization.category.add')}
+            </DialogTitle>
+            <DialogDescription>
+              {t(
+                'dashboard.createSurvey.categorization.category.add.description'
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4">
+            <FormItem>
+              <FormLabel>
+                {t('dashboard.createSurvey.categorization.category.name')}
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder={t(
+                    'dashboard.createSurvey.categorization.category.name.placeholder'
+                  )}
+                  className="text-lg"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            <FormItem>
+              <FormLabel>
+                {t(
+                  'dashboard.createSurvey.categorization.category.description'
+                )}
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder={t(
+                    'dashboard.createSurvey.categorization.category.description.placeholder'
+                  )}
+                  className="text-lg"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDialogOpen(false)
+                setName('')
+                setDescription('')
+              }}>
+              {t('cancel')}
+            </Button>
+            <Button
+              onClick={handleAddCategory}
+              disabled={!description || !name}>
+              {t('dashboard.createSurvey.categorization.category.add')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

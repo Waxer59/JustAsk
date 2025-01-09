@@ -565,7 +565,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
             </Accordion>
             <Button type="submit" className="w-full">
               {isEditing
-                ? t('dashboard.survey.edit.save')
+                ? t('dashboard.editSurvey.save')
                 : t('dashboard.createSurvey.create')}
             </Button>
           </form>

@@ -195,9 +195,7 @@ export const SurveyCard = ({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>
-                          {t('dashboard.options.delete.dialog.cancel')}
-                        </AlertDialogCancel>
+                        <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDeleteSurvey}>
                           {t('dashboard.options.delete.dialog.confirm')}
                         </AlertDialogAction>

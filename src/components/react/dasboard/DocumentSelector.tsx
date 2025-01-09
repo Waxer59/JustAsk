@@ -151,7 +151,7 @@ export const DocumentSelector: React.FC<Props> = ({ onChange }) => {
                 setCustomDialogOpen(false)
                 setCustomDocument({ name: '', description: '' })
               }}>
-              {t('dashboard.createSurvey.documents.add.modal.cancel')}
+              {t('cancel')}
             </Button>
             <Button
               onClick={handleAddCustomDocument}

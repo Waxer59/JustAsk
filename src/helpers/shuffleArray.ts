@@ -1,16 +1,10 @@
-export function shuffleArray(array: any[]) {
-  let currentIndex = array.length
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-    // Pick a remaining element...
-    const randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-
-    // And swap it with the current element.
-    ;[array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex]
-    ]
+export function shuffleArray(a: any[]) {
+  let j, x, i
+  for (i = a.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1))
+    x = a[i]
+    a[i] = a[j]
+    a[j] = x
   }
+  return a
 }

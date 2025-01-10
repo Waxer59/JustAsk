@@ -8,6 +8,9 @@ import { useDashboardStore } from '@/store/dashboard'
 import type { Survey, SurveysResponse } from '@/types'
 import { useUiStore } from '@/store/ui'
 import { CreateSurveyDialog } from '@/components/react/dasboard/CreateSurveyDialog'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 interface Props {
   children: React.ReactNode
@@ -65,7 +68,7 @@ export function DashboardLayout({ children }: Props) {
         </h1>
         <CreateSurveyButton />
       </div>
-      {children}
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       <Toaster />
       {(isCreatingSurvey || isEditingSurvey) && (
         <CreateSurveyDialog isOpen editingSurvey={editingSurvey} />

@@ -3,9 +3,8 @@ import { z } from 'zod'
 import { generateText } from 'ai'
 // import { LANGUAGE_TEXT } from '@constants'
 import { createGroq } from '@ai-sdk/groq'
-import { shuffleArray } from '@/helpers/shuffleArray'
 // import { getSurveyByCode } from '@/db/services/survey'
-import { createHmac, isHmacValid } from '@/lib/hmac'
+import { isHmacValid } from '@/lib/hmac'
 
 const groq = createGroq({
   apiKey: import.meta.env.GROQ_API_KEY
@@ -59,25 +58,37 @@ export const POST: APIRoute = async ({ request }) => {
       toolChoice: 'required',
       tools: {
         generateQuestions: {
-          description: 'Use this to give all interview questions',
+          description: 'Use this to give the interview evaluation',
           parameters: z.object({
-            questions: z.string().array().min(5).describe('Interview questions')
+            softSkillsScore: z
+              .number()
+              .min(0)
+              .max(10)
+              .describe('Soft Skills Score'),
+            hardSkillsScore: z
+              .number()
+              .min(0)
+              .max(10)
+              .describe('Hard Skills Score'),
+            overallScore: z.number().min(0).max(100).describe('Overall Score'),
+            category: z
+              .string()
+              .describe('Category of the candidate')
+              .optional()
           }),
-          execute: async ({ questions }) => ({ questions })
+          execute: async (result) => result
         }
       }
     })
 
-    const questions = toolResults[0].result.questions
+    const { category, softSkillsScore, hardSkillsScore, overallScore } =
+      toolResults[0].result
 
-    const hmac = createHmac(JSON.stringify({ questions }))
-
-    const shuffledQuestions = shuffleArray(questions)
+    console.log({ category, softSkillsScore, hardSkillsScore, overallScore })
 
     return new Response(
       JSON.stringify({
-        questions: shuffledQuestions,
-        ...hmac
+        success: true
       }),
       {
         status: 200

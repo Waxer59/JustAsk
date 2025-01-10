@@ -7,6 +7,18 @@ export type SupportedLanguages = 'en' | 'es'
 
 export interface CreateQuestionsResponse {
   questions: string[]
+  key: string
+  timestamp: number
+}
+
+export interface SurveyResult {
+  name: string
+  email: string
+  isAttempt: boolean
+  category: string
+  overAllScore: number
+  softSkillsScore: number
+  hardSkillsScore: number
 }
 
 export interface GetFeedbackRequest {
@@ -25,7 +37,8 @@ export interface CreateQuestionsData {
 }
 
 export interface DocumentContent {
-  id: string
+  name: string
+  description: string
   content: string
   file: File
 }
@@ -58,10 +71,13 @@ export interface SurveyDocument {
   description: string
 }
 
-export interface CreateSurveyUser {
+export interface SurveyDocumentContent extends SurveyDocument {
+  content: string
+}
+
+export interface SurveyUser {
   name: string
   email: string
-  surveyId: string
 }
 
 export interface Survey {

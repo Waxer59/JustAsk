@@ -68,8 +68,8 @@ const formSchema = z.object({
   offerAdditionalInfo: z.string().optional(),
   numberOfHardQuestions: z.number().min(1, { message: '' }),
   numberOfSoftQuestions: z.number().min(1, { message: '' }),
-  numberOfAttempts: z.number().min(0, { message: '' }),
-  numberOfSubmissions: z.number().min(1, { message: '' })
+  maxAttempts: z.number().min(0, { message: '' }),
+  maxSubmissions: z.number().min(1, { message: '' })
 })
 
 interface Props {
@@ -115,9 +115,8 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
       numberOfSoftQuestions:
         editingSurvey?.numberOfSoftSkillsQuestions ??
         DEFAULT_SOFT_SKILLS_QUESTIONS,
-      numberOfAttempts: editingSurvey?.maxAttempts ?? DEFAULT_ATTEMPTS,
-      numberOfSubmissions:
-        editingSurvey?.maxSubmissions ?? DEFAULT_MAX_SUBMISSIONS
+      maxAttempts: editingSurvey?.maxAttempts ?? DEFAULT_ATTEMPTS,
+      maxSubmissions: editingSurvey?.maxSubmissions ?? DEFAULT_MAX_SUBMISSIONS
     }
   })
 
@@ -560,7 +559,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                       </h3>
                       <FormField
                         control={form.control}
-                        name="numberOfAttempts"
+                        name="maxAttempts"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>
@@ -593,7 +592,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                       </h3>
                       <FormField
                         control={form.control}
-                        name="numberOfSubmissions"
+                        name="maxSubmissions"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>

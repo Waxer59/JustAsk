@@ -5,10 +5,14 @@ import { SurveyUserDataForm } from './SurveyUserDataForm'
 import { SurveyWelcomeMessage } from './SurveyWelcomeMessage'
 import { useEffect, useMemo, useState } from 'react'
 import { ControlButtons } from '../common/ControlButtons'
-import { SurveySteps } from '@/types'
+import { SurveySteps, type SupportedLanguages } from '@/types'
 import { surveyUserDataSchema } from '@/lib/validationSchemas/survey-user-data'
 import { SurveyDocument } from './SurveyDocument'
 import { Toaster } from '@/ui/sonner'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useUiStore } from '@/store/ui'
+
+const queryClient = new QueryClient()
 
 const HIDE_CONTROL_BUTTONS_STEPS = [SurveySteps.USER]
 
@@ -24,17 +28,24 @@ export interface RequiredDocument {
 interface Props {
   surveyId: string
   requiredDocuments?: RequiredDocument[]
+  surveyName: string
+  surveyDescription?: string
+  lang: SupportedLanguages
 }
 
 export const Survey: React.FC<Props> = ({
   surveyId,
-  requiredDocuments = []
+  requiredDocuments = [],
+  surveyName,
+  surveyDescription,
+  lang
 }) => {
   const [currentDocumentIdx, setCurrentDocumentIdx] = useState<number>(0)
   const currentStep = useSurveyStore((state) => state.currentStep)
   const name = useSurveyStore((state) => state.name)
   const email = useSurveyStore((state) => state.email)
   const files = useSurveyStore((state) => state.files)
+  const hideControlButtons = useUiStore((state) => state.hideControlButtons)
   const setCurrentSurveyId = useSurveyStore((state) => state.setCurrentSurveyId)
   const setHaveRequiredDocuments = useSurveyStore(
     (state) => state.setHaveRequiredDocuments
@@ -44,6 +55,7 @@ export const Survey: React.FC<Props> = ({
   const setName = useSurveyStore((state) => state.setName)
   const setEmail = useSurveyStore((state) => state.setEmail)
   const setCurrentStep = useSurveyStore((state) => state.setCurrentStep)
+  const setLang = useSurveyStore((state) => state.setLang)
 
   const shouldDisableNextButton =
     currentStep === SurveySteps.DOCUMENTS &&
@@ -96,6 +108,7 @@ export const Survey: React.FC<Props> = ({
   }, [surveyId])
 
   useEffect(() => {
+    setLang(lang)
     setHaveRequiredDocuments(requiredDocuments.length > 0)
     const { error } = surveyUserDataSchema.safeParse({
       name,
@@ -115,7 +128,7 @@ export const Survey: React.FC<Props> = ({
   }, [])
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <header className="mt-28 flex flex-col gap-10">
         <Stepper
           steps={steps}
@@ -125,7 +138,10 @@ export const Survey: React.FC<Props> = ({
       <main className="max-w-3xl mx-auto w-full mt-28 flex flex-col gap-10">
         {currentStep === SurveySteps.USER && (
           <>
-            <SurveyWelcomeMessage />
+            <SurveyWelcomeMessage
+              surveyName={surveyName}
+              surveyDescription={surveyDescription}
+            />
             <SurveyUserDataForm />
           </>
         )}
@@ -133,7 +149,8 @@ export const Survey: React.FC<Props> = ({
           <SurveyDocument document={requiredDocuments[currentDocumentIdx]} />
         )}
         {currentStep === SurveySteps.INTERVIEW && <SurveyChoices />}
-        {!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) && (
+        {(!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) ||
+          hideControlButtons) && (
           <ControlButtons
             totalSteps={steps.length}
             currentStep={currentStep}
@@ -144,6 +161,6 @@ export const Survey: React.FC<Props> = ({
         )}
       </main>
       <Toaster />
-    </>
+    </QueryClientProvider>
   )
 }

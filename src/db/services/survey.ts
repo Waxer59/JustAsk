@@ -8,7 +8,7 @@ import {
 } from '@/db/schemas/survey-schema'
 import { createSurveySchema } from '@/lib/validationSchemas/create-survey'
 import type { Survey, UpdateSurvey } from '@/types'
-import { inArray, relations, sql } from 'drizzle-orm'
+import { inArray, sql } from 'drizzle-orm'
 import { getAllResultsBySurveyId } from './surveyResult'
 import { init } from '@paralleldrive/cuid2'
 import { CODE_LENGTH } from '@/constants'
@@ -21,11 +21,6 @@ const createId = init({
 type NewSurvey = typeof survey.$inferInsert
 type NewCategory = typeof surveyCategory.$inferInsert
 type NewDocument = typeof surveyDocument.$inferInsert
-
-export const surveyRelations = relations(survey, ({ many }) => ({
-  surveyToCategories: many(surveysToSurveyCategories),
-  surveyToDocuments: many(surveysToSurveysDocuments)
-}))
 
 export const createSurvey = async (
   userId: string,
@@ -121,6 +116,21 @@ export const createSurvey = async (
   })
 
   return result as Survey
+}
+
+export const getUserSurveyById = async (surveyId: string, userId: string) => {
+  try {
+    const result = await db
+      .select()
+      .from(survey)
+      .where(sql`id = ${surveyId} AND user_id = ${userId}`)
+
+    return result[0]
+  } catch (error) {
+    console.log(error)
+  }
+
+  return null
 }
 
 export const getSurveyById = async (surveyId: string) => {

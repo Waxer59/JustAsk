@@ -1,4 +1,9 @@
-import { numberOfSurveySteps, SurveySteps, type DocumentContent } from '@/types'
+import {
+  numberOfSurveySteps,
+  SurveySteps,
+  type DocumentContent,
+  type SupportedLanguages
+} from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
@@ -9,6 +14,8 @@ interface State {
   currentStep: SurveySteps
   files: DocumentContent[]
   haveRequiredDocuments: boolean
+  isAttempt: boolean
+  lang: SupportedLanguages
 }
 
 interface Actions {
@@ -19,6 +26,8 @@ interface Actions {
   removeFile: (fileId: string) => void
   setCurrentStep: (step: SurveySteps) => void
   setHaveRequiredDocuments: (haveRequiredDocuments: boolean) => void
+  setIsAttempt: (isAttempt: boolean) => void
+  setLang: (lang: SupportedLanguages) => void
   nextStep: () => void
   prevStep: () => void
   clear: () => void
@@ -30,7 +39,9 @@ const initialState: State = {
   email: '',
   currentStep: SurveySteps.USER,
   files: [],
-  haveRequiredDocuments: false
+  haveRequiredDocuments: false,
+  isAttempt: false,
+  lang: 'es'
 }
 
 export const useSurveyStore = create<State & Actions>()(
@@ -52,7 +63,7 @@ export const useSurveyStore = create<State & Actions>()(
       setEmail: (email) => set({ email: email }),
       addFile: (file) => set({ files: [...get().files, file] }),
       removeFile: (fileId) =>
-        set({ files: get().files.filter((f) => f.id !== fileId) }),
+        set({ files: get().files.filter((f) => f.name !== fileId) }),
       setCurrentStep: (step) => set({ currentStep: step }),
       nextStep: () => {
         const nextStep = get().currentStep + 1
@@ -86,6 +97,8 @@ export const useSurveyStore = create<State & Actions>()(
           })
         }
       },
+      setIsAttempt: (isAttempt) => set({ isAttempt: isAttempt }),
+      setLang: (lang) => set({ lang: lang }),
       clear: () => set(initialState)
     })),
     {

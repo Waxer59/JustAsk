@@ -17,7 +17,7 @@ export const SurveyDocument: React.FC<Props> = ({ document }) => {
   const removeFile = useSurveyStore((state) => state.removeFile)
   const files = useSurveyStore((state) => state.files)
 
-  const existingFile = files.filter((file) => file.id === document.name)[0]
+  const existingFile = files.filter((file) => file.name === document.name)[0]
 
   const onAddFile = async (file: FilePondFile) => {
     const newFile = new File([file.file], file.filename, {
@@ -28,7 +28,8 @@ export const SurveyDocument: React.FC<Props> = ({ document }) => {
       loading: t('fileUpload.loading'),
       success: (text) => {
         addFile({
-          id: document.name,
+          name: document.name,
+          description: document.description,
           content: text,
           file: newFile
         })

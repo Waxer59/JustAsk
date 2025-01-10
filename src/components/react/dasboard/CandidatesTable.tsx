@@ -1,6 +1,4 @@
-'use client'
-
-import * as React from 'react'
+import { useRef, useState } from 'react'
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -30,54 +28,24 @@ import {
   TableHeader,
   TableRow
 } from '@ui/table'
+import type { SurveyResult } from '@/types'
+import { DownloadTableExcel } from 'react-export-table-to-excel'
+import { useQuery } from '@tanstack/react-query'
 
-const data: Payment[] = [
+const columns: ColumnDef<SurveyResult>[] = [
   {
-    id: 'm5gr84i9',
-    amount: 316,
-    status: 'success',
-    email: 'ken99@yahoo.com'
-  },
-  {
-    id: '3u1reuv4',
-    amount: 242,
-    status: 'success',
-    email: 'Abe45@gmail.com'
-  },
-  {
-    id: 'derv1ws0',
-    amount: 837,
-    status: 'processing',
-    email: 'Monserrat44@gmail.com'
-  },
-  {
-    id: '5kma53ae',
-    amount: 874,
-    status: 'success',
-    email: 'Silas22@gmail.com'
-  },
-  {
-    id: 'bhqecj4p',
-    amount: 721,
-    status: 'failed',
-    email: 'carmella@hotmail.com'
-  }
-]
-
-type Payment = {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
-}
-
-const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('status')}</div>
-    )
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Name
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue('name')}</div>
   },
   {
     accessorKey: 'email',
@@ -92,35 +60,29 @@ const columns: ColumnDef<Payment>[] = [
       )
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>
-  },
-  {
-    accessorKey: 'amount',
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    }
   }
 ]
 
-export function CandidatesTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+interface Props {
+  surveyId: string
+  surveyName: string
+}
+
+export function CandidatesTable({ surveyId, surveyName }: Props) {
+  const tableRef = useRef<HTMLTableElement>(null)
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
+  const { data } = useQuery<SurveyResult[]>({
+    queryKey: ['results', surveyId],
+    queryFn: async () => {
+      return fetch(`/api/survey/${surveyId}/results`).then((res) => res.json())
+    }
+  })
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -150,7 +112,12 @@ export function CandidatesTable() {
           className="max-w-sm"
         />
         <div className="flex flex-col gap-2">
-          <Button variant="ghost">Export .xlsx</Button>
+          <DownloadTableExcel
+            filename={`${surveyName}-data`}
+            sheet="users"
+            currentTableRef={tableRef.current}>
+            <Button variant="ghost">Export .xlsx</Button>
+          </DownloadTableExcel>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -179,7 +146,7 @@ export function CandidatesTable() {
         </div>
       </div>
       <div className="rounded-md border">
-        <Table>
+        <Table ref={tableRef}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

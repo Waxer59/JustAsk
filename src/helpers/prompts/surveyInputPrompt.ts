@@ -11,7 +11,7 @@ export const surveyInputPrompt = ({
   description: string
   interviewStyle: string
   additionalInfo?: string
-  documentsContent?: SurveyDocumentContent[]
+  documentsContent?: Omit<SurveyDocumentContent, 'file'>[]
 }): string => `
 - Job Description:
   * Title: ${title}

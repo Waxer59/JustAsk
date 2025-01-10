@@ -37,6 +37,12 @@ export interface CreateQuestionsData {
 }
 
 export interface DocumentContent {
+  id: string
+  content: string
+  file: File
+}
+
+export interface SurveyDocumentContent {
   name: string
   description: string
   content: string

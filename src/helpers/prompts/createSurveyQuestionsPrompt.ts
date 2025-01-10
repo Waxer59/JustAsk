@@ -13,7 +13,7 @@ export const createSurveyQuestionsPrompt = ({
   offer: OfferDetails
   interviewStyle: string
   additionalInfo?: string
-  documentsContent?: SurveyDocumentContent[]
+  documentsContent?: Omit<SurveyDocumentContent, 'file'>[]
 }): string => `Your task is to generate a specific set of tailored interview questions for each job offer.
         Follow these steps:
         

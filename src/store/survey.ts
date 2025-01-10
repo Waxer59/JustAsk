@@ -1,8 +1,8 @@
 import {
   numberOfSurveySteps,
   SurveySteps,
-  type DocumentContent,
-  type SupportedLanguages
+  type SupportedLanguages,
+  type SurveyDocumentContent
 } from '@/types'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
@@ -12,7 +12,7 @@ interface State {
   name: string
   email: string
   currentStep: SurveySteps
-  files: DocumentContent[]
+  files: SurveyDocumentContent[]
   haveRequiredDocuments: boolean
   isAttempt: boolean
   lang: SupportedLanguages
@@ -22,7 +22,7 @@ interface Actions {
   setCurrentSurveyId: (id: string) => void
   setName: (name: string) => void
   setEmail: (email: string) => void
-  addFile: (file: DocumentContent) => void
+  addFile: (file: SurveyDocumentContent) => void
   removeFile: (fileId: string) => void
   setCurrentStep: (step: SurveySteps) => void
   setHaveRequiredDocuments: (haveRequiredDocuments: boolean) => void

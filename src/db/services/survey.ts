@@ -298,9 +298,34 @@ export const getSurveyByShareCode = async (shareCode: string) => {
 
 export const deleteSurvey = async (userId: string, surveyId: string) => {
   try {
-    return await db
-      .delete(survey)
-      .where(sql`user_id = ${userId} AND id = ${surveyId}`)
+    const surveyToDelete = await getSurveyById(surveyId)
+
+    if (!surveyToDelete || surveyToDelete.userId !== userId) {
+      return null
+    }
+
+    await db.transaction(async (tx) => {
+      try {
+        await tx.delete(survey).where(sql`id = ${surveyId}`)
+
+        await tx.delete(surveyCategory).where(sql`survey_id = ${surveyId}`)
+
+        await tx.delete(surveyDocument).where(sql`survey_id = ${surveyId}`)
+
+        await tx
+          .delete(surveysToSurveyCategories)
+          .where(sql`survey_id = ${surveyId}`)
+
+        await tx
+          .delete(surveysToSurveysDocuments)
+          .where(sql`survey_id = ${surveyId}`)
+      } catch (error) {
+        console.log(error)
+        tx.rollback()
+      }
+    })
+
+    return surveyToDelete
   } catch (error) {
     console.log(error)
   }

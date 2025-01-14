@@ -135,12 +135,23 @@ export const getUserSurveyById = async (surveyId: string, userId: string) => {
 
 export const getSurveyById = async (surveyId: string) => {
   try {
-    const result = await db
-      .select()
-      .from(survey)
-      .where(sql`id = ${surveyId}`)
+    const newSurvey = await db.query.survey.findFirst({
+      where: (survey, { eq }) => eq(survey.id, surveyId),
+      with: {
+        surveysToSurveyCategories: {
+          with: {
+            category: true
+          }
+        },
+        surveysToSurveysDocuments: {
+          with: {
+            document: true
+          }
+        }
+      }
+    })
 
-    return result[0]
+    return newSurvey
   } catch (error) {
     console.log(error)
   }
@@ -159,7 +170,7 @@ export const updateSurvey = async (
     return null
   }
 
-  const { categories, ...rest } = data
+  const { categories, documents, ...rest } = data
 
   const surveyToUpdate = await getSurveyById(surveyId)
 
@@ -170,10 +181,7 @@ export const updateSurvey = async (
   const result = await db.transaction(async (tx) => {
     try {
       if (categories && categories.length > 0) {
-        const existingCategories = await tx
-          .select()
-          .from(surveysToSurveyCategories)
-          .where(sql`survey_id = ${surveyId}`)
+        const existingCategories = surveyToUpdate.surveysToSurveyCategories
 
         const existingCategoryIds = existingCategories.reduce(
           (acc, { surveyCategoryId }) => {
@@ -208,8 +216,41 @@ export const updateSurvey = async (
         )
       }
 
-      // if (documents && documents.length > 0) {
-      // }
+      if (documents && documents.length > 0) {
+        const existingDocuments = surveyToUpdate.surveysToSurveysDocuments
+
+        const existingDocumentIds = existingDocuments.reduce(
+          (acc, { surveyDocumentId }) => {
+            if (surveyDocumentId) {
+              acc.push(surveyDocumentId)
+            }
+            return acc
+          },
+          [] as string[]
+        )
+
+        await tx
+          .delete(surveyDocument)
+          .where(inArray(surveyDocument.id, existingDocumentIds))
+
+        await Promise.all(
+          documents.map(async (document) => {
+            const newDocument = await tx
+              .insert(surveyDocument)
+              .values({
+                name: document.name,
+                isActive: document.isActive,
+                description: document.description
+              })
+              .returning()
+
+            await tx.insert(surveysToSurveysDocuments).values({
+              surveyId: surveyId,
+              surveyDocumentId: newDocument[0].id
+            })
+          })
+        )
+      }
 
       await tx
         .update(survey)
@@ -218,7 +259,7 @@ export const updateSurvey = async (
         })
         .where(sql`id = ${surveyId}`)
 
-      const newSurvey = await tx.query.survey.findMany({
+      const newSurvey = await tx.query.survey.findFirst({
         where: (survey, { eq }) => eq(survey.id, surveyId),
         with: {
           surveysToSurveyCategories: {
@@ -234,7 +275,7 @@ export const updateSurvey = async (
         }
       })
 
-      return newSurvey[0]
+      return newSurvey
     } catch (error) {
       console.log(error)
       tx.rollback()

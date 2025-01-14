@@ -50,7 +50,7 @@ import {
 import { CategoryCreationInput, type Category } from './CategoryCreationInput'
 import { DocumentSelector } from './DocumentSelector'
 import { useEffect, useState } from 'react'
-import type { Document, Survey } from '@/types'
+import type { Document, Survey, SurveyCategory, SurveyDocument } from '@/types'
 import { toast } from 'sonner'
 import { useDashboardStore } from '@/store/dashboard'
 import { getUiTranslations } from '@/i18n/utils'
@@ -92,7 +92,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
       ...category
     })) ?? []
   )
-  const [documents, setDocuments] = useState<Document[]>( // TODO: include is Active
+  const [documents, setDocuments] = useState<Document[]>(
     editingSurvey?.documents.map((document) => ({
       id: crypto.randomUUID(),
       ...document
@@ -152,9 +152,10 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
           name,
           description
         })),
-        documents: documents.map(({ name, description }) => ({
+        documents: documents.map(({ name, description, isActive }) => ({
           name,
-          description
+          description,
+          isActive
         })),
         customQuestions: customQuestions.map(({ question }) => question)
       })
@@ -181,7 +182,15 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
 
       if (body.survey) {
         if (isEditing) {
-          updateSurvey(editingSurveyId!, body.survey)
+          updateSurvey(editingSurveyId!, {
+            ...body.survey,
+            documents: body.survey.surveysToSurveysDocuments.map(
+              ({ document }: { document: SurveyDocument }) => document
+            ),
+            categories: body.survey.surveysToSurveyCategories.map(
+              ({ category }: { category: SurveyCategory }) => category
+            )
+          })
         } else {
           addSurvey(body.survey)
         }

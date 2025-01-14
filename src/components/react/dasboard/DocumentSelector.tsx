@@ -34,14 +34,14 @@ export const DocumentSelector: React.FC<Props> = ({
     description: ''
   })
 
-  const handleCheckboxChange = (id: string, isChecked: boolean) => {
+  const handleCheckboxChange = (id: string, isActive: boolean) => {
     const newDocuments = documents.map((document) =>
-      document.id === id ? { ...document, isChecked } : document
+      document.id === id ? { ...document, isActive } : document
     )
 
     setDocuments(newDocuments)
 
-    onChange?.(documents)
+    onChange?.(newDocuments)
   }
 
   const handleAddCustomDocument = () => {
@@ -54,7 +54,7 @@ export const DocumentSelector: React.FC<Props> = ({
       name: customDocument.name,
       description: customDocument.description,
       isCustom: true,
-      isChecked: true
+      isActive: true
     }
 
     const newDocuments = [...documents, newDocument]
@@ -76,13 +76,13 @@ export const DocumentSelector: React.FC<Props> = ({
       </Button>
       <div className="flex flex-col gap-6">
         <ul className="flex flex-col gap-4">
-          {documents.map(({ id, name, description, isCustom }) => (
+          {documents.map(({ id, name, description, isCustom, isActive }) => (
             <li className="flex items-center gap-2" key={id}>
               <Checkbox
                 id="cv"
                 name="cv"
                 className="self-start"
-                defaultChecked={isCustom}
+                defaultChecked={isActive ?? isCustom}
                 onCheckedChange={(checked: boolean) =>
                   handleCheckboxChange(id, checked)
                 }

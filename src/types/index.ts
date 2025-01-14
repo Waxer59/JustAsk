@@ -114,7 +114,7 @@ export interface Document {
   name: string
   description: string
   isCustom?: boolean
-  isChecked?: boolean
+  isActive?: boolean
 }
 
 export interface OffersResponse {

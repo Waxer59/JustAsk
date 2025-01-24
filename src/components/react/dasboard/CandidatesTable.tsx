@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -29,7 +29,7 @@ import {
   TableRow
 } from '@ui/table'
 import type { SurveyResult } from '@/types'
-import { DownloadTableExcel } from 'react-export-table-to-excel'
+import exportFromJSON from 'export-from-json'
 
 const columns: ColumnDef<SurveyResult>[] = [
   {
@@ -150,7 +150,6 @@ interface Props {
 }
 
 export function CandidatesTable({ surveyName, data }: Props) {
-  const tableRef = useRef<HTMLTableElement>(null)
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState<any>([])
@@ -178,6 +177,17 @@ export function CandidatesTable({ surveyName, data }: Props) {
     }
   })
 
+  const handleDownloadExcel = () => {
+    const fileName = `${surveyName}-data`
+    const exportType = exportFromJSON.types.xls
+
+    exportFromJSON({
+      data: data,
+      fileName,
+      exportType
+    })
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4 justify-between">
@@ -188,12 +198,9 @@ export function CandidatesTable({ surveyName, data }: Props) {
           className="max-w-sm"
         />
         <div className="flex flex-col gap-2">
-          <DownloadTableExcel
-            filename={`${surveyName}-data`}
-            sheet="users"
-            currentTableRef={tableRef.current}>
-            <Button variant="ghost">Export .xlsx</Button>
-          </DownloadTableExcel>
+          <Button variant="ghost" onClick={handleDownloadExcel}>
+            Export .xlsx
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -222,7 +229,7 @@ export function CandidatesTable({ surveyName, data }: Props) {
         </div>
       </div>
       <div className="rounded-md border">
-        <Table ref={tableRef}>
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

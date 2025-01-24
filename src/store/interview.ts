@@ -12,7 +12,6 @@ interface State {
   currentOffer: OfferDetails | null
   isCurrentOfferManual: boolean
   isSimulatingInterview: boolean
-  hasInterviewFinished: boolean
   questions: string[]
   answers: string[]
   documentsContent: DocumentContent[]
@@ -23,7 +22,6 @@ interface Actions {
   setCurrentOffer: (offer: OfferDetails) => void
   setIsCurrentOfferManual: (isManual: boolean) => void
   setIsSimulatingInterview: (isSimulating: boolean) => void
-  setHasInterviewFinished: (hasFinished: boolean) => void
   setAnswers: (answers: string[]) => void
   addAnswer: (answer: string) => void
   removeDocumentContentById: (id: string) => void
@@ -42,7 +40,6 @@ const initialState: State = {
   isSimulatingInterview: false,
   documentsContent: [],
   questions: [],
-  hasInterviewFinished: false,
   answers: []
 }
 
@@ -67,8 +64,6 @@ export const useInterviewStore = create<State & Actions>()(
       }),
     setDocumentsContent: (documentsContent: DocumentContent[]) =>
       set({ documentsContent }),
-    setHasInterviewFinished: (hasFinished: boolean) =>
-      set({ hasInterviewFinished: hasFinished }),
     addAnswer: (answer: string) => set({ answers: [...get().answers, answer] }),
     prevStep: () => {
       const currentStep = get().currentStep

@@ -18,7 +18,6 @@ interface Props {
 
 const { t, lang } = getUiTranslations()
 
-// TODO: REFACTOR
 export const InterviewFeedback: React.FC<Props> = ({ feedback, score }) => {
   useEffect(() => {
     const CONFETTI_ANIMATION_END = Date.now() + CONFETTI_DURATION

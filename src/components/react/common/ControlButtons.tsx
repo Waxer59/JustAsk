@@ -1,6 +1,7 @@
 import { Button } from '@ui/button'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { getUiTranslations } from '@/i18n/utils'
+import { useUiStore } from '@/store/ui'
 
 const { t } = getUiTranslations()
 
@@ -26,23 +27,31 @@ export const ControlButtons: React.FC<Props> = ({
   disablePrevControlButton,
   onNext,
   onPrev
-}) => (
-  <div className="flex items-center justify-center gap-4">
-    {currentStep > hidePrevControlButtonStep && (
-      <Button
-        onClick={() => onPrev?.()}
-        variant="secondary"
-        disabled={disableControlButtons || disablePrevControlButton}>
-        <ArrowLeft className="stroke-1" /> {t('controlButton.previous')}
-      </Button>
-    )}
-    {currentStep < hideNextControlButtonStep && (
-      <Button
-        onClick={() => onNext?.()}
-        variant="secondary"
-        disabled={disableControlButtons || disableNextControlButton}>
-        {t('controlButton.next')} <ArrowRight className="stroke-1" />
-      </Button>
-    )}
-  </div>
-)
+}) => {
+  const hideControlButtons = useUiStore((state) => state.hideControlButtons)
+
+  if (hideControlButtons) {
+    return null
+  }
+
+  return (
+    <div className="flex items-center justify-center gap-4">
+      {currentStep > hidePrevControlButtonStep && (
+        <Button
+          onClick={() => onPrev?.()}
+          variant="secondary"
+          disabled={disableControlButtons || disablePrevControlButton}>
+          <ArrowLeft className="stroke-1" /> {t('controlButton.previous')}
+        </Button>
+      )}
+      {currentStep < hideNextControlButtonStep && (
+        <Button
+          onClick={() => onNext?.()}
+          variant="secondary"
+          disabled={disableControlButtons || disableNextControlButton}>
+          {t('controlButton.next')} <ArrowRight className="stroke-1" />
+        </Button>
+      )}
+    </div>
+  )
+}

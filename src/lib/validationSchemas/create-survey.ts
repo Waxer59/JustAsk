@@ -23,7 +23,8 @@ export const createSurveySchema = z.object({
     .object({
       name: z.string(),
       description: z.string(),
-      isActive: z.boolean().default(false)
+      isActive: z.boolean().default(false),
+      isOptional: z.boolean().default(false)
     })
     .array()
     .default([]),

@@ -19,15 +19,16 @@ const HIDE_CONTROL_BUTTONS_STEPS = [SurveySteps.USER]
 const DOCUMENTS_STEP = 'Documentos'
 const STEPS = ['Usuario', 'Comenzar']
 
-export interface RequiredDocument {
+export interface ReceivedSurveyDocument {
   id: string
   name: string
   description: string
+  isOptional?: boolean
 }
 
 interface Props {
   surveyId: string
-  requiredDocuments?: RequiredDocument[]
+  requiredDocuments?: ReceivedSurveyDocument[]
   surveyName: string
   surveyDescription?: string
   lang: SupportedLanguages
@@ -59,7 +60,8 @@ export const Survey: React.FC<Props> = ({
 
   const shouldDisableNextButton =
     currentStep === SurveySteps.DOCUMENTS &&
-    files.length < currentDocumentIdx + 1
+    files.length < currentDocumentIdx + 1 &&
+    !requiredDocuments[currentDocumentIdx].isOptional
 
   const steps = useMemo(() => {
     const newSteps = [...STEPS]

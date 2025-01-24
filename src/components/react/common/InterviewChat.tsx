@@ -24,16 +24,17 @@ const SILENCE_TIME = 3 * 1000 // 3 sec
 interface Props {
   questions: string[]
   langRecognition?: LANG_CODES
+  onSubmit?: (responses: string[]) => void
 }
 
 const SpeechRecognition =
   // @ts-expect-error https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#javascript
   window.SpeechRecognition || window.webkitSpeechRecognition
 
-// TODO: REFACTOR
 export const InterviewChat: React.FC<Props> = ({
   questions,
-  langRecognition = LANG_CODES.es
+  langRecognition = LANG_CODES.es,
+  onSubmit
 }) => {
   const addAnswer = useInterviewStore((state) => state.addAnswer)
   const [isTalking, setIsTalking] = useState<boolean>(false)
@@ -44,19 +45,13 @@ export const InterviewChat: React.FC<Props> = ({
       isUser: false
     }
   ])
-  const setHasInterviewFinished = useInterviewStore(
-    (state) => state.setHasInterviewFinished
-  )
   const [currentMessage, setCurrentMessage] = useState<string>('')
   const [mic, setMic] = useState<MediaStream | null>(null)
   const userMessages = useRef<string[]>([])
   const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const messagesRef = useRef<HTMLUListElement>(null)
-
-  const finishInterview = () => {
-    setHasInterviewFinished(true)
-  }
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(1)
 
   const onToggleClick = () => {
     if (!recognitionRef.current) return
@@ -185,9 +180,11 @@ export const InterviewChat: React.FC<Props> = ({
     const currentQuestionIdx = userMessages.current.length
 
     if (currentQuestionIdx >= questions.length) {
-      finishInterview()
+      onSubmit?.(userMessages.current)
       return
     }
+
+    setCurrentQuestionIndex(currentQuestionIdx + 1)
 
     // Add the interview question to the state
     setAllMessages((prev) => [
@@ -232,9 +229,13 @@ export const InterviewChat: React.FC<Props> = ({
 
   return (
     <div className="w-full">
+      <h2 className="text-center text-4xl font-bold absolute top-44 left-0 right-0">
+        {currentQuestionIndex} <span className="text-zinc-600">/</span>{' '}
+        {questions.length}
+      </h2>
       <form
         ref={formRef}
-        className="absolute bottom-16 max-w-5xl w-[90%] flex flex-col items-center"
+        className="absolute bottom-10 max-w-4xl w-[90%] flex flex-col items-center left-0 right-0 mx-auto"
         onSubmit={handleSendMessage}>
         {talkingSubtitle.length > 0 && (
           <Card className="absolute -top-14 max-w-3xl mx-auto p-2 overflow-hidden">
@@ -275,7 +276,7 @@ export const InterviewChat: React.FC<Props> = ({
         </TooltipProvider>
       </form>
       <ul
-        className="max-h-[550px] overflow-auto pr-2 flex flex-col gap-3"
+        className="max-h-[550px] overflow-auto pr-2 flex flex-col gap-3 max-w-5xl w-[90%] mx-auto"
         ref={messagesRef}>
         {allMessages.map((message, index) => (
           <Message

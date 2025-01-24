@@ -87,7 +87,9 @@ export const createSurvey = async (
           .values(
             data.documents.map((document) => ({
               name: document.name,
-              description: document.description
+              description: document.description,
+              isActive: document.isActive,
+              isOptional: document.isOptional
             }))
           )
           .returning()
@@ -239,8 +241,9 @@ export const updateSurvey = async (
               .insert(surveyDocument)
               .values({
                 name: document.name,
+                description: document.description,
                 isActive: document.isActive,
-                description: document.description
+                isOptional: document.isOptional
               })
               .returning()
 

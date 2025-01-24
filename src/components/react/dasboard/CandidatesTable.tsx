@@ -30,7 +30,6 @@ import {
 } from '@ui/table'
 import type { SurveyResult } from '@/types'
 import { DownloadTableExcel } from 'react-export-table-to-excel'
-import { useQuery } from '@tanstack/react-query'
 
 const columns: ColumnDef<SurveyResult>[] = [
   {
@@ -60,29 +59,106 @@ const columns: ColumnDef<SurveyResult>[] = [
       )
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>
+  },
+  {
+    accessorKey: 'category',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Category
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('category')}</div>
+    )
+  },
+  {
+    accessorKey: 'overallScore',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Overall Score
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('overallScore')}</div>
+    )
+  },
+  {
+    accessorKey: 'softSkillsScore',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Soft Skills Score
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('softSkillsScore')}</div>
+    )
+  },
+  {
+    accessorKey: 'hardSkillsScore',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Hard Skills Score
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('hardSkillsScore')}</div>
+    )
+  },
+  {
+    accessorKey: 'isAttempt',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Is Attempt
+          <ArrowUpDown />
+        </Button>
+      )
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">
+        {row.getValue('isAttempt') ? 'Yes' : 'No'}
+      </div>
+    )
   }
 ]
 
 interface Props {
-  surveyId: string
   surveyName: string
+  data: SurveyResult[]
 }
 
-export function CandidatesTable({ surveyId, surveyName }: Props) {
+export function CandidatesTable({ surveyName, data }: Props) {
   const tableRef = useRef<HTMLTableElement>(null)
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = useState<any>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
-  const { data } = useQuery<SurveyResult[]>({
-    queryKey: ['results', surveyId],
-    queryFn: async () => {
-      return fetch(`/api/survey/${surveyId}/results`).then((res) => res.json())
-    }
-  })
 
   const table = useReactTable({
-    data: data ?? [],
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -92,11 +168,13 @@ export function CandidatesTable({ surveyId, surveyName }: Props) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
+      rowSelection,
+      globalFilter
     }
   })
 
@@ -104,11 +182,9 @@ export function CandidatesTable({ surveyId, surveyName }: Props) {
     <div className="w-full">
       <div className="flex items-center py-4 justify-between">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
+          placeholder="Filter..."
+          value={globalFilter}
+          onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
         <div className="flex flex-col gap-2">

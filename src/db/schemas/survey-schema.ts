@@ -107,7 +107,8 @@ export const surveyDocument = pgTable('survey_document', {
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
   description: text('description'),
-  isActive: boolean('is_active').notNull().default(true)
+  isActive: boolean('is_active').notNull().default(true),
+  isOptional: boolean('is_optional').notNull().default(false)
 })
 
 export const surveyCategoriesRelations = relations(

@@ -152,11 +152,14 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
           name,
           description
         })),
-        documents: documents.map(({ name, description, isActive }) => ({
-          name,
-          description,
-          isActive
-        })),
+        documents: documents.map(
+          ({ name, description, isActive, isOptional }) => ({
+            name,
+            description,
+            isActive,
+            isOptional
+          })
+        ),
         customQuestions: customQuestions.map(({ question }) => question)
       })
 

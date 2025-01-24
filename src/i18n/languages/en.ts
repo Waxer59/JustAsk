@@ -96,6 +96,9 @@ export default {
   restart: 'Try again',
   questions: 'Questions',
   cancel: 'Cancel',
+  try: 'Try',
+  'try.plural': 'Tries',
+  optional: 'Optional',
 
   // TOOLTIP
   'tooltip.copyLink': 'Copy link',
@@ -204,6 +207,9 @@ export default {
   'dashboard.createSurvey.documents.add.modal.description.placeholder':
     'Professional resume detailing work experience and skills',
   'dashboard.createSurvey.documents.add.modal.submit': 'Add Document',
+  'dashboard.createSurvey.documents.settings.delete': 'Delete',
+  'dashboard.createSurvey.documents.settings.update': 'Update',
+  'dashboard.createSurvey.documents.update.modal': 'Update Document',
 
   // DASHBOARD CREATE SURVEY ADDITIONAL CONFIG
   'dashboard.createSurvey.additionalConfig': 'Additional Configuration',
@@ -220,6 +226,17 @@ export default {
 
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Save',
+
+  // SURVEY COMPLETED
+  'surveyCompleted.feedback': 'Thanks for completing the survey!',
+
+  // SURVEY
+  'survey.description':
+    'This survey will evaluate your skills for the interview in a few minutes. Provide some documents, answer some questions and receive valuable feedback that will help you succeed.',
+  'survey.salute': 'Welcome to the survey',
+  'survey.choices': 'Choose an option',
+  'survey.sendAsAttempt': 'Training',
+  'survey.sendAsSubmission': 'Send as submission',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Login Link',

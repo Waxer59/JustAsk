@@ -47,7 +47,9 @@ export const SurveyDocument: React.FC<Props> = ({ document }) => {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex flex-col gap-1">
-        <h2 className="text-3xl font-bold">{document.name}</h2>
+        <h2 className="text-3xl font-bold">
+          {document.name} {document.isOptional && '(' + t('optional') + ')'}
+        </h2>
         <p>{document.description}</p>
       </div>
       <FileUploader

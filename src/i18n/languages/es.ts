@@ -96,6 +96,9 @@ export default {
   score: 'Puntuación',
   questions: 'Preguntas',
   restart: 'Comenzar de nuevo',
+  try: 'Intento',
+  'try.plural': 'Intentos',
+  optional: 'Opcional',
 
   // TOOLTIP
   'tooltip.copyLink': 'Copiar enlace',
@@ -205,6 +208,9 @@ export default {
   'dashboard.createSurvey.documents.add.modal.description.placeholder':
     'Curriculum vitae profesional en el que se detallen la experiencia laboral y las competencias',
   'dashboard.createSurvey.documents.add.modal.submit': 'Agregar documento',
+  'dashboard.createSurvey.documents.settings.delete': 'Eliminar',
+  'dashboard.createSurvey.documents.settings.update': 'Actualizar',
+  'dashboard.createSurvey.documents.update.modal': 'Actualizar documento',
 
   // DASHBOARD CREATE SURVEY ADDITIONAL CONFIG
   'dashboard.createSurvey.additionalConfig': 'Configuración adicional',
@@ -221,6 +227,17 @@ export default {
 
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Guardar',
+
+  // SURVEY COMPLETED
+  'surveyCompleted.feedback': '¡Gracias por completar el cuestionario!',
+
+  // SURVEY
+  'survey.description':
+    'Esta encuesta evaluará tus aptitudes para las entrevistas en cuestión de minutos. Proporciona algunos documentos, responde a algunas preguntas y recibe valiosos comentarios que te ayudarán a superarte.',
+  'survey.salute': 'Bienvenido a la encuesta',
+  'survey.choices': 'Elige una opción',
+  'survey.sendAsAttempt': 'Entrenar',
+  'survey.sendAsSubmission': 'Enviar como envío',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Enlace de inicio de sesión',

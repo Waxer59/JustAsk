@@ -18,13 +18,14 @@ if (!survey) {
     surveyName={survey.title}
     surveyDescription={survey?.description ?? undefined}
     surveyId={id!}
-    requiredDocuments={survey?.surveysToSurveysDocuments.map(
-      ({ document }) => ({
+    requiredDocuments={survey?.surveysToSurveysDocuments
+      .filter((d) => d.document?.isActive)
+      .map(({ document }) => ({
         id: document!.id,
         name: document!.name,
-        description: document!.description ?? ''
-      })
-    ) ?? []}
+        description: document!.description ?? '',
+        isOptional: document!.isOptional
+      })) ?? []}
     client:only="react"
   />
 </BaseLayout>

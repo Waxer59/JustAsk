@@ -19,7 +19,8 @@ const bodySchema = z.object({
       description: z.string(),
       content: z.string().min(1)
     })
-    .array()
+    .array(),
+  isAttempt: z.boolean()
 })
 
 export const POST: APIRoute = async ({ params, request }) => {
@@ -42,6 +43,8 @@ export const POST: APIRoute = async ({ params, request }) => {
     })
   }
 
+  // TODO: Make sure that the user gives only the documents that are required and not other
+
   try {
     const survey = await getSurveyByCode(code!)
 
@@ -53,7 +56,6 @@ export const POST: APIRoute = async ({ params, request }) => {
 
     const languageText = LANGUAGE_TEXT[survey?.lang ?? 'es']
 
-    // TODO: separate hardskill and softskill questions
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),
       prompt: createSurveyQuestionsPrompt({
@@ -71,14 +73,39 @@ export const POST: APIRoute = async ({ params, request }) => {
         generateQuestions: {
           description: 'Use this to give all interview questions',
           parameters: z.object({
-            questions: z.string().array().min(5).describe('Interview questions')
+            hardSkillQuestions: z
+              .string()
+              .array()
+              .min(survey.numberOfHardSkillsQuestions!)
+              .max(survey.numberOfHardSkillsQuestions!)
+              .describe(
+                'Technical skills questions to evaluate the technical skills of the candidate'
+              ),
+            softSkillQuestions: z
+              .string()
+              .array()
+              .min(survey.numberOfSoftSkillsQuestions!)
+              .max(survey.numberOfSoftSkillsQuestions!)
+              .describe(
+                'Soft skills questions to evaluate the soft skills of the candidate'
+              )
           }),
-          execute: async ({ questions }) => ({ questions })
+          execute: async (result) => result
         }
       }
     })
 
-    const questions = toolResults[0].result.questions
+    const { hardSkillQuestions, softSkillQuestions } = toolResults[0].result
+
+    const questions = [
+      ...hardSkillQuestions.slice(0, survey.numberOfHardSkillsQuestions!),
+      ...softSkillQuestions.slice(0, survey.numberOfSoftSkillsQuestions!)
+    ]
+
+    // TODO: In future versions, add the option to decide whether to include custom questions or not
+    if (!data.isAttempt) {
+      questions.push(...survey.customQuestions!)
+    }
 
     const hmac = createHmac(JSON.stringify({ questions }))
 

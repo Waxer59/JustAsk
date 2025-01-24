@@ -2,7 +2,7 @@ import { useInterviewStore } from '@/store/interview'
 import { InterviewChat } from '../common/InterviewChat'
 import { LANG_CODES, NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ErrorMessage } from '../common/ErrorMessage'
 import { InterviewFeedback } from '../common/InterviewFeedback'
 import { Loading } from '../common/Loading'
@@ -18,9 +18,8 @@ export const FinalStep = () => {
   const currentOffer = useInterviewStore((state) => state.currentOffer)
   const answers = useInterviewStore((state) => state.answers)
   const questions = useInterviewStore((state) => state.questions)
-  const hasInterviewFinished = useInterviewStore(
-    (state) => state.hasInterviewFinished
-  )
+  const [hasInterviewFinished, setHasInterviewFinished] =
+    useState<boolean>(false)
   const interviewQuestions = questions?.slice(0, NUMBER_OF_INTERVIEW_QUESTIONS)
   const {
     refetch,
@@ -54,6 +53,9 @@ export const FinalStep = () => {
       {!isSimulatingInterview && <Questions questions={questions} />}
       {isSimulatingInterview && !hasInterviewFinished && (
         <InterviewChat
+          onSubmit={() => {
+            setHasInterviewFinished(true)
+          }}
           questions={interviewQuestions}
           langRecognition={LANG_CODES[lang]}
         />

@@ -16,7 +16,7 @@ export interface SurveyResult {
   email: string
   isAttempt: boolean
   category: string
-  overAllScore: number
+  overallScore: number
   softSkillsScore: number
   hardSkillsScore: number
 }
@@ -75,6 +75,7 @@ export interface SurveyCategory {
 export interface SurveyDocument {
   name: string
   description: string
+  isOptional?: boolean
 }
 
 export interface SurveyDocumentContent extends SurveyDocument {
@@ -115,6 +116,11 @@ export interface Document {
   description: string
   isCustom?: boolean
   isActive?: boolean
+  isOptional?: boolean
+}
+
+export interface SurveySendResponse {
+  feedback?: string
 }
 
 export interface OffersResponse {

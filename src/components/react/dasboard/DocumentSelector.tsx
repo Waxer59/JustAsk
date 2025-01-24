@@ -13,8 +13,20 @@ import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 import { Textarea } from '@/ui/textarea'
 import { DialogTitle } from '@radix-ui/react-dialog'
-import { PlusIcon } from 'lucide-react'
+import {
+  EllipsisVerticalIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon
+} from 'lucide-react'
 import { useState } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@ui/dropdown-menu'
 
 interface Props {
   onChange?: (documents: Document[]) => void
@@ -33,6 +45,9 @@ export const DocumentSelector: React.FC<Props> = ({
     name: '',
     description: ''
   })
+  const [editingDocumentId, setEditingDocumentId] = useState<string | null>(
+    null
+  )
 
   const handleCheckboxChange = (id: string, isActive: boolean) => {
     const newDocuments = documents.map((document) =>
@@ -49,20 +64,63 @@ export const DocumentSelector: React.FC<Props> = ({
       return
     }
 
-    const newDocument: Document = {
-      id: crypto.randomUUID(),
-      name: customDocument.name,
-      description: customDocument.description,
-      isCustom: true,
-      isActive: true
-    }
+    let newDocuments
 
-    const newDocuments = [...documents, newDocument]
+    if (editingDocumentId) {
+      newDocuments = documents.map((document) =>
+        document.id === editingDocumentId
+          ? {
+              ...document,
+              name: customDocument.name,
+              description: customDocument.description
+            }
+          : document
+      )
+    } else {
+      const newDocument: Document = {
+        id: crypto.randomUUID(),
+        name: customDocument.name,
+        description: customDocument.description,
+        isCustom: true,
+        isActive: true,
+        isOptional: false
+      }
+
+      newDocuments = [...documents, newDocument]
+    }
 
     setDocuments(newDocuments)
     onChange?.(newDocuments)
     setCustomDocument({ name: '', description: '' })
     setCustomDialogOpen(false)
+  }
+
+  const toggleOptionalDocument = (id: string) => {
+    const newDocuments = documents.map((document) =>
+      document.id === id
+        ? { ...document, isOptional: !document.isOptional }
+        : document
+    )
+
+    setDocuments(newDocuments)
+    onChange?.(newDocuments)
+  }
+
+  const deleteDocument = (id: string) => {
+    const newDocuments = documents.filter((document) => document.id !== id)
+
+    setDocuments(newDocuments)
+    onChange?.(newDocuments)
+  }
+
+  const handleEditDocument = (id: string) => {
+    setEditingDocumentId(id)
+    setCustomDialogOpen(true)
+    setCustomDocument({
+      name: documents.find((document) => document.id === id)?.name ?? '',
+      description:
+        documents.find((document) => document.id === id)?.description ?? ''
+    })
   }
 
   return (
@@ -76,27 +134,53 @@ export const DocumentSelector: React.FC<Props> = ({
       </Button>
       <div className="flex flex-col gap-6">
         <ul className="flex flex-col gap-4">
-          {documents.map(({ id, name, description, isCustom, isActive }) => (
-            <li className="flex items-center gap-2" key={id}>
-              <Checkbox
-                id="cv"
-                name="cv"
-                className="self-start"
-                defaultChecked={isActive ?? isCustom}
-                onCheckedChange={(checked: boolean) =>
-                  handleCheckboxChange(id, checked)
-                }
-              />
-              <div className="flex flex-col gap-2">
-                <Label
-                  htmlFor="cv"
-                  className="text-sm font-medium leading-none">
-                  {name}
-                </Label>
-                <p>{description}</p>
-              </div>
-            </li>
-          ))}
+          {documents.map(
+            ({ id, name, description, isCustom, isActive, isOptional }) => (
+              <li className="flex items-center gap-2" key={id}>
+                <Checkbox
+                  id="cv"
+                  name="cv"
+                  className="self-start"
+                  defaultChecked={isActive ?? isCustom}
+                  onCheckedChange={(checked: boolean) =>
+                    handleCheckboxChange(id, checked)
+                  }
+                />
+                <div className="flex flex-col gap-2">
+                  <Label
+                    htmlFor="cv"
+                    className="text-sm font-medium leading-none">
+                    {name}
+                  </Label>
+                  <p>{description}</p>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="ml-auto" asChild>
+                    <Button variant="outline" size="icon">
+                      <EllipsisVerticalIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => handleEditDocument(id)}>
+                      <PencilIcon />{' '}
+                      {t('dashboard.createSurvey.documents.settings.update')}
+                    </DropdownMenuItem>
+                    <DropdownMenuCheckboxItem
+                      checked={isOptional}
+                      onCheckedChange={() => toggleOptionalDocument(id)}>
+                      {t('optional')}
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuItem
+                      className="text-red-500"
+                      onClick={() => deleteDocument(id)}>
+                      <TrashIcon />{' '}
+                      {t('dashboard.createSurvey.documents.settings.delete')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </li>
+            )
+          )}
         </ul>
       </div>
       <Dialog open={customDialogOpen} onOpenChange={setCustomDialogOpen}>
@@ -161,7 +245,9 @@ export const DocumentSelector: React.FC<Props> = ({
             <Button
               onClick={handleAddCustomDocument}
               disabled={!customDocument.name || !customDocument.description}>
-              {t('dashboard.createSurvey.documents.add.modal.submit')}
+              {editingDocumentId
+                ? t('dashboard.createSurvey.documents.update.modal')
+                : t('dashboard.createSurvey.documents.add.modal.submit')}
             </Button>
           </DialogFooter>
         </DialogContent>

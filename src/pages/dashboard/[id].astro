@@ -41,11 +41,11 @@ if (!survey) {
           isAttempt,
           surveyResultToSurveyUser
         }) => ({
-          category: category,
-          overallScore: overallScore,
-          hardSkillsScore: scoreHardSkills,
-          softSkillsScore: scoreSoftSkills,
-          isAttempt: isAttempt,
+          category: category ?? 'N/A',
+          overallScore: overallScore ?? 0,
+          hardSkillsScore: scoreHardSkills ?? 0,
+          softSkillsScore: scoreSoftSkills ?? 0,
+          isAttempt: isAttempt ?? false,
           name: surveyResultToSurveyUser[0].surveyUser?.name ?? 'N/A',
           email: surveyResultToSurveyUser[0].surveyUser?.email ?? 'N/A'
         })

@@ -17,6 +17,10 @@ pnpm i
    * `GROQ_API_KEY`: You will need a [Groq](https://console.groq.com/) API key.
    * `JSEARCH_API_KEY`: You will need a [Jsearch](https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch) API key. 
    * `RAPID_API_HOST`: Provide the Rapid API host.
+   * `DATABASE_URL`: Provide a postgres database url.
+   * `BETTER_AUTH_SECRET`: Provide a secret key for the better auth. run `openssl rand -hex 32` to generate a random key.
+   * `AUTH_RESEND_KEY`: Provide a resend API key.
+   * `HMAC_KEY`: Provide a secret key for the HMAC. run `openssl rand -hex 32` to generate a random key.
 
 3. Run the project with the command:
 

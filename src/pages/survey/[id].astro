@@ -1,0 +1,30 @@
+---
+import { Survey } from '@/components/react/survey/Survey'
+import { getSurveyByCode } from '@/db/services/survey'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+const { id } = Astro.params
+
+const survey = await getSurveyByCode(id!)
+
+if (!survey) {
+  return Astro.redirect('/404')
+}
+---
+
+<BaseLayout>
+  <Survey
+    lang={survey.lang}
+    surveyName={survey.title}
+    surveyDescription={survey?.description ?? undefined}
+    surveyId={id!}
+    requiredDocuments={survey?.surveysToSurveysDocuments.map(
+      ({ document }) => ({
+        id: document!.id,
+        name: document!.name,
+        description: document!.description ?? ''
+      })
+    ) ?? []}
+    client:only="react"
+  />
+</BaseLayout>

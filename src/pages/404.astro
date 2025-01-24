@@ -1,14 +1,18 @@
 ---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 ---
 
 <BaseLayout>
   <div class="flex flex-col items-center justify-center gap-4 mt-72">
-    <h1 class="text-center text-6xl font-bold">Page not found :(</h1>
+    <h1 class="text-center text-6xl font-bold">{t('404.title')}</h1>
     <a
       href="/"
       class="text-center text-xl font-bold bg-neutral-800 hover:bg-neutral-900 transition-colors rounded-lg px-4 py-2 mt-10">
-      Go back home
+      {t('404.return')}
     </a>
   </div>
 </BaseLayout>

@@ -3,8 +3,22 @@ export interface OfferDetails {
   description: string
 }
 
+export type SupportedLanguages = 'en' | 'es'
+
 export interface CreateQuestionsResponse {
   questions: string[]
+  key: string
+  timestamp: number
+}
+
+export interface SurveyResult {
+  name: string
+  email: string
+  isAttempt: boolean
+  category: string
+  overAllScore: number
+  softSkillsScore: number
+  hardSkillsScore: number
 }
 
 export interface GetFeedbackRequest {
@@ -25,6 +39,14 @@ export interface CreateQuestionsData {
 export interface DocumentContent {
   id: string
   content: string
+  file: File
+}
+
+export interface SurveyDocumentContent {
+  name: string
+  description: string
+  content: string
+  file: File
 }
 
 export enum InterviewProcessSteps {
@@ -34,7 +56,66 @@ export enum InterviewProcessSteps {
   COMPLETE
 }
 
-export const numberOfSteps = Object.keys(InterviewProcessSteps).length / 2
+export enum SurveySteps {
+  USER,
+  DOCUMENTS,
+  INTERVIEW
+}
+
+export const numberOfInterviewSteps =
+  Object.keys(InterviewProcessSteps).length / 2 // We divide by two because Object.keys() in a enum returns an array of key names and key indexes e.g. enum X { OFFER } will return [0, 'OFFER']
+
+export const numberOfSurveySteps = Object.keys(SurveySteps).length / 2 // Refer to the comment above
+
+export interface SurveyCategory {
+  name: string
+  description: string
+}
+
+export interface SurveyDocument {
+  name: string
+  description: string
+}
+
+export interface SurveyDocumentContent extends SurveyDocument {
+  content: string
+}
+
+export interface SurveyUser {
+  name: string
+  email: string
+}
+
+export interface Survey {
+  id: string
+  code: string
+  title: string
+  shareCode?: string | null
+  description: string
+  lang: SupportedLanguages
+  offerStyle: string
+  offerTitle: string
+  offerDescription: string
+  offerAdditionalInfo?: string | null
+  numberOfSoftSkillsQuestions: number
+  numberOfHardSkillsQuestions: number
+  maxSubmissions: number
+  maxAttempts: number
+  customQuestions: string[]
+  categories: SurveyCategory[]
+  documents: SurveyDocument[]
+  numberOfResponses: number
+}
+
+export type UpdateSurvey = Partial<Survey>
+
+export interface Document {
+  id: string
+  name: string
+  description: string
+  isCustom?: boolean
+  isActive?: boolean
+}
 
 export interface OffersResponse {
   status: string
@@ -76,4 +157,45 @@ export interface OfferResponseData {
   job_naics_code?: string
   job_naics_name?: string
   job_occupational_categories?: string[]
+}
+
+export interface SurveysResponse {
+  id: string
+  title: string
+  description: string
+  lang: SupportedLanguages
+  offerStyle: string
+  offerTitle: string
+  offerDescription: string
+  offerAdditionalInfo?: string | null
+  numberOfSoftSkillsQuestions: number
+  numberOfHardSkillsQuestions: number
+  customQuestions: string[]
+  maxSubmissions: number
+  maxAttempts: number
+  code: string
+  shareCode: null
+  userId: string
+  surveysToSurveyCategories: SurveysToSurveyCategory[]
+  surveysToSurveysDocuments: SurveysToSurveysDocument[]
+  numberOfResponses: number
+}
+
+export interface SurveysToSurveyCategory {
+  surveyId: string
+  surveyCategoryId: string
+  category: Category
+}
+
+export interface Category {
+  id: string
+  name: string
+  description: string
+  isActive?: boolean
+}
+
+export interface SurveysToSurveysDocument {
+  surveyId: string
+  surveyDocumentId: string
+  document: Category
 }

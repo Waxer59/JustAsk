@@ -1,0 +1,13 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { DashboardLayout } from '@layouts/react/DashboardLayout'
+import { SurveysCards } from '@/components/react/dasboard/SurveysCards'
+---
+
+<BaseLayout>
+  <DashboardLayout client:only="react">
+    <div class="flex flex-col justify-between">
+      <SurveysCards client:only="react" />
+    </div>
+  </DashboardLayout>
+</BaseLayout>

@@ -2,7 +2,6 @@
 import { getLangFromUrl, useTranslations } from '@/i18n/utils'
 import { cannonicalURL } from '@constants/seo'
 import { Head } from 'astro-capo'
-import { ViewTransitions } from 'astro:transitions'
 const isProd = import.meta.env.PROD
 
 const localeCode = {
@@ -50,6 +49,4 @@ const t = useTranslations(currentLang)
       />
     )
   }
-
-  <ViewTransitions />
 </Head>

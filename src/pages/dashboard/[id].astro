@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { DashboardLayout } from '@/layouts/react/DashboardLayout'
+import { CandidatesTable } from '@/components/react/dasboard/CandidatesTable'
+import { ChevronLeftIcon } from 'lucide-react'
+import { buttonVariants } from '@/ui/button'
+import { getUserSurveyById } from '@/db/services/survey'
+
+const { user } = Astro.locals
+const { id } = Astro.params
+
+const survey = await getUserSurveyById(id!, user!.id!)
+
+if (!survey) {
+  return Astro.redirect('/404')
+}
+---
+
+<BaseLayout>
+  <DashboardLayout client:only="react">
+    <div class="flex items-center gap-2">
+      <a
+        href="/dashboard"
+        class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+        <ChevronLeftIcon className="w-6 h-6" />
+      </a>
+      <h1 class="text-3xl font-bold">{survey.title}</h1>
+    </div>
+    <CandidatesTable
+      surveyId={survey.id}
+      surveyName={survey.title}
+      client:only="react"
+    />
+  </DashboardLayout>
+</BaseLayout>

@@ -230,6 +230,28 @@ export default {
   // SURVEY COMPLETED
   'surveyCompleted.feedback': 'Thanks for completing the survey!',
 
+  // DASHBOARD TABLE
+  'dashboard.table.name': 'Name',
+  'dashboard.table.email': 'Email',
+  'dashboard.table.category': 'Category',
+  'dashboard.table.overallScore': 'Overall Score',
+  'dashboard.table.softSkillsScore': 'Soft Skills Score',
+  'dashboard.table.hardSkillsScore': 'Hard Skills Score',
+  'dashboard.table.isAttempt': 'Is Attempt',
+  'dashboard.table.actions': 'Actions',
+  'dashboard.table.actions.open': 'Open menu',
+  'dashboard.table.actions.viewChat': 'View chat',
+  'dashboard.table.actions.viewChat.description':
+    'Chat between the candidate and the interviewer',
+  'dashboard.table.isAttempt.true': 'Yes',
+  'dashboard.table.isAttempt.false': 'No',
+  'dashboard.table.export': 'Export',
+  'dashboard.table.columns': 'Columns',
+  'dashboard.table.next': 'Next',
+  'dashboard.table.previous': 'Previous',
+  'dashboard.table.noResults': 'No results',
+  'dashboard.table.filter': 'Filter',
+
   // SURVEY
   'survey.description':
     'This survey will evaluate your skills for the interview in a few minutes. Provide some documents, answer some questions and receive valuable feedback that will help you succeed.',

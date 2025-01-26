@@ -19,6 +19,10 @@ export interface SurveyResult {
   overallScore: number
   softSkillsScore: number
   hardSkillsScore: number
+  log: {
+    question: string
+    answer: string
+  }[]
 }
 
 export interface GetFeedbackRequest {

@@ -11,13 +11,15 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { ArrowUpDown, ChevronDown } from 'lucide-react'
+import { ArrowUpDown, ChevronDown, MoreHorizontalIcon } from 'lucide-react'
 import { Button } from '@ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel
 } from '@ui/dropdown-menu'
 import { Input } from '@ui/input'
 import {
@@ -30,6 +32,18 @@ import {
 } from '@ui/table'
 import type { SurveyResult } from '@/types'
 import exportFromJSON from 'export-from-json'
+import { getUiTranslations } from '@/i18n/utils'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from '@/ui/dialog'
+import { DialogTrigger } from '@radix-ui/react-dialog'
+import { Message } from '../common/Message'
+
+const { t } = getUiTranslations()
 
 const columns: ColumnDef<SurveyResult>[] = [
   {
@@ -39,12 +53,12 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Name
+          {t('dashboard.table.name')}
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('name')}</div>
+    cell: ({ row }) => <div className="capitalize">{row.getValue('name')}</div>
   },
   {
     accessorKey: 'email',
@@ -53,12 +67,12 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Email
+          {t('dashboard.table.email')}
           <ArrowUpDown />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>
+    cell: ({ row }) => <div className="capitalize">{row.getValue('email')}</div>
   },
   {
     accessorKey: 'category',
@@ -67,13 +81,13 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Category
+          {t('dashboard.table.category')}
           <ArrowUpDown />
         </Button>
       )
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('category')}</div>
+      <div className="capitalize">{row.getValue('category')}</div>
     )
   },
   {
@@ -83,13 +97,13 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Overall Score
+          {t('dashboard.table.overallScore')}
           <ArrowUpDown />
         </Button>
       )
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('overallScore')}</div>
+      <div className="capitalize">{row.getValue('overallScore')}</div>
     )
   },
   {
@@ -99,13 +113,13 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Soft Skills Score
+          {t('dashboard.table.softSkillsScore')}
           <ArrowUpDown />
         </Button>
       )
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('softSkillsScore')}</div>
+      <div className="capitalize">{row.getValue('softSkillsScore')}</div>
     )
   },
   {
@@ -115,13 +129,13 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Hard Skills Score
+          {t('dashboard.table.hardSkillsScore')}
           <ArrowUpDown />
         </Button>
       )
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('hardSkillsScore')}</div>
+      <div className="capitalize">{row.getValue('hardSkillsScore')}</div>
     )
   },
   {
@@ -131,16 +145,85 @@ const columns: ColumnDef<SurveyResult>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Is Attempt
+          {t('dashboard.table.isAttempt')}
           <ArrowUpDown />
         </Button>
       )
     },
     cell: ({ row }) => (
-      <div className="lowercase">
-        {row.getValue('isAttempt') ? 'Yes' : 'No'}
+      <div className="capitalize">
+        {row.getValue('isAttempt')
+          ? t('dashboard.table.isAttempt.true')
+          : t('dashboard.table.isAttempt.false')}
       </div>
     )
+  },
+  {
+    accessorKey: t('dashboard.table.actions'),
+    enableHiding: false,
+    cell: ({ row }) => {
+      const [dialogMenu, setDialogMenu] = useState<string>('viewChat')
+      const data = row.original
+
+      const handleDialogMenu = (): JSX.Element | null => {
+        switch (dialogMenu) {
+          case 'viewChat':
+            return (
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="capitalize">{data.name}</DialogTitle>
+                  <DialogDescription>
+                    {t('dashboard.table.actions.viewChat.description')}
+                  </DialogDescription>
+                </DialogHeader>
+                <ul className="flex-1 overflow-y-auto flex flex-col gap-3 h-[calc(100vh-300px)] pr-2">
+                  {data.log.map((message, index) => (
+                    <>
+                      <Message
+                        key={`question-${index}`}
+                        message={message.question}
+                      />
+                      <Message
+                        key={`answer-${index}`}
+                        message={message.answer}
+                        isUser
+                      />
+                    </>
+                  ))}
+                </ul>
+              </DialogContent>
+            )
+          default:
+            return null
+        }
+      }
+
+      return (
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">
+                  {t('dashboard.table.actions.open')}
+                </span>
+                <MoreHorizontalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                {t('dashboard.table.actions')}
+              </DropdownMenuLabel>
+              <DialogTrigger asChild>
+                <DropdownMenuItem onClick={() => setDialogMenu('viewChat')}>
+                  {t('dashboard.table.actions.viewChat')}
+                </DropdownMenuItem>
+              </DialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {handleDialogMenu()}
+        </Dialog>
+      )
+    }
   }
 ]
 
@@ -192,19 +275,20 @@ export function CandidatesTable({ surveyName, data }: Props) {
     <div className="w-full">
       <div className="flex items-center py-4 justify-between">
         <Input
-          placeholder="Filter..."
+          placeholder={`${t('dashboard.table.filter')}...`}
           value={globalFilter}
           onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
         <div className="flex flex-col gap-2">
           <Button variant="ghost" onClick={handleDownloadExcel}>
-            Export .xlsx
+            {t('dashboard.table.export')} .xlsx
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
-                Columns <ChevronDown />
+                {t('dashboard.table.columns')}
+                <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -220,7 +304,8 @@ export function CandidatesTable({ surveyName, data }: Props) {
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
                       }>
-                      {column.id}
+                      {/* @ts-expect-error all columns ids have a translation */}
+                      {t(`dashboard.table.${column.id}`)}
                     </DropdownMenuCheckboxItem>
                   )
                 })}
@@ -269,7 +354,7 @@ export function CandidatesTable({ surveyName, data }: Props) {
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center">
-                  No results.
+                  {t('dashboard.table.noResults')}
                 </TableCell>
               </TableRow>
             )}
@@ -283,14 +368,14 @@ export function CandidatesTable({ surveyName, data }: Props) {
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}>
-            Previous
+            {t('dashboard.table.previous')}
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}>
-            Next
+            {t('dashboard.table.next')}
           </Button>
         </div>
       </div>

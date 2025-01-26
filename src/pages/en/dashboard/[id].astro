@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { DashboardLayout } from '@/layouts/react/DashboardLayout'
+import { CandidatesTable } from '@/components/react/dasboard/CandidatesTable'
+import { ChevronLeftIcon } from 'lucide-react'
+import { buttonVariants } from '@/ui/button'
+import { getUserSurveyById } from '@/db/services/survey'
+import { getAllResultsBySurveyId } from '@/db/services/surveyResult'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getLangFromUrl } from '@/i18n/utils'
+
+const { user } = Astro.locals
+const { id } = Astro.params
+
+const lang = getLangFromUrl(Astro.url)
+
+const survey = await getUserSurveyById(id!, user!.id!)
+
+const surveyResults = await getAllResultsBySurveyId(id!)
+
+if (!survey) {
+  return Astro.redirect('/404')
+}
+---
+
+<BaseLayout>
+  <DashboardLayout client:only="react">
+    <div class="flex items-center gap-2">
+      <a
+        href={getRelativeLocaleUrl(lang, 'dashboard')}
+        class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+        <ChevronLeftIcon className="w-6 h-6" />
+      </a>
+      <h1 class="text-3xl font-bold">{survey.title}</h1>
+    </div>
+    <CandidatesTable
+      data={surveyResults?.map(
+        ({
+          category,
+          overallScore,
+          scoreHardSkills,
+          scoreSoftSkills,
+          isAttempt,
+          surveyResultToSurveyUser,
+          surveyLog
+        }) => ({
+          category: category ?? 'N/A',
+          overallScore: overallScore ?? 0,
+          hardSkillsScore: scoreHardSkills ?? 0,
+          softSkillsScore: scoreSoftSkills ?? 0,
+          isAttempt: isAttempt ?? false,
+          name: surveyResultToSurveyUser[0].surveyUser?.name ?? 'N/A',
+          email: surveyResultToSurveyUser[0].surveyUser?.email ?? 'N/A',
+          log: surveyLog as any[]
+        })
+      ) ?? []}
+      surveyName={survey.title}
+      client:only="react"
+    />
+  </DashboardLayout>
+</BaseLayout>

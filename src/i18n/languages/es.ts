@@ -231,6 +231,28 @@ export default {
   // SURVEY COMPLETED
   'surveyCompleted.feedback': '¡Gracias por completar el cuestionario!',
 
+  // DASHBOARD TABLE
+  'dashboard.table.name': 'Nombre',
+  'dashboard.table.email': 'Email',
+  'dashboard.table.category': 'Categoría',
+  'dashboard.table.overallScore': 'Puntuación general',
+  'dashboard.table.softSkillsScore': 'Puntuación de habilidades sociales',
+  'dashboard.table.hardSkillsScore': 'Puntuación de habilidades técnicas',
+  'dashboard.table.actions': 'Acciones',
+  'dashboard.table.actions.open': 'Abrir menu',
+  'dashboard.table.actions.viewChat': 'Ver chat',
+  'dashboard.table.actions.viewChat.description':
+    'Chat entre el candidato y el entrevistador',
+  'dashboard.table.isAttempt': 'Es intento',
+  'dashboard.table.isAttempt.true': 'Sí',
+  'dashboard.table.isAttempt.false': 'No',
+  'dashboard.table.export': 'Exportar',
+  'dashboard.table.columns': 'Columnas',
+  'dashboard.table.next': 'Siguiente',
+  'dashboard.table.previous': 'Anterior',
+  'dashboard.table.noResults': 'No hay resultados',
+  'dashboard.table.filter': 'Filtrar',
+
   // SURVEY
   'survey.description':
     'Esta encuesta evaluará tus aptitudes para las entrevistas en cuestión de minutos. Proporciona algunos documentos, responde a algunas preguntas y recibe valiosos comentarios que te ayudarán a superarte.',

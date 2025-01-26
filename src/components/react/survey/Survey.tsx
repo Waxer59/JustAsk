@@ -11,10 +11,11 @@ import { SurveyDocument } from './SurveyDocument'
 import { Toaster } from '@/ui/sonner'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useUiStore } from '@/store/ui'
+import { InterviewProcessLayout } from '@/layouts/react/InterviewProcessLayout'
 
 const queryClient = new QueryClient()
 
-const HIDE_CONTROL_BUTTONS_STEPS = [SurveySteps.USER]
+export const HIDE_CONTROL_BUTTONS_STEPS = [SurveySteps.USER]
 
 const DOCUMENTS_STEP = 'Documentos'
 const STEPS = ['Usuario', 'Comenzar']
@@ -47,6 +48,9 @@ export const Survey: React.FC<Props> = ({
   const email = useSurveyStore((state) => state.email)
   const files = useSurveyStore((state) => state.files)
   const hideControlButtons = useUiStore((state) => state.hideControlButtons)
+  const disableControlButtons = useUiStore(
+    (state) => state.disableControlButtons
+  )
   const setCurrentSurveyId = useSurveyStore((state) => state.setCurrentSurveyId)
   const setHaveRequiredDocuments = useSurveyStore(
     (state) => state.setHaveRequiredDocuments
@@ -131,13 +135,13 @@ export const Survey: React.FC<Props> = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <header className="mt-28 flex flex-col gap-10">
-        <Stepper
-          steps={steps}
-          currentStep={logicalToStepperIndex[currentStep]}
-        />
-      </header>
-      <main className="max-w-3xl mx-auto w-full mt-28 flex flex-col gap-10">
+      <InterviewProcessLayout
+        header={
+          <Stepper
+            steps={steps}
+            currentStep={logicalToStepperIndex[currentStep]}
+          />
+        }>
         {currentStep === SurveySteps.USER && (
           <>
             <SurveyWelcomeMessage
@@ -156,12 +160,13 @@ export const Survey: React.FC<Props> = ({
           <ControlButtons
             totalSteps={steps.length}
             currentStep={currentStep}
+            disableControlButtons={disableControlButtons}
             disableNextControlButton={shouldDisableNextButton}
             onNext={handleNextStep}
             onPrev={handlePrevStep}
           />
         )}
-      </main>
+      </InterviewProcessLayout>
       <Toaster />
     </QueryClientProvider>
   )

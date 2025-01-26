@@ -215,7 +215,7 @@ export const InterviewChat: React.FC<Props> = ({
 
     // Add the user's message to the state
     addAnswer(currentMessage)
-    recognitionRef.current.stop()
+    recognitionRef.current?.stop()
     setAllMessages((prev) => [
       ...prev,
       { message: currentMessage, isUser: true }
@@ -228,14 +228,25 @@ export const InterviewChat: React.FC<Props> = ({
   }
 
   return (
-    <div className="w-full">
+    <>
       <h2 className="text-center text-4xl font-bold absolute top-44 left-0 right-0">
         {currentQuestionIndex} <span className="text-zinc-600">/</span>{' '}
         {questions.length}
       </h2>
+      <ul
+        className="flex-1 overflow-y-auto flex flex-col gap-3"
+        ref={messagesRef}>
+        {allMessages.map((message, index) => (
+          <Message
+            key={index}
+            message={message.message}
+            isUser={message.isUser}
+          />
+        ))}
+      </ul>
       <form
         ref={formRef}
-        className="absolute bottom-10 max-w-4xl w-[90%] flex flex-col items-center left-0 right-0 mx-auto"
+        className="flex flex-col items-center relative pb-12"
         onSubmit={handleSendMessage}>
         {talkingSubtitle.length > 0 && (
           <Card className="absolute -top-14 max-w-3xl mx-auto p-2 overflow-hidden">
@@ -275,18 +286,7 @@ export const InterviewChat: React.FC<Props> = ({
           </Tooltip>
         </TooltipProvider>
       </form>
-      <ul
-        className="max-h-[550px] overflow-auto pr-2 flex flex-col gap-3 max-w-5xl w-[90%] mx-auto"
-        ref={messagesRef}>
-        {allMessages.map((message, index) => (
-          <Message
-            key={index}
-            message={message.message}
-            isUser={message.isUser}
-          />
-        ))}
-      </ul>
-    </div>
+    </>
   )
 }
 

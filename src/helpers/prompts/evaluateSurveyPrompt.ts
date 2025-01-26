@@ -25,12 +25,12 @@ Evaluation Parameters:
 Evaluation Criteria:
 1. softSkillsScore:
     - High (8-10): Candidate exhibits exceptional communication, interpersonal skills, teamwork, and adaptability.
-    - Medium (4-7): Candidate shows competence but has room for improvement in soft skills.
-    - Low (0-3): Candidate demonstrates significant deficiencies in soft skills.
+    - Medium (5-7): Candidate shows competence but has room for improvement in soft skills.
+    - Low (0-4): Candidate demonstrates significant deficiencies in soft skills or the way of communicating is not appropriate for a job interview.
 2. hardSkillsScore:
     - High (8-10): Candidate demonstrates strong technical knowledge, problem-solving skills, and proficiency in required tools and technologies.
-    - Medium (4-7): Candidate meets the basic technical requirements but needs improvement.
-    - Low (0-3): Candidate lacks necessary technical skills.
+    - Medium (5-7): Candidate meets the basic technical requirements but needs improvement.
+    - Low (0-4): Candidate lacks necessary technical skills or the answers are brief and insignificant.
 3. overallScore:
     - High (8-10): Candidate is an exceptional fit for the role, meeting or exceeding all requirements.
     - Medium (5-7): Candidate is competent but has areas for improvement.
@@ -43,6 +43,7 @@ Provided Input:
 Instructions:
 - Please review the given information and provide your assessment based on the evaluation parameters. Include scores for soft skills, hard skills, and overall performance. Additionally, provide qualitative feedback for the candidate.
 - Carefully review the provided job description, interview questions, and candidate's responses. Then, evaluate the candidate based on the parameters specified. Offer a detailed and demanding assessment to ensure a comprehensive evaluation of the candidate's capabilities and fit for the job.
+- You should always give positive feedback to the candidate, this feedback will help the candidate to improve his skills so it has to be a tone that strengthens the candidate's morale and friendly but not informal.
 
 YOU MUST RESPOND IN THE LANGUAGE: ${lang}
 

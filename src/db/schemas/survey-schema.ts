@@ -48,6 +48,7 @@ export const survey = pgTable(
     maxAttempts: integer('max_attempts').default(DEFAULT_ATTEMPTS),
     code: text('code').$defaultFn(createId),
     shareCode: text('share_code'),
+    numberOfAttemptQuestions: integer('number_of_attempt_questions').default(2),
     userId: text('user_id').references(() => user.id, {
       onDelete: 'cascade',
       onUpdate: 'cascade'

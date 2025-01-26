@@ -5,6 +5,7 @@ import { useSurveyStore } from '@/store/survey'
 import { toast } from 'sonner'
 import { documentToText } from '@/helpers/documentToText'
 import { getUiTranslations } from '@/i18n/utils'
+import { useUiStore } from '@/store/ui'
 
 interface Props {
   document: SurveyDocumentType
@@ -15,6 +16,9 @@ const { t } = getUiTranslations()
 export const SurveyDocument: React.FC<Props> = ({ document }) => {
   const addFile = useSurveyStore((state) => state.addFile)
   const removeFile = useSurveyStore((state) => state.removeFile)
+  const setDisableControlButtons = useUiStore(
+    (state) => state.setDisableControlButtons
+  )
   const files = useSurveyStore((state) => state.files)
 
   const existingFile = files.filter((file) => file.name === document.name)[0]
@@ -33,15 +37,23 @@ export const SurveyDocument: React.FC<Props> = ({ document }) => {
           content: text,
           file: newFile
         })
+        setDisableControlButtons(false)
         return t('fileUpload.success')
       },
-      error: t('fileUpload.error')
+      error: () => {
+        setDisableControlButtons(false)
+        return t('fileUpload.error')
+      }
     })
   }
 
   const onRemoveFile = async () => {
     removeFile(document.name)
     toast.success(t('fileRemove.success'))
+  }
+
+  const onFileAddStart = async () => {
+    setDisableControlButtons(true)
   }
 
   return (
@@ -56,6 +68,7 @@ export const SurveyDocument: React.FC<Props> = ({ document }) => {
         key={document.name} // Specify the key to force re-render when the file changes
         addFile={onAddFile}
         removeFile={onRemoveFile}
+        onAddingFile={onFileAddStart}
         maxFiles={1}
         defaultFiles={[existingFile?.file]}
       />

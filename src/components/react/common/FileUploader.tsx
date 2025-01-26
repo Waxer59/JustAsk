@@ -17,6 +17,7 @@ registerPlugin(
 interface Props {
   addFile: (file: FilePondFile) => Promise<void>
   removeFile: (file: FilePondFile) => Promise<void>
+  onAddingFile?: (file: FilePondFile) => Promise<void>
   maxFiles?: number
   isDisabled?: boolean
   defaultFiles?: File[]
@@ -25,6 +26,7 @@ interface Props {
 export const FileUploader: React.FC<Props> = ({
   addFile,
   removeFile,
+  onAddingFile,
   isDisabled,
   maxFiles = 10,
   defaultFiles
@@ -48,6 +50,7 @@ export const FileUploader: React.FC<Props> = ({
       onremovefile={(_, file) => {
         removeFile(file)
       }}
+      onaddfilestart={(file) => onAddingFile?.(file)}
       disabled={isDisabled}
       allowMultiple={maxFiles > 1}
       maxFiles={maxFiles}

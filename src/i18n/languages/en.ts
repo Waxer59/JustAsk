@@ -262,7 +262,7 @@ export default {
 
   // SURVEY
   'survey.description':
-    'This survey will evaluate your skills for the interview in a few minutes. Provide some documents, answer some questions and receive valuable feedback that will help you succeed.',
+    'This survey will evaluate your skills for the interview in a few minutes. Provide some documents, answer some questions and receive valuable feedback that will help you succeed. Keep in mind that you will have limited time to answer each question.',
   'survey.salute': 'Welcome to the survey',
   'survey.choices': 'Choose an option',
   'survey.sendAsAttempt': 'Training',

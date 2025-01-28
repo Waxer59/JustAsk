@@ -263,7 +263,7 @@ export default {
 
   // SURVEY
   'survey.description':
-    'Esta encuesta evaluará tus aptitudes para las entrevistas en cuestión de minutos. Proporciona algunos documentos, responde a algunas preguntas y recibe valiosos comentarios que te ayudarán a superarte.',
+    'Esta encuesta evaluará tus aptitudes para las entrevistas en cuestión de minutos. Proporciona algunos documentos, responde a algunas preguntas y recibe valiosos comentarios que te ayudarán a superarte. Ten en cuenta que tendrás tiempo limitado para responder a cada pregunta.',
   'survey.salute': 'Bienvenido a la encuesta',
   'survey.choices': 'Elige una opción',
   'survey.sendAsAttempt': 'Entrenar',

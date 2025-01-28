@@ -6,7 +6,6 @@ import { Loading } from '../common/Loading'
 import { getUiTranslations } from '@/i18n/utils'
 import { ErrorMessage } from '../common/ErrorMessage'
 import { InterviewChat } from '../common/InterviewChat'
-import { LANG_CODES } from '@/constants'
 import { useUiStore } from '@/store/ui'
 import { SurveyCompleted } from './SurveyCompleted'
 import { SurveyChoicesButtons } from './SurveyChoicesButtons'
@@ -159,19 +158,25 @@ export const SurveyChoices = () => {
     )
   }
 
+  const shouldShowFeedback =
+    hasInterviewFinished && !isSurveySending && !isAttempt
+
   return (
     <>
       {areQuestionsLoading && <Loading text={t('questions.loading')} />}
       {isSurveySending && <Loading text={'Enviando la encuesta'} />}
-      {isQuestionsError && <ErrorMessage text={t('questions.error')} />}
+      {isQuestionsError && (
+        <ErrorMessage text={t('questions.error')} lang={lang} />
+      )}
       {questionsData && !hasInterviewFinished && (
         <InterviewChat
+          secondsToAnswer={questionsData.secondsPerQuestion}
           onSubmit={handleSumbitSurvey}
           questions={questionsData.questions}
-          langRecognition={LANG_CODES[lang]}
+          lang={lang}
         />
       )}
-      {hasInterviewFinished && !isSurveySending && (
+      {shouldShowFeedback && (
         <div className="flex flex-col items-center justify-center gap-4">
           <SurveyCompleted feedback={surveySendData?.feedback} />
           {numberOfAttempts > 0 && (

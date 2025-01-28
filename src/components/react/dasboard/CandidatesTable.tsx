@@ -164,7 +164,6 @@ const columns: ColumnDef<SurveyResult>[] = [
     cell: ({ row }) => {
       const [dialogMenu, setDialogMenu] = useState<string>('viewChat')
       const data = row.original
-
       const handleDialogMenu = (): JSX.Element | null => {
         switch (dialogMenu) {
           case 'viewChat':
@@ -177,18 +176,11 @@ const columns: ColumnDef<SurveyResult>[] = [
                   </DialogDescription>
                 </DialogHeader>
                 <ul className="flex-1 overflow-y-auto flex flex-col gap-3 h-[calc(100vh-300px)] pr-2">
-                  {data.log.map((message, index) => (
-                    <>
-                      <Message
-                        key={`question-${index}`}
-                        message={message.question}
-                      />
-                      <Message
-                        key={`answer-${index}`}
-                        message={message.answer}
-                        isUser
-                      />
-                    </>
+                  {data.log.map((message) => (
+                    <li key={message.id}>
+                      <Message message={message.question} asTag="div" />
+                      <Message message={message.answer} isUser asTag="div" />
+                    </li>
                   ))}
                 </ul>
               </DialogContent>

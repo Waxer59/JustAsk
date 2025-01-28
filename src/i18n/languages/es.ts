@@ -260,6 +260,9 @@ export default {
   'survey.choices': 'Elige una opción',
   'survey.sendAsAttempt': 'Entrenar',
   'survey.sendAsSubmission': 'Enviar como envío',
+  'survey.noAnswer': 'Sin respuesta',
+  'survey.viewFeedback': 'Ver feedback',
+  'survey.feedback': 'Feedback',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Enlace de inicio de sesión',

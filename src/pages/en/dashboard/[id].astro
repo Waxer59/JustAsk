@@ -16,7 +16,19 @@ const lang = getLangFromUrl(Astro.url)
 
 const survey = await getUserSurveyById(id!, user!.id!)
 
-const surveyResults = await getAllResultsBySurveyId(id!)
+const surveyResults = (await getAllResultsBySurveyId(id!)).map(
+  ({ surveyLog, ...rest }) => {
+    const log = surveyLog as any[]
+    return {
+      ...rest,
+      surveyLog: log.map((message) => ({
+        id: crypto.randomUUID(),
+        question: message.question,
+        answer: message.answer
+      }))
+    }
+  }
+)
 
 if (!survey) {
   return Astro.redirect('/404')

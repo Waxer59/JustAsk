@@ -114,6 +114,7 @@ export const POST: APIRoute = async ({ params, request }) => {
     return new Response(
       JSON.stringify({
         questions: shuffledQuestions,
+        secondsPerQuestion: survey.secondsPerQuestion,
         ...hmac
       }),
       {

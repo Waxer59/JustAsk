@@ -25,11 +25,11 @@ export const SurveyCompleted: React.FC<Props> = ({ feedback }) => {
       <p className="text-xl">{t('surveyCompleted.feedback', lang)}</p>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Ver feedback</Button>
+          <Button>{t('survey.viewFeedback', lang)}</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Feedback</DialogTitle>
+            <DialogTitle>{t('survey.feedback', lang)}</DialogTitle>
             <p>{feedback}</p>
           </DialogHeader>
         </DialogContent>

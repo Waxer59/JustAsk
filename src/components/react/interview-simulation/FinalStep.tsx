@@ -1,6 +1,6 @@
 import { useInterviewStore } from '@/store/interview'
 import { InterviewChat } from '../common/InterviewChat'
-import { LANG_CODES, NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
+import { NUMBER_OF_INTERVIEW_QUESTIONS } from '@constants'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { ErrorMessage } from '../common/ErrorMessage'
@@ -57,7 +57,7 @@ export const FinalStep = () => {
             setHasInterviewFinished(true)
           }}
           questions={interviewQuestions}
-          langRecognition={LANG_CODES[lang]}
+          lang={lang}
         />
       )}
 

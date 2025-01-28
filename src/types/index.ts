@@ -7,6 +7,7 @@ export type SupportedLanguages = 'en' | 'es'
 
 export interface CreateQuestionsResponse {
   questions: string[]
+  secondsPerQuestion: number
   key: string
   timestamp: number
 }
@@ -20,6 +21,7 @@ export interface SurveyResult {
   softSkillsScore: number
   hardSkillsScore: number
   log: {
+    id: string
     question: string
     answer: string
   }[]

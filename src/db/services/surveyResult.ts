@@ -66,24 +66,19 @@ export const getUserSurveyResults = async (
   surveyId: string
 ) => {
   try {
-    const userSurveys = await db.query.surveyUsersToSurveys.findMany({
-      where: (surveyUser, { eq }) =>
-        eq(surveyUser.surveyId, surveyId) && eq(surveyUser.surveyUserId, userId)
-    })
-
-    const surveysIds = userSurveys.reduce((acc, { surveyId }) => {
-      if (surveyId) {
-        acc.push(surveyId)
+    const results = await db.query.surveyResultToSurveyUser.findMany({
+      where: (surveyResultToSurveyUser, { eq }) =>
+        eq(surveyResultToSurveyUser.surveyUserId, userId),
+      with: {
+        surveyResult: {
+          // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+          where: (surveyResult, { eq }) => eq(surveyResult.surveyId, surveyId)
+        }
       }
-
-      return acc
-    }, [] as string[])
-
-    const results = await db.query.surveyResult.findMany({
-      where: (surveyResult, { inArray }) => inArray(surveyResult.id, surveysIds)
     })
 
-    return results
+    // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+    return results.filter((result) => result.surveyResult)
   } catch (error) {
     console.log(error)
   }

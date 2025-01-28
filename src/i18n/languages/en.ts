@@ -259,6 +259,9 @@ export default {
   'survey.choices': 'Choose an option',
   'survey.sendAsAttempt': 'Training',
   'survey.sendAsSubmission': 'Send as submission',
+  'survey.noAnswer': 'No answer',
+  'survey.viewFeedback': 'View feedback',
+  'survey.feedback': 'Feedback',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Login Link',

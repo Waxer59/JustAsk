@@ -40,6 +40,7 @@ import { Badge } from '@/ui/badge'
 import { getUiTranslations } from '@/i18n/utils'
 import { useDashboardStore } from '@/store/dashboard'
 import { useUiStore } from '@/store/ui'
+import { defaultLang } from '@/i18n/ui'
 
 interface Props {
   id: string
@@ -113,7 +114,8 @@ export const SurveyCard = ({
 
   const handleCopyShareCode = async () => {
     navigator.clipboard.writeText(
-      `${window.location.origin}/${lang}/survey/share/${shareCode}`
+      window.location.origin +
+        `${lang === defaultLang ? '' : `/${lang}`}/survey/share/${shareCode}`
     )
     toast.success(t('dashboard.clipBoard.success'))
   }

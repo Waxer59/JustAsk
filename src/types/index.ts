@@ -7,6 +7,7 @@ export type SupportedLanguages = 'en' | 'es'
 
 export interface CreateQuestionsResponse {
   questions: string[]
+  secondsPerQuestion: number
   key: string
   timestamp: number
 }
@@ -19,6 +20,11 @@ export interface SurveyResult {
   overallScore: number
   softSkillsScore: number
   hardSkillsScore: number
+  log: {
+    id: string
+    question: string
+    answer: string
+  }[]
 }
 
 export interface GetFeedbackRequest {
@@ -106,6 +112,8 @@ export interface Survey {
   categories: SurveyCategory[]
   documents: SurveyDocument[]
   numberOfResponses: number
+  numberOfAttemptQuestions: number
+  secondsPerQuestion: number
 }
 
 export type UpdateSurvey = Partial<Survey>
@@ -185,6 +193,8 @@ export interface SurveysResponse {
   surveysToSurveyCategories: SurveysToSurveyCategory[]
   surveysToSurveysDocuments: SurveysToSurveysDocument[]
   numberOfResponses: number
+  numberOfAttemptQuestions: number
+  secondsPerQuestion: number
 }
 
 export interface SurveysToSurveyCategory {

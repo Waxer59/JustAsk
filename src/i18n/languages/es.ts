@@ -224,6 +224,14 @@ export default {
     'Número de envíos',
   'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description':
     'Número de envíos para evaluar la entrevista',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions':
+    'Número de preguntas en intentos',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions.description':
+    'Número de preguntas en los intentos',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion':
+    'Segundos por pregunta',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion.description':
+    'Número de segundos que se tomará una pregunta',
 
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Guardar',
@@ -231,13 +239,38 @@ export default {
   // SURVEY COMPLETED
   'surveyCompleted.feedback': '¡Gracias por completar el cuestionario!',
 
+  // DASHBOARD TABLE
+  'dashboard.table.name': 'Nombre',
+  'dashboard.table.email': 'Email',
+  'dashboard.table.category': 'Categoría',
+  'dashboard.table.overallScore': 'Puntuación general',
+  'dashboard.table.softSkillsScore': 'Puntuación de habilidades sociales',
+  'dashboard.table.hardSkillsScore': 'Puntuación de habilidades técnicas',
+  'dashboard.table.actions': 'Acciones',
+  'dashboard.table.actions.open': 'Abrir menu',
+  'dashboard.table.actions.viewChat': 'Ver chat',
+  'dashboard.table.actions.viewChat.description':
+    'Chat entre el candidato y el entrevistador',
+  'dashboard.table.isAttempt': 'Es intento',
+  'dashboard.table.isAttempt.true': 'Sí',
+  'dashboard.table.isAttempt.false': 'No',
+  'dashboard.table.export': 'Exportar',
+  'dashboard.table.columns': 'Columnas',
+  'dashboard.table.next': 'Siguiente',
+  'dashboard.table.previous': 'Anterior',
+  'dashboard.table.noResults': 'No hay resultados',
+  'dashboard.table.filter': 'Filtrar',
+
   // SURVEY
   'survey.description':
-    'Esta encuesta evaluará tus aptitudes para las entrevistas en cuestión de minutos. Proporciona algunos documentos, responde a algunas preguntas y recibe valiosos comentarios que te ayudarán a superarte.',
+    'Esta encuesta evaluará tus aptitudes para las entrevistas en cuestión de minutos. Proporciona algunos documentos, responde a algunas preguntas y recibe valiosos comentarios que te ayudarán a superarte. Ten en cuenta que tendrás tiempo limitado para responder a cada pregunta.',
   'survey.salute': 'Bienvenido a la encuesta',
   'survey.choices': 'Elige una opción',
   'survey.sendAsAttempt': 'Entrenar',
   'survey.sendAsSubmission': 'Enviar como envío',
+  'survey.noAnswer': 'Sin respuesta',
+  'survey.viewFeedback': 'Ver feedback',
+  'survey.feedback': 'Feedback',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Enlace de inicio de sesión',

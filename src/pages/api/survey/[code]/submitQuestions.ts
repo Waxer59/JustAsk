@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { generateText } from 'ai'
 import { createGroq } from '@ai-sdk/groq'
 import { getSurveyByCode } from '@/db/services/survey'
-// import { isHmacValid } from '@/lib/hmac'
+import { createHmac } from '@/lib/hmac'
 import { evaluateSurveyPrompt } from '@/helpers/prompts/evaluateSurveyPrompt'
 import { createSurveyResult } from '@/db/services/surveyResult'
 import { findOrCreateSurveyUser } from '@/db/services/surveyUser'
@@ -24,8 +24,8 @@ const bodySchema = z.object({
     name: z.string(),
     email: z.string()
   }),
-  // key: z.string(),
-  // timestamp: z.number(),
+  key: z.string(),
+  timestamp: z.number(),
   isAttempt: z.boolean()
 })
 
@@ -42,18 +42,19 @@ export const POST: APIRoute = async ({ request, params }) => {
     })
   }
 
-  // const allQuestions = data.questions.map(({ question }) => question)
+  const allQuestions = data.questions.map(({ question }) => question)
+  const validKey = createHmac(
+    JSON.stringify({ questions: allQuestions }),
+    data.timestamp
+  )
 
-  // const isKeyValid = isHmacValid(
-  //   JSON.stringify({ payload: allQuestions, timestamp: data.timestamp }),
-  //   data.key
-  // )
+  const isKeyValid = validKey.key === data.key
 
-  // if (!isKeyValid) {
-  //   return new Response(null, {
-  //     status: 401
-  //   })
-  // }
+  if (!isKeyValid) {
+    return new Response(null, {
+      status: 401
+    })
+  }
 
   try {
     const survey = await getSurveyByCode(code!)
@@ -69,8 +70,8 @@ export const POST: APIRoute = async ({ request, params }) => {
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),
       prompt: evaluateSurveyPrompt({
-        jobTitle: survey.title,
-        jobDescription: survey.description ?? '',
+        jobTitle: survey.offerTitle,
+        jobDescription: survey.offerDescription ?? '',
         jobAditionalInfo: survey.offerAdditionalInfo ?? '',
         JobStyle: survey.offerStyle,
         questions: data.questions,
@@ -96,7 +97,9 @@ export const POST: APIRoute = async ({ request, params }) => {
               .string()
               .describe('Category of the candidate')
               .optional(),
-            feedback: z.string().describe('Feedback for the candidate')
+            feedback: z
+              .string()
+              .describe('Feedback for the candidate following the template')
           }),
           execute: async (result) => result
         }
@@ -116,16 +119,16 @@ export const POST: APIRoute = async ({ request, params }) => {
       email: data.user.email
     })
 
-    await createSurveyResult(
-      survey.id,
-      surveyUser!.id!,
+    await createSurveyResult({
+      surveyId: survey.id,
+      surveyUserId: surveyUser!.id!,
       category,
-      softSkillsScore,
-      hardSkillsScore,
+      scoreSoftSkills: softSkillsScore,
+      scoreHardSkills: hardSkillsScore,
       overallScore,
-      JSON.stringify(data.questions),
-      data.isAttempt
-    )
+      surveyLog: JSON.stringify(data.questions),
+      isAttempt: data.isAttempt
+    })
 
     return new Response(
       JSON.stringify({

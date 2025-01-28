@@ -1,16 +1,27 @@
 import { db } from '@/db'
 import { surveyResult, surveyResultToSurveyUser } from '../schemas'
+import { NOT_APLICABLE } from '@/constants'
 
-export const createSurveyResult = async (
-  surveyId: string,
-  surveyUserId: string,
-  category: string,
-  scoreSoftSkills: number,
-  scoreHardSkills: number,
-  overallScore: number,
-  surveyLog: string,
+interface CreateSurveyResult {
+  surveyId: string
+  surveyUserId: string
+  category: string
+  scoreSoftSkills: number
+  scoreHardSkills: number
+  overallScore: number
+  surveyLog: string
   isAttempt: boolean
-) => {
+}
+
+export const createSurveyResult = async ({
+  surveyId,
+  surveyUserId,
+  scoreSoftSkills,
+  scoreHardSkills,
+  overallScore,
+  surveyLog,
+  isAttempt
+}: CreateSurveyResult) => {
   try {
     const result = await db.transaction(async (tx) => {
       const newResult = await tx
@@ -20,7 +31,7 @@ export const createSurveyResult = async (
           overallScore,
           scoreSoftSkills,
           scoreHardSkills,
-          category: 'N/A',
+          category: NOT_APLICABLE,
           surveyLog,
           isAttempt
         })
@@ -66,24 +77,19 @@ export const getUserSurveyResults = async (
   surveyId: string
 ) => {
   try {
-    const userSurveys = await db.query.surveyUsersToSurveys.findMany({
-      where: (surveyUser, { eq }) =>
-        eq(surveyUser.surveyId, surveyId) && eq(surveyUser.surveyUserId, userId)
-    })
-
-    const surveysIds = userSurveys.reduce((acc, { surveyId }) => {
-      if (surveyId) {
-        acc.push(surveyId)
+    const results = await db.query.surveyResultToSurveyUser.findMany({
+      where: (surveyResultToSurveyUser, { eq }) =>
+        eq(surveyResultToSurveyUser.surveyUserId, userId),
+      with: {
+        surveyResult: {
+          // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+          where: (surveyResult, { eq }) => eq(surveyResult.surveyId, surveyId)
+        }
       }
-
-      return acc
-    }, [] as string[])
-
-    const results = await db.query.surveyResult.findMany({
-      where: (surveyResult, { inArray }) => inArray(surveyResult.id, surveysIds)
     })
 
-    return results
+    // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+    return results.filter((result) => result.surveyResult)
   } catch (error) {
     console.log(error)
   }

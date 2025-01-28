@@ -21,8 +21,7 @@ export const surveyInputPrompt = ({
 
 ${
   additionalInfo
-    ? `- Additional Information (You should take into account the following information): 
-* Additional Information: ${additionalInfo}`
+    ? `- Additional Information (You should take into account the following information): ${additionalInfo}`
     : ''
 }
 

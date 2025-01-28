@@ -223,6 +223,14 @@ export default {
     'Number of submissions',
   'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description':
     'Number of submissions to evaluate the interview',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions':
+    'Number of attempt questions',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions.description':
+    'Number of attempt questions',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion':
+    'Seconds per question',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion.description':
+    'Number of seconds to answer a question',
 
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Save',
@@ -230,13 +238,38 @@ export default {
   // SURVEY COMPLETED
   'surveyCompleted.feedback': 'Thanks for completing the survey!',
 
+  // DASHBOARD TABLE
+  'dashboard.table.name': 'Name',
+  'dashboard.table.email': 'Email',
+  'dashboard.table.category': 'Category',
+  'dashboard.table.overallScore': 'Overall Score',
+  'dashboard.table.softSkillsScore': 'Soft Skills Score',
+  'dashboard.table.hardSkillsScore': 'Hard Skills Score',
+  'dashboard.table.isAttempt': 'Is Attempt',
+  'dashboard.table.actions': 'Actions',
+  'dashboard.table.actions.open': 'Open menu',
+  'dashboard.table.actions.viewChat': 'View chat',
+  'dashboard.table.actions.viewChat.description':
+    'Chat between the candidate and the interviewer',
+  'dashboard.table.isAttempt.true': 'Yes',
+  'dashboard.table.isAttempt.false': 'No',
+  'dashboard.table.export': 'Export',
+  'dashboard.table.columns': 'Columns',
+  'dashboard.table.next': 'Next',
+  'dashboard.table.previous': 'Previous',
+  'dashboard.table.noResults': 'No results',
+  'dashboard.table.filter': 'Filter',
+
   // SURVEY
   'survey.description':
-    'This survey will evaluate your skills for the interview in a few minutes. Provide some documents, answer some questions and receive valuable feedback that will help you succeed.',
+    'This survey will evaluate your skills for the interview in a few minutes. Provide some documents, answer some questions and receive valuable feedback that will help you succeed. Keep in mind that you will have limited time to answer each question.',
   'survey.salute': 'Welcome to the survey',
   'survey.choices': 'Choose an option',
   'survey.sendAsAttempt': 'Training',
   'survey.sendAsSubmission': 'Send as submission',
+  'survey.noAnswer': 'No answer',
+  'survey.viewFeedback': 'View feedback',
+  'survey.feedback': 'Feedback',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Login Link',

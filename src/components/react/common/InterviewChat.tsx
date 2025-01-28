@@ -8,14 +8,17 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@ui/tooltip'
-import { Mic, Send } from 'lucide-react'
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { ClockIcon, Mic, Send } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import hark, { type Harker } from 'hark'
 import { getUserMicrophone } from '@/helpers/getUserMicrophone'
 import { LANG_CODES } from '@/constants'
 import { Card } from '@/ui/card'
 import { getUiTranslations } from '@/i18n/utils'
+import { Message, type MessageProps } from './Message'
+import { timeFormatter } from '@/helpers/timeFormatter'
+import type { SupportedLanguages } from '@/types'
 
 const { t } = getUiTranslations()
 
@@ -23,7 +26,8 @@ const SILENCE_TIME = 3 * 1000 // 3 sec
 
 interface Props {
   questions: string[]
-  langRecognition?: LANG_CODES
+  lang: SupportedLanguages
+  secondsToAnswer?: number
   onSubmit?: (responses: string[]) => void
 }
 
@@ -33,10 +37,13 @@ const SpeechRecognition =
 
 export const InterviewChat: React.FC<Props> = ({
   questions,
-  langRecognition = LANG_CODES.es,
+  lang = 'es',
+  secondsToAnswer,
   onSubmit
 }) => {
   const addAnswer = useInterviewStore((state) => state.addAnswer)
+  const [secondsToAnswerLeft, setSecondsToAnswerLeft] =
+    useState(secondsToAnswer)
   const [isTalking, setIsTalking] = useState<boolean>(false)
   const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')
   const [allMessages, setAllMessages] = useState<MessageProps[]>([
@@ -53,6 +60,8 @@ export const InterviewChat: React.FC<Props> = ({
   const messagesRef = useRef<HTMLUListElement>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(1)
 
+  const formattedSecondsLeft = timeFormatter(secondsToAnswerLeft ?? 0)
+
   const onToggleClick = () => {
     if (!recognitionRef.current) return
 
@@ -67,8 +76,92 @@ export const InterviewChat: React.FC<Props> = ({
     }
   }
 
+  const getMic = async () => {
+    const mic = await getUserMicrophone()
+
+    if (!mic) {
+      toast.error(t('chat.error.speechRecognition'))
+      return
+    }
+
+    setMic(mic)
+  }
+
+  const nextQuestion = () => {
+    const currentQuestionIdx = userMessages.current.length
+
+    if (currentQuestionIdx >= questions.length) {
+      onSubmit?.(userMessages.current)
+      return
+    }
+
+    setCurrentQuestionIndex(currentQuestionIdx + 1)
+
+    // Add the interview question to the state
+    setAllMessages((prev) => [
+      ...prev,
+      { message: questions[currentQuestionIdx], isUser: false }
+    ])
+    setSecondsToAnswerLeft(secondsToAnswer)
+  }
+
+  const handleContentKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+
+      if (formRef.current) {
+        formRef.current.requestSubmit()
+        setCurrentMessage('')
+        setTalkingSubtitle('')
+      }
+    }
+  }
+
+  const handleSendMessage = (message: string = currentMessage) => {
+    if (message.trim() === '') {
+      toast.error(t('chat.error.emptyMessage'))
+      return
+    }
+
+    // Add the user's message to the state
+    addAnswer(message)
+    recognitionRef.current?.stop()
+    setAllMessages((prev) => [...prev, { message: message, isUser: true }])
+    userMessages.current.push(message)
+    setCurrentMessage('')
+    setTalkingSubtitle('')
+
+    nextQuestion()
+  }
+
   useEffect(() => {
     getMic()
+  }, [])
+
+  useEffect(() => {
+    if (!secondsToAnswerLeft) {
+      return
+    }
+
+    const interval = setInterval(() => {
+      setSecondsToAnswerLeft((prev) => {
+        const formData = new FormData(formRef.current!)
+        const secondsLeft = prev! - 1
+
+        if (secondsLeft <= 0) {
+          handleSendMessage(
+            formData.get('message')?.toString().trim()
+              ? formData.get('message')?.toString()
+              : t('survey.noAnswer', lang)
+          )
+          return secondsToAnswer
+        }
+
+        return secondsLeft
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -86,7 +179,7 @@ export const InterviewChat: React.FC<Props> = ({
     let silenceTime: number | null = null
     let timeCountInterval: NodeJS.Timeout | null = null
 
-    recognition.lang = langRecognition
+    recognition.lang = LANG_CODES[lang]
     recognition.interimResults = true
     recognition.maxAlternatives = 1
     recognition.continuous = true
@@ -165,82 +258,40 @@ export const InterviewChat: React.FC<Props> = ({
     })
   }, [allMessages])
 
-  const getMic = async () => {
-    const mic = await getUserMicrophone()
-
-    if (!mic) {
-      toast.error(t('chat.error.speechRecognition'))
-      return
-    }
-
-    setMic(mic)
-  }
-
-  const nextQuestion = () => {
-    const currentQuestionIdx = userMessages.current.length
-
-    if (currentQuestionIdx >= questions.length) {
-      onSubmit?.(userMessages.current)
-      return
-    }
-
-    setCurrentQuestionIndex(currentQuestionIdx + 1)
-
-    // Add the interview question to the state
-    setAllMessages((prev) => [
-      ...prev,
-      { message: questions[currentQuestionIdx], isUser: false }
-    ])
-  }
-
-  const handleContentKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-
-      if (formRef.current) {
-        formRef.current.requestSubmit()
-        setCurrentMessage('')
-        setTalkingSubtitle('')
-      }
-    }
-  }
-
-  const handleSendMessage = (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault()
-
-    if (currentMessage.trim() === '') {
-      toast.error(t('chat.error.emptyMessage'))
-      return
-    }
-
-    // Add the user's message to the state
-    addAnswer(currentMessage)
-    recognitionRef.current.stop()
-    setAllMessages((prev) => [
-      ...prev,
-      { message: currentMessage, isUser: true }
-    ])
-    userMessages.current.push(currentMessage)
-    setCurrentMessage('')
-    setTalkingSubtitle('')
-
-    nextQuestion()
-  }
-
   return (
-    <div className="w-full">
+    <>
       <h2 className="text-center text-4xl font-bold absolute top-44 left-0 right-0">
         {currentQuestionIndex} <span className="text-zinc-600">/</span>{' '}
         {questions.length}
       </h2>
+      <ul
+        className="flex-1 overflow-y-auto flex flex-col gap-3"
+        ref={messagesRef}>
+        {allMessages.map((message, index) => (
+          <Message
+            key={index}
+            message={message.message}
+            isUser={message.isUser}
+          />
+        ))}
+      </ul>
       <form
         ref={formRef}
-        className="absolute bottom-10 max-w-4xl w-[90%] flex flex-col items-center left-0 right-0 mx-auto"
-        onSubmit={handleSendMessage}>
+        className="flex flex-col items-center relative pb-12"
+        onSubmit={(ev) => {
+          ev.preventDefault()
+          handleSendMessage()
+        }}>
         {talkingSubtitle.length > 0 && (
           <Card className="absolute -top-14 max-w-3xl mx-auto p-2 overflow-hidden">
             <p className="text-nowrap [direction:rtl]">{talkingSubtitle}</p>
           </Card>
+        )}
+        {secondsToAnswer && (
+          <span className="absolute right-2 -top-8 flex text-lg items-center gap-2 italic">
+            <ClockIcon size={18} />
+            {formattedSecondsLeft} min
+          </span>
         )}
         <AutosizeTextarea
           onKeyDown={handleContentKeyDown}
@@ -275,34 +326,6 @@ export const InterviewChat: React.FC<Props> = ({
           </Tooltip>
         </TooltipProvider>
       </form>
-      <ul
-        className="max-h-[550px] overflow-auto pr-2 flex flex-col gap-3 max-w-5xl w-[90%] mx-auto"
-        ref={messagesRef}>
-        {allMessages.map((message, index) => (
-          <Message
-            key={index}
-            message={message.message}
-            isUser={message.isUser}
-          />
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-interface MessageProps {
-  message: string
-  isUser: boolean
-}
-
-const Message: React.FC<MessageProps> = ({ message, isUser }) => {
-  return (
-    <li
-      className={`flex ${isUser ? 'justify-end pl-4' : 'justify-start pr-4'}`}>
-      <p
-        className={`p-3 rounded-t-lg w-[50%] text-pretty ${isUser ? 'bg-secondary text-white rounded-bl-lg' : 'bg-primary text-gray-800 rounded-br-lg'}`}>
-        {message}
-      </p>
-    </li>
+    </>
   )
 }

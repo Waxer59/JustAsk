@@ -11,8 +11,9 @@ import { useUiStore } from '@store/ui'
 import { OfferStep } from './OfferStep'
 import { FinalStep } from './FinalStep'
 import { getUiTranslations } from '@/i18n/utils'
+import { InterviewProcessLayout } from '@/layouts/react/InterviewProcessLayout'
 
-const HIDE_CONTROL_BUTTONS_STEPS = [
+export const HIDE_CONTROL_BUTTONS_STEPS = [
   InterviewProcessSteps.OFFER,
   InterviewProcessSteps.COMPLETE
 ]
@@ -21,7 +22,7 @@ const queryClient = new QueryClient()
 
 const { t } = getUiTranslations()
 
-const steps = [
+export const steps = [
   t('stepper.step.1'),
   t('stepper.step.2'),
   t('stepper.step.3'),
@@ -39,28 +40,25 @@ export const InterviewProcess = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="mt-16">
-        <Stepper steps={steps} currentStep={currentStep} />
+      <InterviewProcessLayout
+        header={<Stepper steps={steps} currentStep={currentStep} />}>
+        {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
+        {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}
+        {currentStep === InterviewProcessSteps.SETUP && <ConfigureStep />}
+        {currentStep === InterviewProcessSteps.COMPLETE && <FinalStep />}
 
-        <div className="mt-28 flex flex-col gap-12 items-center justify-center max-w-3xl mx-auto pb-5">
-          {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
-          {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}
-          {currentStep === InterviewProcessSteps.SETUP && <ConfigureStep />}
-          {currentStep === InterviewProcessSteps.COMPLETE && <FinalStep />}
-
-          {!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) &&
-            !hideControlButtons && (
-              <ControlButtons
-                disableControlButtons={disableControlButtons}
-                currentStep={currentStep}
-                totalSteps={steps.length}
-                hideNextControlButtonStep={steps.length - 2}
-                onNext={nextStep}
-                onPrev={prevStep}
-              />
-            )}
-        </div>
-      </div>
+        {!HIDE_CONTROL_BUTTONS_STEPS.includes(currentStep) &&
+          !hideControlButtons && (
+            <ControlButtons
+              disableControlButtons={disableControlButtons}
+              currentStep={currentStep}
+              totalSteps={steps.length}
+              hideNextControlButtonStep={steps.length - 2}
+              onNext={nextStep}
+              onPrev={prevStep}
+            />
+          )}
+      </InterviewProcessLayout>
       <Toaster />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

@@ -13,64 +13,38 @@ export const evaluateSurveyPrompt = ({
   questions: Array<{ question: string; answer: string }>
   lang: string
 }): string => `
-As an expert evaluator for job interviews, your task is to assess and correct a job interview based on the following parameters:
+As an expert evaluator for job interviews, your task is to assess and provide scores for a candidate's job interview performance, along with constructive feedback, based on the following parameters:
 
-Evaluation Parameters:
-1. softSkillsScore: Provide a score from 0 to 10, where 0 is the lowest and 10 is the highest. Evaluate the candidate's communication skills, interpersonal skills, teamwork, and adaptability.
-2. hardSkillsScore: Provide a score from 0 to 10, where 0 is the lowest and 10 is the highest. Evaluate the candidate's technical knowledge, problem-solving ability and proficiency in required tools and technologies.
-3. overallScore: Provide a score from 0 to 10, where 0 is the lowest and 10 is the highest. This score should represent the candidate's overall performance, considering both soft and hard skills, as well as their fit for the role.
-4. category: (Optional) Specify the professional category or profile of the candidate (e.g., software engineer, marketing manager, data scientist).
-5. feedback: Provide a qualitative comment offering constructive feedback for the candidate. Discuss their strengths and areas for improvement, along with specific examples from their interview responses.
+### Evaluation Parameters:
+1. **SoftSkillsScore:** Provide a score from 0 to 10, where 0 is the lowest and 10 is the highest. Evaluate the candidate's communication skills, interpersonal skills, teamwork, and adaptability.
+2. **HardSkillsScore:** Provide a score from 0 to 10, where 0 is the lowest and 10 is the highest. Evaluate the candidate's technical knowledge, problem-solving ability, and proficiency in required tools and technologies.
+3. **OverallScore:** Provide a score from 0 to 10, where 0 is the lowest and 10 is the highest. This score should represent the candidate's overall performance, considering both soft and hard skills, as well as their fit for the role.
+4. **Category:** (Optional) Specify the professional category or profile of the candidate.
+5. **Feedback:** Provide positive feedback to help the candidate improve. Use a tone that strengthens the candidate's morale and is friendly but professional. Include detailed feedback on areas where the candidate can improve and mention the aspects they performed well.
 
-Evaluation Criteria:
-1. softSkillsScore:
-    - High (8-10): Candidate exhibits exceptional communication, interpersonal skills, teamwork, and adaptability.
-    - Medium (4-7): Candidate shows competence but has room for improvement in soft skills.
-    - Low (0-3): Candidate demonstrates significant deficiencies in soft skills.
-2. hardSkillsScore:
-    - High (8-10): Candidate demonstrates strong technical knowledge, problem-solving skills, and proficiency in required tools and technologies.
-    - Medium (4-7): Candidate meets the basic technical requirements but needs improvement.
-    - Low (0-3): Candidate lacks necessary technical skills.
-3. overallScore:
-    - High (8-10): Candidate is an exceptional fit for the role, meeting or exceeding all requirements.
-    - Medium (5-7): Candidate is competent but has areas for improvement.
-    - Low (0-4): Candidate does not meet the essential criteria for the role.
+### Provided Input:
+1. **Job Offer:** This includes the job description, requirements, and desired competencies. Additional relevant information may also be provided if available.
+2. **Questions and Answers:** A list of the questions asked during the interview along with the candidate's responses.
 
-Provided Input:
-1. Job Offer: This includes the job description, requirements, and desired competencies. Additional relevant information may also be provided if available.
-2. Questions and Answers: A list of the questions asked during the interview along with the candidate's responses.
-
-Instructions:
-- Please review the given information and provide your assessment based on the evaluation parameters. Include scores for soft skills, hard skills, and overall performance. Additionally, provide qualitative feedback for the candidate.
-- Carefully review the provided job description, interview questions, and candidate's responses. Then, evaluate the candidate based on the parameters specified. Offer a detailed and demanding assessment to ensure a comprehensive evaluation of the candidate's capabilities and fit for the job.
-
-YOU MUST RESPOND IN THE LANGUAGE: ${lang}
+### Instructions:
+1. Review the given job description, interview questions, and candidate's responses thoroughly.
+2. Assign scores for soft skills, hard skills, and overall performance based on the evaluation parameters.
+3. Ensure the scores accurately reflect the candidate's performance (between 0 and 10, 0 being the lowest and 10 being the highest).
+4. Provide qualitative feedback that is constructive and encouraging. Highlight the candidate's strengths and areas for improvement with specific examples.
+5. Maintain a friendly but professional tone in your feedback to enhance the candidate's morale.
+6. You MUST provide feedback in the language: ${lang}
+7. You MUST use the following format for your feedback, do not give any other format:
+8. You MUST provide feedback you CANT leave it empty. The feedback has to be positive reinforcement for the candidate pointing out areas of improvement and areas where the candidate has done well, address the candidate directly by talking to the candidate but do not include the name of the candidate, as if you were an interviewer giving feedback to the candidate, use a friendly tone.
 
 ---
 
-User Input:
+### User Input:
+- **Job Title:** ${jobTitle}
+- **Description:** ${jobDescription}
+- **Interview Style:** ${JobStyle}
 
-Job Description:
-* Title: ${jobTitle}
-* Description: ${jobDescription}
+${jobAditionalInfo ? `Additional Information: ${jobAditionalInfo}` : ''}
 
-Interview Style:
-* ${JobStyle}
-
-${
-  jobAditionalInfo
-    ? `Additional Information (You should take into account the following information):
-* Additional Information: ${jobAditionalInfo}`
-    : ''
-}
-
-Questions and Answers:
-${questions
-  .map(
-    ({ question, answer }) => `
-* Question: ${question}
-* Answer: ${answer}
-`
-  )
-  .join('\n')}
+### Questions and Answers:
+${questions.map(({ question, answer }) => `Question: ${question} Answer: ${answer}`).join('\n')}
 `

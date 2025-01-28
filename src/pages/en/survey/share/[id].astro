@@ -1,0 +1,65 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { CandidatesTable } from '@/components/react/dasboard/CandidatesTable'
+import { getSurveyByShareCode } from '@/db/services/survey'
+import { getAllResultsBySurveyId } from '@/db/services/surveyResult'
+import { NOT_APLICABLE } from '@/constants'
+import { LanguagePicker } from '@/components/react/common/LanguagePicker'
+
+const { id } = Astro.params
+
+const survey = await getSurveyByShareCode(id!)
+
+if (!survey) {
+  return Astro.redirect('/404')
+}
+
+const surveyResults = (await getAllResultsBySurveyId(survey.id)).map(
+  ({ surveyLog, ...rest }) => {
+    const log = surveyLog as any[]
+    return {
+      ...rest,
+      surveyLog: log.map((message) => ({
+        id: crypto.randomUUID(),
+        question: message.question,
+        answer: message.answer
+      }))
+    }
+  }
+)
+
+if (!survey) {
+  return Astro.redirect('/404')
+}
+---
+
+<BaseLayout>
+  <div class="flex items-center gap-8 mt-16">
+    <LanguagePicker client:only="react" />
+    <h1 class="text-3xl font-bold">{survey.title}</h1>
+  </div>
+  <CandidatesTable
+    data={surveyResults?.map(
+      ({
+        category,
+        overallScore,
+        scoreHardSkills,
+        scoreSoftSkills,
+        isAttempt,
+        surveyResultToSurveyUser,
+        surveyLog
+      }) => ({
+        category: category ?? NOT_APLICABLE,
+        overallScore: overallScore ?? 0,
+        hardSkillsScore: scoreHardSkills ?? 0,
+        softSkillsScore: scoreSoftSkills ?? 0,
+        isAttempt: isAttempt ?? false,
+        name: surveyResultToSurveyUser[0].surveyUser?.name ?? NOT_APLICABLE,
+        email: surveyResultToSurveyUser[0].surveyUser?.email ?? NOT_APLICABLE,
+        log: surveyLog as any[]
+      })
+    ) ?? []}
+    surveyName={survey.title}
+    client:only="react"
+  />
+</BaseLayout>

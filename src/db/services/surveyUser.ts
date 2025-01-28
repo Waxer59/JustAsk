@@ -79,8 +79,9 @@ export const getUserSurveyData = async (
 
   const userSurveyResults = await getUserSurveyResults(userId, survey.id)
 
-  const attempts = userSurveyResults.reduce((acc, { isAttempt }) => {
-    if (isAttempt) {
+  // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+  const attempts = userSurveyResults.reduce((acc, { surveyResult }) => {
+    if (surveyResult.isAttempt) {
       acc++
     }
 
@@ -89,9 +90,12 @@ export const getUserSurveyData = async (
 
   const submissions = userSurveyResults.length - attempts
 
+  const attemptsLeft = survey.maxAttempts! - attempts
+  const submissionsLeft = survey.maxSubmissions! - submissions
+
   return {
-    attempts,
-    submissions
+    attempts: attemptsLeft > 0 ? attemptsLeft : 0,
+    submissions: submissionsLeft > 0 ? submissionsLeft : 0
   }
 }
 
@@ -118,8 +122,9 @@ export const getUserSurveyDataByEmail = async (
 
     const userSurveyResults = await getUserSurveyResults(user.id!, survey.id)
 
-    const attempts = userSurveyResults.reduce((acc, { isAttempt }) => {
-      if (isAttempt) {
+    // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+    const attempts = userSurveyResults.reduce((acc, { surveyResult }) => {
+      if (surveyResult.isAttempt) {
         acc++
       }
 
@@ -128,9 +133,12 @@ export const getUserSurveyDataByEmail = async (
 
     const submissions = userSurveyResults.length - attempts
 
+    const attemptsLeft = survey.maxAttempts! - attempts
+    const submissionsLeft = survey.maxSubmissions! - submissions
+
     return {
-      attempts: survey.maxAttempts! - attempts,
-      submissions: survey.maxSubmissions! - submissions
+      attempts: attemptsLeft > 0 ? attemptsLeft : 0,
+      submissions: submissionsLeft > 0 ? submissionsLeft : 0
     }
   } catch (error) {
     console.log(error)

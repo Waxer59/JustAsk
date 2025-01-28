@@ -6,7 +6,6 @@ import { Loading } from '../common/Loading'
 import { getUiTranslations } from '@/i18n/utils'
 import { ErrorMessage } from '../common/ErrorMessage'
 import { InterviewChat } from '../common/InterviewChat'
-import { LANG_CODES } from '@/constants'
 import { useUiStore } from '@/store/ui'
 import { SurveyCompleted } from './SurveyCompleted'
 import { SurveyChoicesButtons } from './SurveyChoicesButtons'
@@ -38,7 +37,7 @@ export const SurveyChoices = () => {
     data: questionsData,
     isError: isQuestionsError
   } = useQuery<CreateQuestionsResponse>({
-    queryKey: ['questions'],
+    queryKey: ['questions', isAttempt],
     enabled: false,
     retry: false,
     queryFn: async () => {
@@ -53,6 +52,10 @@ export const SurveyChoices = () => {
             description,
             content
           })),
+          user: {
+            name: name,
+            email: email
+          },
           isAttempt
         })
       }).then((res) => res.json())
@@ -98,10 +101,6 @@ export const SurveyChoices = () => {
     }
   }
 
-  useEffect(() => {
-    setNumberOfAttemptsAndSubmissions()
-  }, [])
-
   const handleChoiceClick = () => {
     setHasChosen(true)
     setHideControlButtons(true)
@@ -112,15 +111,23 @@ export const SurveyChoices = () => {
     handleChoiceClick()
     setIsAttempt(true)
     setNumberOfAttempts(numberOfAttempts - 1)
-    refetchQuestions()
   }
 
   const handleSubmissionClick = () => {
     handleChoiceClick()
     setIsAttempt(false)
     setNumberOfSubmissions(numberOfSubmissions - 1)
-    refetchQuestions()
   }
+
+  useEffect(() => {
+    setNumberOfAttemptsAndSubmissions()
+  }, [])
+
+  useEffect(() => {
+    if (hasChosen) {
+      refetchQuestions()
+    }
+  }, [isAttempt, hasChosen])
 
   const handleSumbitSurvey = (responses: string[]) => {
     setHasInterviewFinished(true)
@@ -133,7 +140,9 @@ export const SurveyChoices = () => {
         name,
         email
       },
-      isAttempt
+      isAttempt,
+      key: questionsData!.key,
+      timestamp: questionsData!.timestamp
     })
   }
 
@@ -163,18 +172,24 @@ export const SurveyChoices = () => {
     <>
       {areQuestionsLoading && <Loading text={t('questions.loading')} />}
       {isSurveySending && <Loading text={'Enviando la encuesta'} />}
-      {isQuestionsError && <ErrorMessage text={t('questions.error')} />}
+      {isQuestionsError && (
+        <ErrorMessage text={t('questions.error')} lang={lang} />
+      )}
       {questionsData && !hasInterviewFinished && (
         <InterviewChat
+          secondsToAnswer={questionsData.secondsPerQuestion}
           onSubmit={handleSumbitSurvey}
           questions={questionsData.questions}
-          langRecognition={LANG_CODES[lang]}
+          lang={lang}
         />
       )}
       {hasInterviewFinished && !isSurveySending && (
         <div className="flex flex-col items-center justify-center gap-4">
-          <SurveyCompleted feedback={surveySendData?.feedback} />
-          {numberOfAttempts > 0 && (
+          <SurveyCompleted
+            feedback={surveySendData?.feedback}
+            showFeedback={!isAttempt}
+          />
+          {isAttempt && (
             <SurveyChoicesButtons
               numberOfAttempts={numberOfAttempts}
               numberOfSubmissions={numberOfSubmissions}

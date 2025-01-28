@@ -14,26 +14,32 @@ const { t } = getUiTranslations()
 
 interface Props {
   feedback?: string | null
+  showFeedback?: boolean
 }
 
-export const SurveyCompleted: React.FC<Props> = ({ feedback }) => {
+export const SurveyCompleted: React.FC<Props> = ({
+  feedback,
+  showFeedback
+}) => {
   const lang = useSurveyStore((state) => state.lang)
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       <SmileIcon size={92} />
       <p className="text-xl">{t('surveyCompleted.feedback', lang)}</p>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button>Ver feedback</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Feedback</DialogTitle>
-            <p>{feedback}</p>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      {showFeedback && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>{t('survey.viewFeedback', lang)}</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t('survey.feedback', lang)}</DialogTitle>
+              <p>{feedback}</p>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }

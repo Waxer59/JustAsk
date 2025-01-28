@@ -352,17 +352,29 @@ export const deleteSurvey = async (userId: string, surveyId: string) => {
       try {
         await tx.delete(survey).where(sql`id = ${surveyId}`)
 
-        await tx.delete(surveyCategory).where(sql`survey_id = ${surveyId}`)
-
-        await tx.delete(surveyDocument).where(sql`survey_id = ${surveyId}`)
-
-        await tx
+        const deletedCategories = await tx
           .delete(surveysToSurveyCategories)
           .where(sql`survey_id = ${surveyId}`)
+          .returning()
 
-        await tx
+        const deletedDocuments = await tx
           .delete(surveysToSurveysDocuments)
           .where(sql`survey_id = ${surveyId}`)
+          .returning()
+
+        await tx.delete(surveyCategory).where(
+          inArray(
+            surveyCategory.id,
+            deletedCategories.map(({ surveyCategoryId }) => surveyCategoryId!)
+          )
+        )
+
+        await tx.delete(surveyDocument).where(
+          inArray(
+            surveyDocument.id,
+            deletedDocuments.map(({ surveyDocumentId }) => surveyDocumentId!)
+          )
+        )
       } catch (error) {
         console.log(error)
         tx.rollback()

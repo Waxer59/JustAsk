@@ -52,6 +52,10 @@ export const SurveyChoices = () => {
             description,
             content
           })),
+          user: {
+            name: name,
+            email: email
+          },
           isAttempt
         })
       }).then((res) => res.json())

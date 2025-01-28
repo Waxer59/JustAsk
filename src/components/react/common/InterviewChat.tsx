@@ -145,11 +145,14 @@ export const InterviewChat: React.FC<Props> = ({
 
     const interval = setInterval(() => {
       setSecondsToAnswerLeft((prev) => {
+        const formData = new FormData(formRef.current!)
         const secondsLeft = prev! - 1
 
         if (secondsLeft <= 0) {
           handleSendMessage(
-            currentMessage.trim() ? currentMessage : t('survey.noAnswer', lang)
+            formData.get('message')?.toString().trim()
+              ? formData.get('message')?.toString()
+              : t('survey.noAnswer', lang)
           )
           return secondsToAnswer
         }

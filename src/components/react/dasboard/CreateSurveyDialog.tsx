@@ -68,8 +68,8 @@ const formSchema = z.object({
   offerStyle: z.string().min(1, { message: '' }),
   offerDescription: z.string().optional(),
   offerAdditionalInfo: z.string().optional(),
-  numberOfHardQuestions: z.number().min(1, { message: '' }),
-  numberOfSoftQuestions: z.number().min(1, { message: '' }),
+  numberOfHardSkillsQuestions: z.number().min(1, { message: '' }),
+  numberOfSoftSkillsQuestions: z.number().min(1, { message: '' }),
   maxAttempts: z.number().min(0, { message: '' }),
   maxSubmissions: z.number().min(1, { message: '' }),
   numberOfAttemptQuestions: z.number().min(1, { message: '' }),
@@ -113,10 +113,10 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
       offerTitle: editingSurvey?.offerTitle ?? '',
       offerDescription: editingSurvey?.offerDescription ?? '',
       offerAdditionalInfo: editingSurvey?.offerAdditionalInfo ?? '',
-      numberOfHardQuestions:
+      numberOfHardSkillsQuestions:
         editingSurvey?.numberOfHardSkillsQuestions ??
         DEFAULT_HARD_SKILLS_QUESTIONS,
-      numberOfSoftQuestions:
+      numberOfSoftSkillsQuestions:
         editingSurvey?.numberOfSoftSkillsQuestions ??
         DEFAULT_SOFT_SKILLS_QUESTIONS,
       maxAttempts: editingSurvey?.maxAttempts ?? DEFAULT_ATTEMPTS,
@@ -228,8 +228,8 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
   }
 
   const totalOfQuestions =
-    form.getValues('numberOfHardQuestions') +
-    form.getValues('numberOfSoftQuestions')
+    form.getValues('numberOfHardSkillsQuestions') +
+    form.getValues('numberOfSoftSkillsQuestions')
 
   useEffect(() => {
     setDialogState(isOpen)
@@ -469,7 +469,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                       </h3>
                       <FormField
                         control={form.control}
-                        name="numberOfSoftQuestions"
+                        name="numberOfSoftSkillsQuestions"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>
@@ -501,7 +501,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                       </h3>
                       <FormField
                         control={form.control}
-                        name="numberOfHardQuestions"
+                        name="numberOfHardSkillsQuestions"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>

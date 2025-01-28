@@ -70,8 +70,8 @@ export const POST: APIRoute = async ({ request, params }) => {
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),
       prompt: evaluateSurveyPrompt({
-        jobTitle: survey.title,
-        jobDescription: survey.description ?? '',
+        jobTitle: survey.offerTitle,
+        jobDescription: survey.offerDescription ?? '',
         jobAditionalInfo: survey.offerAdditionalInfo ?? '',
         JobStyle: survey.offerStyle,
         questions: data.questions,
@@ -97,7 +97,9 @@ export const POST: APIRoute = async ({ request, params }) => {
               .string()
               .describe('Category of the candidate')
               .optional(),
-            feedback: z.string().describe('Feedback for the candidate')
+            feedback: z
+              .string()
+              .describe('Feedback for the candidate following the template')
           }),
           execute: async (result) => result
         }

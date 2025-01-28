@@ -50,7 +50,17 @@ export const FileUploader: React.FC<Props> = ({
       onremovefile={(_, file) => {
         removeFile(file)
       }}
-      onaddfilestart={(file) => onAddingFile?.(file)}
+      onaddfilestart={(file) => {
+        const metadata = file.getMetadata()
+
+        // Default file dont trigger onaddfile event
+        // to avoid duplicated files
+        if (metadata?.isDefault) {
+          return
+        }
+
+        onAddingFile?.(file)
+      }}
       disabled={isDisabled}
       allowMultiple={maxFiles > 1}
       maxFiles={maxFiles}

@@ -7,6 +7,8 @@ import { shuffleArray } from '@/helpers/shuffleArray'
 import { getSurveyByCode } from '@/db/services/survey'
 import { createHmac } from '@/lib/hmac'
 import { createSurveyQuestionsPrompt } from '@/helpers/prompts/createSurveyQuestionsPrompt'
+import { findOrCreateSurveyUser } from '@/db/services/surveyUser'
+import { getUserSurveyResults } from '@/db/services/surveyResult'
 
 const groq = createGroq({
   apiKey: import.meta.env.GROQ_API_KEY
@@ -20,6 +22,10 @@ const bodySchema = z.object({
       content: z.string().min(1)
     })
     .array(),
+  user: z.object({
+    name: z.string(),
+    email: z.string()
+  }),
   isAttempt: z.boolean()
 })
 
@@ -56,17 +62,35 @@ export const POST: APIRoute = async ({ params, request }) => {
 
     const languageText = LANGUAGE_TEXT[survey?.lang ?? 'es']
 
+    const { name, email } = data.user
+
+    const user = await findOrCreateSurveyUser(survey.id, {
+      name,
+      email
+    })
+    const userSurveyResults = await getUserSurveyResults(user!.id!, survey.id)
+
+    const allQuestions = userSurveyResults
+      // @ts-expect-error https://orm.drizzle.team/docs/rqb#select-filters
+      .map(({ surveyResult }) =>
+        surveyResult.surveyLog.map(
+          ({ question }: { question: string }) => question
+        )
+      )
+      .flat()
+
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),
       prompt: createSurveyQuestionsPrompt({
         language: languageText,
         offer: {
-          title: survey.title,
-          description: survey.description!
+          title: survey.offerTitle,
+          description: survey.offerDescription!
         },
         interviewStyle: survey.offerStyle,
         additionalInfo: survey?.offerAdditionalInfo ?? undefined,
-        documentsContent: data.documents
+        documentsContent: data.documents,
+        questionsToNotInclude: allQuestions
       }),
       toolChoice: 'required',
       tools: {
@@ -77,17 +101,15 @@ export const POST: APIRoute = async ({ params, request }) => {
               .string()
               .array()
               .min(survey.numberOfHardSkillsQuestions!)
-              .max(survey.numberOfHardSkillsQuestions!)
               .describe(
-                'Technical skills questions to evaluate the technical skills of the candidate'
+                'Provide here technical skills questions to evaluate the technical skills of the candidate'
               ),
             softSkillQuestions: z
               .string()
               .array()
               .min(survey.numberOfSoftSkillsQuestions!)
-              .max(survey.numberOfSoftSkillsQuestions!)
               .describe(
-                'Soft skills questions to evaluate the soft skills of the candidate'
+                'Provide here soft skills questions to evaluate the soft skills of the candidate'
               )
           }),
           execute: async (result) => result

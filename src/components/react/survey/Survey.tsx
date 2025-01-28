@@ -12,6 +12,7 @@ import { Toaster } from '@/ui/sonner'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useUiStore } from '@/store/ui'
 import { InterviewProcessLayout } from '@/layouts/react/InterviewProcessLayout'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryClient = new QueryClient()
 
@@ -168,6 +169,7 @@ export const Survey: React.FC<Props> = ({
         )}
       </InterviewProcessLayout>
       <Toaster />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

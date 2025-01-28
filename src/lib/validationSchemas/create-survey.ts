@@ -1,4 +1,12 @@
-import { INTERVIEW_LANGUAGES } from '@/constants'
+import {
+  DEFAULT_ATTEMPTS,
+  DEFAULT_HARD_SKILLS_QUESTIONS,
+  DEFAULT_MAX_SUBMISSIONS,
+  DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS,
+  DEFAULT_SECONDS_PER_QUESTION,
+  DEFAULT_SOFT_SKILLS_QUESTIONS,
+  INTERVIEW_LANGUAGES
+} from '@/constants'
 import { z } from 'zod'
 
 export const createSurveySchema = z.object({
@@ -9,8 +17,12 @@ export const createSurveySchema = z.object({
   offerTitle: z.string(),
   offerDescription: z.string(),
   offerAdditionalInfo: z.string().optional(),
-  numberOfSoftSkillsQuestions: z.number().default(3),
-  numberOfHardSkillsQuestions: z.number().default(3),
+  numberOfSoftSkillsQuestions: z
+    .number()
+    .default(DEFAULT_SOFT_SKILLS_QUESTIONS),
+  numberOfHardSkillsQuestions: z
+    .number()
+    .default(DEFAULT_HARD_SKILLS_QUESTIONS),
   customQuestions: z.string().array().default([]),
   categories: z
     .object({
@@ -28,6 +40,11 @@ export const createSurveySchema = z.object({
     })
     .array()
     .default([]),
-  maxAttempts: z.number().min(0).default(2),
-  maxSubmissions: z.number().min(1).default(1)
+  maxAttempts: z.number().min(0).default(DEFAULT_ATTEMPTS),
+  maxSubmissions: z.number().min(1).default(DEFAULT_MAX_SUBMISSIONS),
+  secondsPerQuestion: z.number().min(1).default(DEFAULT_SECONDS_PER_QUESTION),
+  numberOfAttemptQuestions: z
+    .number()
+    .min(0)
+    .default(DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS)
 })

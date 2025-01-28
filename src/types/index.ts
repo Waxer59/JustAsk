@@ -112,6 +112,8 @@ export interface Survey {
   categories: SurveyCategory[]
   documents: SurveyDocument[]
   numberOfResponses: number
+  numberOfAttemptQuestions: number
+  secondsPerQuestion: number
 }
 
 export type UpdateSurvey = Partial<Survey>
@@ -191,6 +193,8 @@ export interface SurveysResponse {
   surveysToSurveyCategories: SurveysToSurveyCategory[]
   surveysToSurveysDocuments: SurveysToSurveysDocument[]
   numberOfResponses: number
+  numberOfAttemptQuestions: number
+  secondsPerQuestion: number
 }
 
 export interface SurveysToSurveyCategory {

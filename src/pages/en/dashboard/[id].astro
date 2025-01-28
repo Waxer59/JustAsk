@@ -8,6 +8,7 @@ import { getUserSurveyById } from '@/db/services/survey'
 import { getAllResultsBySurveyId } from '@/db/services/surveyResult'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { getLangFromUrl } from '@/i18n/utils'
+import { NOT_APLICABLE } from '@/constants'
 
 const { user } = Astro.locals
 const { id } = Astro.params
@@ -56,13 +57,13 @@ if (!survey) {
           surveyResultToSurveyUser,
           surveyLog
         }) => ({
-          category: category ?? 'N/A',
+          category: category ?? NOT_APLICABLE,
           overallScore: overallScore ?? 0,
           hardSkillsScore: scoreHardSkills ?? 0,
           softSkillsScore: scoreSoftSkills ?? 0,
           isAttempt: isAttempt ?? false,
-          name: surveyResultToSurveyUser[0].surveyUser?.name ?? 'N/A',
-          email: surveyResultToSurveyUser[0].surveyUser?.email ?? 'N/A',
+          name: surveyResultToSurveyUser[0].surveyUser?.name ?? NOT_APLICABLE,
+          email: surveyResultToSurveyUser[0].surveyUser?.email ?? NOT_APLICABLE,
           log: surveyLog as any[]
         })
       ) ?? []}

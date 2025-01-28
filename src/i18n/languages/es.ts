@@ -224,6 +224,14 @@ export default {
     'Número de envíos',
   'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description':
     'Número de envíos para evaluar la entrevista',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions':
+    'Número de preguntas en intentos',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions.description':
+    'Número de preguntas en los intentos',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion':
+    'Segundos por pregunta',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion.description':
+    'Número de segundos que se tomará una pregunta',
 
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Guardar',

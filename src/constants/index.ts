@@ -39,13 +39,16 @@ export const DEFAULT_DOUMENTS: Record<string, Document[]> = {
     {
       id: 'cv',
       name: 'Curriculum Vitae',
-      description: 'Professional resume detailing work experience and skills'
+      description: 'Professional resume detailing work experience and skills',
+      isActive: true
     },
     {
       id: 'swot',
       name: 'SWOT Analysis',
       description:
-        'Analysis of Strengths, Weaknesses, Opportunities, and Threats'
+        'Analysis of Strengths, Weaknesses, Opportunities, and Threats',
+      isActive: true,
+      isOptional: true
     }
   ],
   es: [
@@ -53,13 +56,16 @@ export const DEFAULT_DOUMENTS: Record<string, Document[]> = {
       id: 'cv',
       name: 'Curriculum Vitae',
       description:
-        'Resumen profesional que detalla experiencia laboral y habilidades'
+        'Resumen profesional que detalla experiencia laboral y habilidades',
+      isActive: true
     },
     {
       id: 'swot',
       name: 'Análisis DAFO',
       description:
-        'Análisis de fortalezas, debilidades, oportunidades y amenazas'
+        'Análisis de fortalezas, debilidades, oportunidades y amenazas',
+      isActive: true,
+      isOptional: true
     }
   ]
 }
@@ -69,5 +75,8 @@ export const DEFAULT_MAX_SUBMISSIONS = 1
 export const DEFAULT_HARD_SKILLS_QUESTIONS = 3
 export const DEFAULT_SOFT_SKILLS_QUESTIONS = 3
 export const DEFAULT_SECONDS_PER_QUESTION = 150 // 2.5 min
+export const DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS = 2
 
 export const CODE_LENGTH = 8
+
+export const NOT_APLICABLE = 'N/A'

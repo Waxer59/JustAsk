@@ -107,13 +107,17 @@ export const POST: APIRoute = async ({ params, request }) => {
       questions.push(...survey.customQuestions!)
     }
 
-    const hmac = createHmac(JSON.stringify({ questions }))
-
     const shuffledQuestions = shuffleArray(questions)
+
+    const questionsToSend = data.isAttempt
+      ? shuffledQuestions.slice(0, survey.numberOfAttemptQuestions!)
+      : shuffledQuestions
+
+    const hmac = createHmac(JSON.stringify({ questions: questionsToSend }))
 
     return new Response(
       JSON.stringify({
-        questions: shuffledQuestions,
+        questions: questionsToSend,
         secondsPerQuestion: survey.secondsPerQuestion,
         ...hmac
       }),

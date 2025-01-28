@@ -223,6 +223,14 @@ export default {
     'Number of submissions',
   'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description':
     'Number of submissions to evaluate the interview',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions':
+    'Number of attempt questions',
+  'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions.description':
+    'Number of attempt questions',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion':
+    'Seconds per question',
+  'dashboard.createSurvey.additionalConfig.secondsPerQuestion.description':
+    'Number of seconds to answer a question',
 
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Save',

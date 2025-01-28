@@ -3,6 +3,8 @@ import {
   DEFAULT_DOUMENTS,
   DEFAULT_HARD_SKILLS_QUESTIONS,
   DEFAULT_MAX_SUBMISSIONS,
+  DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS,
+  DEFAULT_SECONDS_PER_QUESTION,
   DEFAULT_SOFT_SKILLS_QUESTIONS,
   INTERVIEW_LANGUAGES,
   LANGUAGE_TEXT,
@@ -69,7 +71,9 @@ const formSchema = z.object({
   numberOfHardQuestions: z.number().min(1, { message: '' }),
   numberOfSoftQuestions: z.number().min(1, { message: '' }),
   maxAttempts: z.number().min(0, { message: '' }),
-  maxSubmissions: z.number().min(1, { message: '' })
+  maxSubmissions: z.number().min(1, { message: '' }),
+  numberOfAttemptQuestions: z.number().min(1, { message: '' }),
+  secondsPerQuestion: z.number().min(1, { message: '' })
 })
 
 interface Props {
@@ -116,7 +120,12 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
         editingSurvey?.numberOfSoftSkillsQuestions ??
         DEFAULT_SOFT_SKILLS_QUESTIONS,
       maxAttempts: editingSurvey?.maxAttempts ?? DEFAULT_ATTEMPTS,
-      maxSubmissions: editingSurvey?.maxSubmissions ?? DEFAULT_MAX_SUBMISSIONS
+      maxSubmissions: editingSurvey?.maxSubmissions ?? DEFAULT_MAX_SUBMISSIONS,
+      numberOfAttemptQuestions:
+        editingSurvey?.numberOfAttemptQuestions ??
+        DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS,
+      secondsPerQuestion:
+        editingSurvey?.secondsPerQuestion ?? DEFAULT_SECONDS_PER_QUESTION
     }
   })
 
@@ -610,6 +619,72 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
                             <FormLabel>
                               {t(
                                 'dashboard.createSurvey.additionalConfig.numberOfSubmissions.description'
+                              )}
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="1"
+                                className="text-lg"
+                                min={1}
+                                type="number"
+                                onChange={(event) =>
+                                  field.onChange(+event.target.value)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </li>
+                    <li>
+                      <h3 className="text-lg">
+                        {t(
+                          'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions'
+                        )}
+                      </h3>
+                      <FormField
+                        control={form.control}
+                        name="numberOfAttemptQuestions"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              {t(
+                                'dashboard.createSurvey.additionalConfig.numberOfAttemptQuestions.description'
+                              )}
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="1"
+                                className="text-lg"
+                                min={1}
+                                type="number"
+                                onChange={(event) =>
+                                  field.onChange(+event.target.value)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </li>
+                    <li>
+                      <h3 className="text-lg">
+                        {t(
+                          'dashboard.createSurvey.additionalConfig.secondsPerQuestion'
+                        )}
+                      </h3>
+                      <FormField
+                        control={form.control}
+                        name="secondsPerQuestion"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              {t(
+                                'dashboard.createSurvey.additionalConfig.secondsPerQuestion.description'
                               )}
                             </FormLabel>
                             <FormControl>

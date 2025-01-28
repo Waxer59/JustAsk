@@ -12,6 +12,7 @@ import {
   DEFAULT_ATTEMPTS,
   DEFAULT_HARD_SKILLS_QUESTIONS,
   DEFAULT_MAX_SUBMISSIONS,
+  DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS,
   DEFAULT_SECONDS_PER_QUESTION,
   DEFAULT_SOFT_SKILLS_QUESTIONS,
   INTERVIEW_LANGUAGES
@@ -49,8 +50,9 @@ export const survey = pgTable(
     maxAttempts: integer('max_attempts').default(DEFAULT_ATTEMPTS),
     code: text('code').$defaultFn(createId),
     shareCode: text('share_code'),
-    lastQuestionsAsked: text('last_questions_asked').array().default([]),
-    numberOfAttemptQuestions: integer('number_of_attempt_questions').default(2),
+    numberOfAttemptQuestions: integer('number_of_attempt_questions').default(
+      DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS
+    ),
     secondsPerQuestion: integer('seconds_per_question').default(
       DEFAULT_SECONDS_PER_QUESTION
     ),

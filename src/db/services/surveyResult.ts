@@ -1,16 +1,27 @@
 import { db } from '@/db'
 import { surveyResult, surveyResultToSurveyUser } from '../schemas'
+import { NOT_APLICABLE } from '@/constants'
 
-export const createSurveyResult = async (
-  surveyId: string,
-  surveyUserId: string,
-  category: string,
-  scoreSoftSkills: number,
-  scoreHardSkills: number,
-  overallScore: number,
-  surveyLog: string,
+interface CreateSurveyResult {
+  surveyId: string
+  surveyUserId: string
+  category: string
+  scoreSoftSkills: number
+  scoreHardSkills: number
+  overallScore: number
+  surveyLog: string
   isAttempt: boolean
-) => {
+}
+
+export const createSurveyResult = async ({
+  surveyId,
+  surveyUserId,
+  scoreSoftSkills,
+  scoreHardSkills,
+  overallScore,
+  surveyLog,
+  isAttempt
+}: CreateSurveyResult) => {
   try {
     const result = await db.transaction(async (tx) => {
       const newResult = await tx
@@ -20,7 +31,7 @@ export const createSurveyResult = async (
           overallScore,
           scoreSoftSkills,
           scoreHardSkills,
-          category: 'N/A',
+          category: NOT_APLICABLE,
           surveyLog,
           isAttempt
         })

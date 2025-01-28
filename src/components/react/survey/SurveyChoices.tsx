@@ -37,7 +37,7 @@ export const SurveyChoices = () => {
     data: questionsData,
     isError: isQuestionsError
   } = useQuery<CreateQuestionsResponse>({
-    queryKey: ['questions'],
+    queryKey: ['questions', isAttempt],
     enabled: false,
     retry: false,
     queryFn: async () => {
@@ -97,10 +97,6 @@ export const SurveyChoices = () => {
     }
   }
 
-  useEffect(() => {
-    setNumberOfAttemptsAndSubmissions()
-  }, [])
-
   const handleChoiceClick = () => {
     setHasChosen(true)
     setHideControlButtons(true)
@@ -111,15 +107,23 @@ export const SurveyChoices = () => {
     handleChoiceClick()
     setIsAttempt(true)
     setNumberOfAttempts(numberOfAttempts - 1)
-    refetchQuestions()
   }
 
   const handleSubmissionClick = () => {
     handleChoiceClick()
     setIsAttempt(false)
     setNumberOfSubmissions(numberOfSubmissions - 1)
-    refetchQuestions()
   }
+
+  useEffect(() => {
+    setNumberOfAttemptsAndSubmissions()
+  }, [])
+
+  useEffect(() => {
+    if (hasChosen) {
+      refetchQuestions()
+    }
+  }, [isAttempt, hasChosen])
 
   const handleSumbitSurvey = (responses: string[]) => {
     setHasInterviewFinished(true)
@@ -132,7 +136,9 @@ export const SurveyChoices = () => {
         name,
         email
       },
-      isAttempt
+      isAttempt,
+      key: questionsData!.key,
+      timestamp: questionsData!.timestamp
     })
   }
 
@@ -158,9 +164,6 @@ export const SurveyChoices = () => {
     )
   }
 
-  const shouldShowFeedback =
-    hasInterviewFinished && !isSurveySending && !isAttempt
-
   return (
     <>
       {areQuestionsLoading && <Loading text={t('questions.loading')} />}
@@ -176,10 +179,13 @@ export const SurveyChoices = () => {
           lang={lang}
         />
       )}
-      {shouldShowFeedback && (
+      {hasInterviewFinished && !isSurveySending && (
         <div className="flex flex-col items-center justify-center gap-4">
-          <SurveyCompleted feedback={surveySendData?.feedback} />
-          {numberOfAttempts > 0 && (
+          <SurveyCompleted
+            feedback={surveySendData?.feedback}
+            showFeedback={!isAttempt}
+          />
+          {isAttempt && (
             <SurveyChoicesButtons
               numberOfAttempts={numberOfAttempts}
               numberOfSubmissions={numberOfSubmissions}

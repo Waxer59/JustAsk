@@ -57,6 +57,7 @@ import { toast } from 'sonner'
 import { useDashboardStore } from '@/store/dashboard'
 import { getUiTranslations } from '@/i18n/utils'
 import { useUiStore } from '@/store/ui'
+import type { LANGS } from '@/i18n/ui'
 
 const { t, lang } = getUiTranslations()
 
@@ -108,7 +109,7 @@ export function CreateSurveyDialog({ editingSurvey, isOpen = false }: Props) {
     defaultValues: {
       title: editingSurvey?.title ?? '',
       description: editingSurvey?.description ?? '',
-      lang: editingSurvey?.lang ?? lang,
+      lang: (editingSurvey?.lang ?? lang) as LANGS,
       offerStyle: editingSurvey?.offerStyle ?? '',
       offerTitle: editingSurvey?.offerTitle ?? '',
       offerDescription: editingSurvey?.offerDescription ?? '',

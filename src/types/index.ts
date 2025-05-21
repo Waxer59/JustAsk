@@ -1,9 +1,11 @@
+import type { LANGS } from '@/i18n/ui'
+
 export interface OfferDetails {
   title: string
   description: string
 }
 
-export type SupportedLanguages = 'en' | 'es'
+export type SupportedLanguages = LANGS.en | LANGS.es
 
 export interface CreateQuestionsResponse {
   questions: string[]
@@ -25,6 +27,10 @@ export interface SurveyResult {
     question: string
     answer: string
   }[]
+}
+
+export interface UploadedDocument {
+  name: string
 }
 
 export interface GetFeedbackRequest {

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { DashboardLayout } from '@layouts/react/DashboardLayout'
+---
+
+<BaseLayout>
+  <DashboardLayout client:only="react">
+    <div
+      class="flex flex-col gap-4 items-center sm:flex-row justify-between sm:items-end my-8 w-full">
+      <h1 class="text-4xl font-bold">
+        <a href="/dashboard">Agents</a>
+      </h1>
+    </div>
+  </DashboardLayout>
+</BaseLayout>

@@ -2,10 +2,18 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { DashboardLayout } from '@layouts/react/DashboardLayout'
 import { SurveysCards } from '@/components/react/dasboard/SurveysCards'
+import { CreateSurveyButton } from '@/components/react/dasboard/CreateSurveyButton'
 ---
 
 <BaseLayout>
   <DashboardLayout client:only="react">
+    <div
+      class="flex flex-col gap-4 items-center sm:flex-row justify-between sm:items-end mt-8 mb-16">
+      <h1 class="text-4xl font-bold">
+        <a href="/dashboard">Encuestas</a>
+      </h1>
+      <CreateSurveyButton client:only="react" />
+    </div>
     <div class="flex flex-col justify-between">
       <SurveysCards client:only="react" />
     </div>

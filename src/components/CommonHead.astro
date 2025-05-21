@@ -11,6 +11,7 @@ const localeCode = {
 
 const currentLang = getLangFromUrl(Astro.url)
 const t = useTranslations(currentLang)
+const { title = 'Just Ask' } = Astro.props
 ---
 
 <Head>
@@ -18,7 +19,7 @@ const t = useTranslations(currentLang)
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width" />
   <meta name="generator" content={Astro.generator} />
-  <title>Just ask</title>
+  <title>{title}</title>
 
   <link rel="sitemap" href="/sitemap-index.xml" />
 

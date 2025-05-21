@@ -4,11 +4,12 @@ import CommonHead from '@components/CommonHead.astro'
 import '@styles/globals.css'
 
 const lang = getLangFromUrl(Astro.url)
+const { title } = Astro.props
 ---
 
 <html lang={lang} class="dark">
   <head>
-    <CommonHead />
+    <CommonHead title={title} />
   </head>
   <body class="max-w-7xl mx-auto w-[90%]">
     <slot />

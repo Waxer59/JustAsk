@@ -1,65 +1,46 @@
+import { LANG_CODES, SILENCE_TIME } from '@/constants'
+import { getUserMicrophone } from '@/helpers/getUserMicrophone'
+import { getUiTranslations } from '@/i18n/utils'
 import { useInterviewStore } from '@/store/interview'
-import { AutosizeTextarea } from '@ui/autosize-textarea'
-import { Button } from '@ui/button'
-import { Toggle } from '@ui/toggle'
+import { AutosizeTextarea } from '@/ui/autosize-textarea'
+import { Button } from '@/ui/button'
+import { Card } from '@/ui/card'
+import { Toggle } from '@/ui/toggle'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
-} from '@ui/tooltip'
-import { ClockIcon, Mic, Send } from 'lucide-react'
+} from '@/ui/tooltip'
+import type { Harker } from 'hark'
+import hark from 'hark'
+import { Mic, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import hark, { type Harker } from 'hark'
-import { getUserMicrophone } from '@/helpers/getUserMicrophone'
-import { LANG_CODES, SILENCE_TIME } from '@/constants'
-import { Card } from '@/ui/card'
-import { getUiTranslations } from '@/i18n/utils'
-import { Message, type MessageProps } from './Message'
-import { timeFormatter } from '@/helpers/timeFormatter'
-import type { SupportedLanguages } from '@/types'
-import { LANGS } from '@/i18n/ui'
+import { Message, type MessageProps } from '../common/Message'
 
-const { t } = getUiTranslations()
-
-interface Props {
-  questions: string[]
-  lang: SupportedLanguages
-  secondsToAnswer?: number
-  onSubmit?: (responses: string[]) => void
-}
+const { t, lang } = getUiTranslations()
 
 const SpeechRecognition =
   // @ts-expect-error https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#javascript
   window.SpeechRecognition || window.webkitSpeechRecognition
 
-export const InterviewChat: React.FC<Props> = ({
-  questions,
-  lang = LANGS.es,
-  secondsToAnswer,
-  onSubmit
-}) => {
+export const TrainingChat = () => {
+  const [messages, setMessages] = useState<
+    {
+      message: string
+      isUser: boolean
+    }[]
+  >([])
   const addAnswer = useInterviewStore((state) => state.addAnswer)
-  const [secondsToAnswerLeft, setSecondsToAnswerLeft] =
-    useState(secondsToAnswer)
   const [isTalking, setIsTalking] = useState<boolean>(false)
   const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')
-  const [allMessages, setAllMessages] = useState<MessageProps[]>([
-    {
-      message: questions[0],
-      isUser: false
-    }
-  ])
+  const [allMessages, setAllMessages] = useState<MessageProps[]>([])
   const [currentMessage, setCurrentMessage] = useState<string>('')
   const [mic, setMic] = useState<MediaStream | null>(null)
-  const userMessages = useRef<string[]>([])
   const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const messagesRef = useRef<HTMLUListElement>(null)
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(1)
-
-  const formattedSecondsLeft = timeFormatter(secondsToAnswerLeft ?? 0)
 
   const onToggleClick = () => {
     if (!recognitionRef.current) return
@@ -86,24 +67,6 @@ export const InterviewChat: React.FC<Props> = ({
     setMic(mic)
   }
 
-  const nextQuestion = () => {
-    const currentQuestionIdx = userMessages.current.length
-
-    if (currentQuestionIdx >= questions.length) {
-      onSubmit?.(userMessages.current)
-      return
-    }
-
-    setCurrentQuestionIndex(currentQuestionIdx + 1)
-
-    // Add the interview question to the state
-    setAllMessages((prev) => [
-      ...prev,
-      { message: questions[currentQuestionIdx], isUser: false }
-    ])
-    setSecondsToAnswerLeft(secondsToAnswer)
-  }
-
   const handleContentKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -116,51 +79,45 @@ export const InterviewChat: React.FC<Props> = ({
     }
   }
 
-  const handleSendMessage = (message: string = currentMessage) => {
+  const handleSendMessage = async (message: string = currentMessage) => {
     if (message.trim() === '') {
       toast.error(t('chat.error.emptyMessage'))
       return
     }
 
+    setMessages((prev) => [...prev, { message, isUser: true }])
+
     // Add the user's message to the state
     addAnswer(message)
     recognitionRef.current?.stop()
     setAllMessages((prev) => [...prev, { message: message, isUser: true }])
-    userMessages.current.push(message)
     setCurrentMessage('')
     setTalkingSubtitle('')
 
-    nextQuestion()
+    const resp = await fetch('http://localhost:8000/query', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        question: message,
+        user_id: 'cnV_Xpup92F74sHWDwQ6c'
+      })
+    })
+
+    const data = await resp.json()
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        message: data.answer,
+        isUser: false
+      }
+    ])
   }
 
   useEffect(() => {
     getMic()
-  }, [])
-
-  useEffect(() => {
-    if (!secondsToAnswerLeft) {
-      return
-    }
-
-    const interval = setInterval(() => {
-      setSecondsToAnswerLeft((prev) => {
-        const formData = new FormData(formRef.current!)
-        const secondsLeft = prev! - 1
-
-        if (secondsLeft <= 0) {
-          handleSendMessage(
-            formData.get('message')?.toString().trim()
-              ? formData.get('message')?.toString()
-              : t('survey.noAnswer', lang)
-          )
-          return secondsToAnswer
-        }
-
-        return secondsLeft
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -258,15 +215,9 @@ export const InterviewChat: React.FC<Props> = ({
   }, [allMessages])
 
   return (
-    <>
-      <h2 className="text-center text-4xl font-bold absolute top-44 left-0 right-0">
-        {currentQuestionIndex} <span className="text-zinc-600">/</span>{' '}
-        {questions.length}
-      </h2>
-      <ul
-        className="flex-1 overflow-y-auto flex flex-col gap-3"
-        ref={messagesRef}>
-        {allMessages.map((message, index) => (
+    <div className="mt-8">
+      <ul className="h-[500px] w-full overflow-y-auto flex flex-col gap-3">
+        {messages.map((message, index) => (
           <Message
             key={index}
             message={message.message}
@@ -277,20 +228,14 @@ export const InterviewChat: React.FC<Props> = ({
       <form
         ref={formRef}
         className="flex flex-col items-center relative pb-12"
-        onSubmit={(ev) => {
+        onSubmit={async (ev) => {
           ev.preventDefault()
-          handleSendMessage()
+          await handleSendMessage()
         }}>
         {talkingSubtitle.length > 0 && (
           <Card className="absolute -top-14 max-w-3xl mx-auto p-2 overflow-hidden">
             <p className="text-nowrap [direction:rtl]">{talkingSubtitle}</p>
           </Card>
-        )}
-        {secondsToAnswer && (
-          <span className="absolute right-2 -top-8 flex text-lg items-center gap-2 italic">
-            <ClockIcon size={18} />
-            {formattedSecondsLeft} min
-          </span>
         )}
         <AutosizeTextarea
           onKeyDown={handleContentKeyDown}
@@ -325,6 +270,6 @@ export const InterviewChat: React.FC<Props> = ({
           </Tooltip>
         </TooltipProvider>
       </form>
-    </>
+    </div>
   )
 }

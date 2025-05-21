@@ -9,6 +9,7 @@ import { createHmac } from '@/lib/hmac'
 import { createSurveyQuestionsPrompt } from '@/helpers/prompts/createSurveyQuestionsPrompt'
 import { findOrCreateSurveyUser } from '@/db/services/surveyUser'
 import { getUserSurveyResults } from '@/db/services/surveyResult'
+import { LANGS } from '@/i18n/ui'
 
 const groq = createGroq({
   apiKey: import.meta.env.GROQ_API_KEY
@@ -49,8 +50,6 @@ export const POST: APIRoute = async ({ params, request }) => {
     })
   }
 
-  // TODO: Make sure that the user gives only the documents that are required and not other
-
   try {
     const survey = await getSurveyByCode(code!)
 
@@ -60,7 +59,21 @@ export const POST: APIRoute = async ({ params, request }) => {
       })
     }
 
-    const languageText = LANGUAGE_TEXT[survey?.lang ?? 'es']
+    const haveOnlyRequiredDocuments = body.documents.every(
+      (document: { name: string; description: string; content: string }) =>
+        survey.surveysToSurveysDocuments.some(
+          (surveyToSurveysDocument) =>
+            surveyToSurveysDocument.document?.name === document.name
+        )
+    )
+
+    if (!haveOnlyRequiredDocuments) {
+      return new Response(null, {
+        status: 400
+      })
+    }
+
+    const languageText = LANGUAGE_TEXT[(survey?.lang ?? LANGS.es) as LANGS]
 
     const { name, email } = data.user
 
@@ -124,7 +137,6 @@ export const POST: APIRoute = async ({ params, request }) => {
       ...softSkillQuestions.slice(0, survey.numberOfSoftSkillsQuestions!)
     ]
 
-    // TODO: In future versions, add the option to decide whether to include custom questions or not
     if (!data.isAttempt) {
       questions.push(...survey.customQuestions!)
     }

@@ -5,6 +5,7 @@ import { LANGUAGE_TEXT } from '@constants'
 import { createGroq } from '@ai-sdk/groq'
 import { createQuestionsPrompt } from '@/helpers/prompts/createQuestionsPrompt'
 import { shuffleArray } from '@/helpers/shuffleArray'
+import { LANGS } from '@/i18n/ui'
 
 const groq = createGroq({
   apiKey: import.meta.env.GROQ_API_KEY
@@ -18,7 +19,7 @@ const bodySchema = z.object({
   interviewStyle: z.string(),
   documentsContent: z.string().array().optional(),
   additionalInfo: z.string().optional(),
-  language: z.enum(['es', 'en'])
+  language: z.enum([LANGS.es, LANGS.en])
 })
 
 export const POST: APIRoute = async ({ request }) => {

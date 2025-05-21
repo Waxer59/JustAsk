@@ -1,3 +1,4 @@
+import { LANGS } from '@/i18n/ui'
 import type { Document } from '@/types'
 
 export const ALLOWED_FILE_MIME_TYPES = [
@@ -6,7 +7,9 @@ export const ALLOWED_FILE_MIME_TYPES = [
   'image/png',
   'image/pbm',
   'image/webp',
-  'application/pdf'
+  'application/pdf',
+  'text/plain',
+  'text/markdown'
 ]
 
 export enum LANG_CODES {
@@ -29,7 +32,7 @@ export const CONFETTI_DEFAULTS = {
   zIndex: 0
 }
 
-export const INTERVIEW_LANGUAGES = ['en', 'es'] as const
+export const INTERVIEW_LANGUAGES = [LANGS.en, LANGS.es] as const
 export const MAX_NUMBER_OF_QUESTIONS = 10
 
 export const PRIVATE_ROUTES = ['/dashboard']
@@ -77,6 +80,14 @@ export const DEFAULT_SOFT_SKILLS_QUESTIONS = 3
 export const DEFAULT_SECONDS_PER_QUESTION = 150 // 2.5 min
 export const DEFAULT_NUMBER_OF_ATTEMPT_QUESTIONS = 2
 
+export const PRIVACY_POLICY_VERSION = 1
+
 export const CODE_LENGTH = 8
 
 export const NOT_APLICABLE = 'N/A'
+
+export enum R2Buckets {
+  justask = 'justask'
+}
+
+export const SILENCE_TIME = 3 * 1000 // 3 sec

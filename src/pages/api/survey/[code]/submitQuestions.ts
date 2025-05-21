@@ -8,6 +8,7 @@ import { evaluateSurveyPrompt } from '@/helpers/prompts/evaluateSurveyPrompt'
 import { createSurveyResult } from '@/db/services/surveyResult'
 import { findOrCreateSurveyUser } from '@/db/services/surveyUser'
 import { LANGUAGE_TEXT } from '@/constants'
+import { LANGS } from '@/i18n/ui'
 
 const groq = createGroq({
   apiKey: import.meta.env.GROQ_API_KEY
@@ -65,7 +66,7 @@ export const POST: APIRoute = async ({ request, params }) => {
       })
     }
 
-    const languageText = LANGUAGE_TEXT[survey?.lang ?? 'es']
+    const languageText = LANGUAGE_TEXT[(survey?.lang ?? LANGS.es) as LANGS]
 
     const { toolResults } = await generateText({
       model: groq('gemma2-9b-it'),

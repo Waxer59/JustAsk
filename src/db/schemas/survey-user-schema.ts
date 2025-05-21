@@ -1,4 +1,4 @@
-import { pgTable, text } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { survey } from './survey-schema'
 import { relations } from 'drizzle-orm'
 
@@ -7,7 +7,10 @@ export const surveyUser = pgTable('survey_user', {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name').notNull(),
-  email: text('email').notNull()
+  email: text('email').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  policyAcceptedAt: timestamp('policy_accepted_at'),
+  policyVersion: text('policy_version')
 })
 
 export const surveyUsersToSurveys = pgTable('survey_users_to_surveys', {

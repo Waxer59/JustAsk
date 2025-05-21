@@ -23,6 +23,7 @@ export const SurveyChoicesButtons: React.FC<Props> = ({
   return (
     <div className="mt-12 flex flex-col gap-4 w-full">
       <Button
+        className="capitalize"
         variant="secondary"
         onClick={onAttemptClick}
         disabled={numberOfAttempts === 0}>
@@ -34,7 +35,10 @@ export const SurveyChoicesButtons: React.FC<Props> = ({
         )
       </Button>
       <HorizontalLine text="o" />
-      <Button onClick={onSubmissionClick} disabled={numberOfSubmissions === 0}>
+      <Button
+        className="capitalize"
+        onClick={onSubmissionClick}
+        disabled={numberOfSubmissions === 0}>
         {t('survey.sendAsSubmission', lang)} ({numberOfSubmissions}{' '}
         {(numberOfSubmissions > 1
           ? t('try.plural', lang)

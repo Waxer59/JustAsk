@@ -12,6 +12,9 @@ interface ImportMetaEnv {
   readonly R2_ACCESS_KEY_ID: string
   readonly R2_SECRET_ACCESS_KEY: string
   readonly DATABASE_URL: string
+  readonly JWT_SECRET: string
+  readonly JWT_ALGORITHM: string
+  readonly RAG_API_URL: string
 }
 
 interface ImportMeta {

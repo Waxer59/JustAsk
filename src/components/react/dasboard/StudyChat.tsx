@@ -1,7 +1,6 @@
 import { LANG_CODES, SILENCE_TIME } from '@/constants'
 import { getUserMicrophone } from '@/helpers/getUserMicrophone'
 import { getUiTranslations } from '@/i18n/utils'
-import { useInterviewStore } from '@/store/interview'
 import { AutosizeTextarea } from '@/ui/autosize-textarea'
 import { Button } from '@/ui/button'
 import { Card } from '@/ui/card'
@@ -17,7 +16,8 @@ import hark from 'hark'
 import { Mic, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { Message, type MessageProps } from '../common/Message'
+import { Message } from '../common/Message'
+import { BeatLoader } from 'react-spinners'
 
 const { t, lang } = getUiTranslations()
 
@@ -32,12 +32,11 @@ export const TrainingChat = () => {
       isUser: boolean
     }[]
   >([])
-  const addAnswer = useInterviewStore((state) => state.addAnswer)
   const [isTalking, setIsTalking] = useState<boolean>(false)
   const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')
-  const [allMessages, setAllMessages] = useState<MessageProps[]>([])
   const [currentMessage, setCurrentMessage] = useState<string>('')
   const [mic, setMic] = useState<MediaStream | null>(null)
+  const [isGeneratingQuestion, setIsGeneratingQuestion] = useState(false)
   const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const messagesRef = useRef<HTMLUListElement>(null)
@@ -85,35 +84,50 @@ export const TrainingChat = () => {
       return
     }
 
+    setIsGeneratingQuestion(true)
+    messagesRef.current?.scrollTo({
+      behavior: 'smooth',
+      top: messagesRef.current?.scrollHeight
+    })
     setMessages((prev) => [...prev, { message, isUser: true }])
 
-    // Add the user's message to the state
-    addAnswer(message)
     recognitionRef.current?.stop()
-    setAllMessages((prev) => [...prev, { message: message, isUser: true }])
     setCurrentMessage('')
     setTalkingSubtitle('')
 
-    const resp = await fetch('http://localhost:8000/query', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        question: message,
-        user_id: 'cnV_Xpup92F74sHWDwQ6c'
+    try {
+      const resp = await fetch('/api/dashboard/rag/query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          question: message
+        })
       })
-    })
 
-    const data = await resp.json()
+      const data = await resp.json()
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        message: data.answer,
-        isUser: false
+      if (data.answer) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            message: data.answer,
+            isUser: false
+          }
+        ])
+        messagesRef.current?.scrollTo({
+          behavior: 'smooth',
+          top: messagesRef.current?.scrollHeight
+        })
+      } else {
+        toast.error(t('dashboard.chat.rag.error'))
       }
-    ])
+    } catch {
+      toast.error(t('dashboard.chat.rag.error'))
+    }
+
+    setIsGeneratingQuestion(false)
   }
 
   useEffect(() => {
@@ -207,16 +221,11 @@ export const TrainingChat = () => {
     }
   }, [mic])
 
-  useEffect(() => {
-    messagesRef.current?.scrollTo({
-      behavior: 'smooth',
-      top: messagesRef.current?.scrollHeight
-    })
-  }, [allMessages])
-
   return (
     <div className="mt-8">
-      <ul className="h-[500px] w-full overflow-y-auto flex flex-col gap-3">
+      <ul
+        className="h-[500px] w-full overflow-y-auto flex flex-col gap-3"
+        ref={messagesRef}>
         {messages.map((message, index) => (
           <Message
             key={index}
@@ -227,11 +236,16 @@ export const TrainingChat = () => {
       </ul>
       <form
         ref={formRef}
-        className="flex flex-col items-center relative pb-12"
+        className="flex flex-col items-center relative pb-12 mt-4"
         onSubmit={async (ev) => {
           ev.preventDefault()
           await handleSendMessage()
         }}>
+        {isGeneratingQuestion && (
+          <Card className="absolute -top-14 px-4 py-2">
+            <BeatLoader size={10} color="#fff" />
+          </Card>
+        )}
         {talkingSubtitle.length > 0 && (
           <Card className="absolute -top-14 max-w-3xl mx-auto p-2 overflow-hidden">
             <p className="text-nowrap [direction:rtl]">{talkingSubtitle}</p>

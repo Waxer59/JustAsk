@@ -116,6 +116,9 @@ export default {
   'dashboard.study.tab.chat': 'Chat',
   'dashboard.study.tab.upload': 'Upload Documents',
 
+  // DASHBOARD CHAT RAG
+  'dashboard.chat.rag.error': 'Error generating response',
+
   // DASHBOARD SURVEY OPTIONS
   'dashboard.options.edit': 'Edit',
   'dashboard.options.share': 'Share',

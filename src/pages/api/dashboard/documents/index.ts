@@ -1,5 +1,7 @@
-import { R2Buckets } from '@/constants'
-import { s3Client } from '@/lib/s3Client'
+import { R2Buckets } from '@constants'
+import { createJWT } from '@lib/jwt'
+import { s3Client } from '@lib/s3Client'
+import { addRagDocument, clearRagDocument } from '@services/rag'
 import {
   PutObjectCommand,
   DeleteObjectCommand,
@@ -7,6 +9,7 @@ import {
 } from '@aws-sdk/client-s3'
 import type { APIRoute } from 'astro'
 import { z } from 'astro:content'
+
 export const POST: APIRoute = async ({ locals, request }) => {
   const { user } = locals
 
@@ -32,6 +35,10 @@ export const POST: APIRoute = async ({ locals, request }) => {
     )
   }
 
+  const jwtToken = createJWT({
+    user_id: user.id
+  })
+
   await Promise.all(
     files.map(async (file) => {
       const arrayBuffer = await file.arrayBuffer()
@@ -46,6 +53,8 @@ export const POST: APIRoute = async ({ locals, request }) => {
           ContentType: file.type
         })
       )
+
+      await addRagDocument(key, jwtToken)
     })
   )
 
@@ -78,6 +87,10 @@ export const DELETE: APIRoute = async ({ locals, request }) => {
 
   const { files } = body
 
+  const jwtToken = createJWT({
+    user_id: user.id
+  })
+
   await Promise.all(
     files.map(async (file: string) => {
       const key = `${user.id}/${file}`
@@ -87,6 +100,8 @@ export const DELETE: APIRoute = async ({ locals, request }) => {
           Key: key
         })
       )
+
+      await clearRagDocument(key, jwtToken)
     })
   )
 

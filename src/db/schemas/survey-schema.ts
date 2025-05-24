@@ -4,7 +4,8 @@ import {
   text,
   integer,
   uniqueIndex,
-  boolean
+  boolean,
+  timestamp
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 import {
@@ -59,7 +60,9 @@ export const survey = pgTable(
     userId: text('user_id').references(() => user.id, {
       onDelete: 'cascade',
       onUpdate: 'cascade'
-    })
+    }),
+    isDisabled: boolean('is_disabled').default(false),
+    disableAt: timestamp('disable_at')
   },
   (table) => ({
     code: uniqueIndex('code_idx').on(table.code),

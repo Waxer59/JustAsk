@@ -8,6 +8,7 @@ import { InterviewFeedback } from '../common/InterviewFeedback'
 import { Loading } from '../common/Loading'
 import { Questions } from './QuestionsFinal'
 import { getUiTranslations } from '@/i18n/utils'
+import type { LANGS } from '@/i18n/ui'
 
 const { t, lang } = getUiTranslations()
 
@@ -57,7 +58,7 @@ export const FinalStep = () => {
             setHasInterviewFinished(true)
           }}
           questions={interviewQuestions}
-          lang={lang}
+          lang={lang as LANGS}
         />
       )}
 

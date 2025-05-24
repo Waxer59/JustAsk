@@ -13,23 +13,39 @@ import { useForm } from 'react-hook-form'
 import { Button } from '@/ui/button'
 import { useSurveyStore } from '@/store/survey'
 import { surveyUserDataSchema } from '@/lib/validationSchemas/survey-user-data'
+import { getUiTranslations } from '@/i18n/utils'
+import { Checkbox } from '@/ui/checkbox'
+import { toast } from 'sonner'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+
+const { t } = getUiTranslations()
 
 export const SurveyUserDataForm = () => {
   const email = useSurveyStore((state) => state.email)
   const name = useSurveyStore((state) => state.name)
+  const consent = useSurveyStore((state) => state.consent)
   const form = useForm<z.infer<typeof surveyUserDataSchema>>({
     resolver: zodResolver(surveyUserDataSchema),
     defaultValues: {
       name,
-      email
+      email,
+      consent
     }
   })
+  const lang = useSurveyStore((state) => state.lang)
   const setName = useSurveyStore((state) => state.setName)
   const setEmail = useSurveyStore((state) => state.setEmail)
+  const setConsent = useSurveyStore((state) => state.setConsent)
   const nextStep = useSurveyStore((state) => state.nextStep)
 
   const onSubmit = (values: z.infer<typeof surveyUserDataSchema>) => {
+    if (!values.consent) {
+      toast.error(t('survey.userData.consentRequired', lang))
+      return
+    }
+
     setName(values.name)
+    setConsent(values.consent)
     setEmail(values.email)
     nextStep()
   }
@@ -42,7 +58,7 @@ export const SurveyUserDataForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t('survey.userData.name', lang)}</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -60,7 +76,7 @@ export const SurveyUserDataForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>E-mail</FormLabel>
+              <FormLabel>{t('survey.userData.email', lang)}</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -74,8 +90,34 @@ export const SurveyUserDataForm = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="consent"
+          render={({ field }) => (
+            <FormItem className="flex items-center gap-2">
+              <FormControl>
+                <Checkbox
+                  id="consent"
+                  defaultChecked={field.value}
+                  className="text-lg"
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel
+                htmlFor="consent"
+                className="text-md !mt-0 underline cursor-pointer">
+                <a
+                  href={getRelativeLocaleUrl(lang, '/privacy-policy')}
+                  target="_blank">
+                  {t('survey.userData.consent', lang)}
+                </a>
+              </FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit" className="mx-auto">
-          Continuar
+          {t('survey.userData.continue', lang)}
         </Button>
       </form>
     </Form>

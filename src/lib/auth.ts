@@ -33,7 +33,7 @@ export const auth = betterAuth({
         const t = useTranslations(lang)
 
         await resend.emails.send({
-          from: 'noreply@justask.app',
+          from: import.meta.env.RESEND_EMAIL,
           to: email,
           subject: t('email.magicLink.subject'),
           html: magicLinkEmail(url, lang)

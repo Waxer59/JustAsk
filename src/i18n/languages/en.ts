@@ -90,6 +90,7 @@ export default {
   'fileUpload.loading': 'Loading file...',
   'fileUpload.success': 'File uploaded successfully',
   'fileRemove.success': 'File removed successfully',
+  'fileUpload.uploading': 'Uploading...',
 
   // GENERICS
   score: 'Score',
@@ -105,10 +106,44 @@ export default {
   'tooltip.options': 'Options',
 
   // DASHBOARD
-  'dashboard.title': 'Dashboard',
+  'dashboard.surveys.title': 'Surveys',
+  'dashboard.training.title': 'Training',
   'dashboard.createSurvey': 'Create Survey',
   'dashboard.account.signOut': 'Sign Out',
   'dashboard.account.title': 'My Account',
+
+  // DASHBOARD TRAINING
+  'dashboard.study.tab.chat': 'Chat',
+  'dashboard.study.tab.upload': 'Upload Documents',
+
+  // DASHBOARD CHAT RAG
+  'dashboard.chat.rag.error': 'Error generating response',
+  'dashboard.chat.rag.generateFeedback': 'Generate feedback',
+  'dashboard.chat.rag.feedback': 'Feedback',
+
+  // DASHBOARD CUSTOM AGENT
+  'dashboard.customAgent.create': 'Create custom agent',
+  'dashboard.customAgent.dialog.description':
+    'This will create a custom agent for you to use.',
+  'dashboard.customAgent.name': 'Name',
+  'dashboard.customAgent.description': 'Description',
+  'dashboard.customAgent.action': 'What do you want your agent to do?',
+  'dashboard.customAgent.loading': 'Creating custom agent...',
+  'dashboard.customAgent.success': 'Custom agent created successfully',
+  'dashboard.customAgent.error':
+    'An error occurred while creating the custom agent',
+  'dashboard.agentsResponse.error':
+    'An error occurred while getting the agents',
+  'dahboard.agents.delete.success': 'Agent deleted successfully',
+  'dahboard.agents.delete.error': 'An error occurred while deleting the agent',
+  'dashboard.agents.custom.opening': 'Start the conversation!',
+  'dashboard.agents.custom.edit': 'Edit agent',
+  'dashboard.agents.custom.edit.description':
+    "Edit the agent's name, description, and action",
+  'dashboard.agents.custom.editing': 'Editing agent...',
+  'dashboard.agents.custom.edit.success': 'Agent edited successfully',
+  'dashboard.agents.custom.edit.error':
+    'An error occurred while editing the agent',
 
   // DASHBOARD SURVEY OPTIONS
   'dashboard.options.edit': 'Edit',
@@ -235,6 +270,12 @@ export default {
   // DASHBOARD EDIT SURVEY
   'dashboard.editSurvey.save': 'Save',
 
+  // DASHBOARD SIDEBAR
+  'dasboard.sidebar.surveys': 'Surveys',
+  'dashboard.sidebar.study': 'Study',
+  'dashboard.sidebar.label': 'Tools',
+  'dashboard.sidebar.agents': 'Agents',
+
   // SURVEY COMPLETED
   'surveyCompleted.feedback': 'Thanks for completing the survey!',
 
@@ -248,6 +289,7 @@ export default {
   'dashboard.table.isAttempt': 'Is Attempt',
   'dashboard.table.actions': 'Actions',
   'dashboard.table.actions.open': 'Open menu',
+  'dashboard.table.actions.delete': 'Delete',
   'dashboard.table.actions.viewChat': 'View chat',
   'dashboard.table.actions.viewChat.description':
     'Chat between the candidate and the interviewer',
@@ -259,6 +301,11 @@ export default {
   'dashboard.table.previous': 'Previous',
   'dashboard.table.noResults': 'No results',
   'dashboard.table.filter': 'Filter',
+  'dashboard.table.type': 'Type',
+  'dashboard.table.actions.view': 'View',
+  'dashboard.table.actions.deleting': 'Deleting...',
+  'dashboard.table.actions.deleted': 'Deleted successfully',
+  'dashboard.table.actions.error': 'An error occurred while deleting the file',
 
   // SURVEY
   'survey.description':
@@ -266,10 +313,15 @@ export default {
   'survey.salute': 'Welcome to the survey',
   'survey.choices': 'Choose an option',
   'survey.sendAsAttempt': 'Training',
-  'survey.sendAsSubmission': 'Send as submission',
+  'survey.sendAsSubmission': 'Send final test',
   'survey.noAnswer': 'No answer',
   'survey.viewFeedback': 'View feedback',
   'survey.feedback': 'Feedback',
+  'survey.userData.name': 'Name',
+  'survey.userData.email': 'Email',
+  'survey.userData.continue': 'Continue',
+  'survey.userData.consent': 'I have read and accept the Privacy Policy.',
+  'survey.userData.consentRequired': 'You must accept the Privacy Policy.',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Login Link',

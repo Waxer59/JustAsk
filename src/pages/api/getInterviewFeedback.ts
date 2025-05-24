@@ -1,4 +1,5 @@
 import { getInterviewFeedbackPrompt } from '@/helpers/prompts/getInterviewFeedbackPrompt'
+import { LANGS } from '@/i18n/ui'
 import { createGroq } from '@ai-sdk/groq'
 import { generateText } from 'ai'
 import type { APIRoute } from 'astro'
@@ -15,7 +16,7 @@ const bodySchema = z.object({
   }),
   interviewQuestions: z.string().array(),
   interviewResponses: z.string().array(),
-  language: z.enum(['es', 'en'])
+  language: z.enum([LANGS.es, LANGS.en])
 })
 
 export const POST: APIRoute = async ({ request }) => {

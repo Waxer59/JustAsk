@@ -6,7 +6,12 @@ export const languages = {
   es: 'Spanish'
 }
 
-export const defaultLang = 'es'
+export enum LANGS {
+  en = 'en',
+  es = 'es'
+}
+
+export const defaultLang = LANGS.es
 
 export const ui = {
   en,

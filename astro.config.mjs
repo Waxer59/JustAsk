@@ -6,6 +6,8 @@ import { defaultLang, languages } from './src/i18n/ui'
 import sitemap from '@astrojs/sitemap'
 import { cannonicalURL } from './src/constants/seo'
 
+import mdx from '@astrojs/mdx';
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -19,13 +21,9 @@ export default defineConfig({
   output: 'server',
   site: cannonicalURL,
   adapter: vercel(),
-  integrations: [
-    tailwind({
-      applyBaseStyles: false
-    }),
-    react(),
-    sitemap()
-  ],
+  integrations: [tailwind({
+    applyBaseStyles: false
+  }), react(), sitemap(), mdx()],
   devToolbar: {
     enabled: false
   },

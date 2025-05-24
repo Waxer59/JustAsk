@@ -83,12 +83,13 @@ export default {
     'Tu navegador no soporta el reconocimiento de voz, por favor utiliza un navegador compatible con esta característica.',
 
   // ERRORS
-  'error.creatingQuestions': 'Ocurrio un error al crear las preguntas.',
+  'error.creatingQuestions': 'Ocurrió un error al crear las preguntas.',
 
   // FILE UPLOAD
-  'fileUpload.error': 'Ocurrio un error subiendo el archivo',
+  'fileUpload.error': 'Ocurrió un error subiendo el archivo',
   'fileUpload.loading': 'Cargando archivo...',
   'fileUpload.success': 'Archivo subido correctamente',
+  'fileUpload.uploading': 'Subiendo...',
   'fileRemove.success': 'Archivo eliminado correctamente',
 
   // GENERICS
@@ -105,10 +106,48 @@ export default {
   'tooltip.options': 'Opciones',
 
   // DASHBOARD
-  'dashboard.title': 'Panel de Control',
+  'dashboard.surveys.title': 'Encuestas',
+  'dashboard.training.title': 'Entrenamiento',
   'dashboard.createSurvey': 'Crear Encuesta',
   'dashboard.account.title': 'Mi cuenta',
   'dashboard.account.signOut': 'Cerrar sesión',
+
+  // DASHBOARD SIDEBAR
+  'dasboard.sidebar.surveys': 'Encuestas',
+  'dashboard.sidebar.study': 'Estudio',
+  'dashboard.sidebar.label': 'Herramientas',
+  'dashboard.sidebar.agents': 'Agentes',
+
+  // DASHBOARD TRAINING
+  'dashboard.study.tab.chat': 'Chat',
+  'dashboard.study.tab.upload': 'Subir Documentos',
+
+  // DASHBOARD CHAT RAG
+  'dashboard.chat.rag.error': 'Error al generar respuesta',
+  'dashboard.chat.rag.generateFeedback': 'Generar retroalimentación',
+  'dashboard.chat.rag.feedback': 'Retroalimentación',
+
+  // DASHBOARD CUSTOM AGENT
+  'dashboard.customAgent.create': 'Crear agente personalizado',
+  'dashboard.customAgent.dialog.description':
+    'Esto creará un agente personalizado para uso.',
+  'dashboard.customAgent.name': 'Nombre',
+  'dashboard.customAgent.description': 'Descripción',
+  'dashboard.customAgent.action': '¿Qué quieres que tu agente haga?',
+  'dashboard.customAgent.loading': 'Creando agente personalizado...',
+  'dashboard.customAgent.success': 'Agente personalizado creado correctamente',
+  'dashboard.customAgent.error':
+    'Ocurrió un error al crear el agente personalizado',
+  'dashboard.agentsResponse.error': 'Ocurrió un error al obtener los agentes',
+  'dahboard.agents.delete.success': 'Agente eliminado correctamente',
+  'dahboard.agents.delete.error': 'Ocurrió un error al eliminar el agente',
+  'dashboard.agents.custom.opening': '¡Comienza la conversación!',
+  'dashboard.agents.custom.edit': 'Editar agente',
+  'dashboard.agents.custom.edit.description':
+    'Edita el nombre, la descripción y la acción del agente',
+  'dashboard.agents.custom.editing': 'Editando agente...',
+  'dashboard.agents.custom.edit.success': 'Agente editado correctamente',
+  'dashboard.agents.custom.edit.error': 'Ocurrió un error al editar el agente',
 
   // DASHBOARD SURVEY OPTIONS
   'dashboard.options.edit': 'Editar',
@@ -248,6 +287,7 @@ export default {
   'dashboard.table.hardSkillsScore': 'Puntuación de habilidades técnicas',
   'dashboard.table.actions': 'Acciones',
   'dashboard.table.actions.open': 'Abrir menu',
+  'dashboard.table.actions.delete': 'Eliminar',
   'dashboard.table.actions.viewChat': 'Ver chat',
   'dashboard.table.actions.viewChat.description':
     'Chat entre el candidato y el entrevistador',
@@ -260,6 +300,11 @@ export default {
   'dashboard.table.previous': 'Anterior',
   'dashboard.table.noResults': 'No hay resultados',
   'dashboard.table.filter': 'Filtrar',
+  'dashboard.table.type': 'Tipo',
+  'dashboard.table.actions.view': 'Ver',
+  'dashboard.table.actions.deleting': 'Eliminando...',
+  'dashboard.table.actions.deleted': 'Eliminado correctamente',
+  'dashboard.table.actions.error': 'Ocurrió un error al eliminar el archivo',
 
   // SURVEY
   'survey.description':
@@ -267,10 +312,15 @@ export default {
   'survey.salute': 'Bienvenido a la encuesta',
   'survey.choices': 'Elige una opción',
   'survey.sendAsAttempt': 'Entrenar',
-  'survey.sendAsSubmission': 'Enviar como envío',
+  'survey.sendAsSubmission': 'Enviar prueba final',
   'survey.noAnswer': 'Sin respuesta',
   'survey.viewFeedback': 'Ver feedback',
   'survey.feedback': 'Feedback',
+  'survey.userData.name': 'Nombre',
+  'survey.userData.email': 'Correo electrónico',
+  'survey.userData.continue': 'Continuar',
+  'survey.userData.consent': 'He leído y acepto la Política de Privacidad.',
+  'survey.userData.consentRequired': 'Debes aceptar la Política de Privacidad.',
 
   // EMAILS
   'email.magicLink.subject': 'JustAsk - Enlace de inicio de sesión',

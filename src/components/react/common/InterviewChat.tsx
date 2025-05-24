@@ -13,16 +13,15 @@ import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import hark, { type Harker } from 'hark'
 import { getUserMicrophone } from '@/helpers/getUserMicrophone'
-import { LANG_CODES } from '@/constants'
+import { LANG_CODES, SILENCE_TIME } from '@/constants'
 import { Card } from '@/ui/card'
 import { getUiTranslations } from '@/i18n/utils'
 import { Message, type MessageProps } from './Message'
 import { timeFormatter } from '@/helpers/timeFormatter'
 import type { SupportedLanguages } from '@/types'
+import { LANGS } from '@/i18n/ui'
 
 const { t } = getUiTranslations()
-
-const SILENCE_TIME = 3 * 1000 // 3 sec
 
 interface Props {
   questions: string[]
@@ -37,7 +36,7 @@ const SpeechRecognition =
 
 export const InterviewChat: React.FC<Props> = ({
   questions,
-  lang = 'es',
+  lang = LANGS.es,
   secondsToAnswer,
   onSubmit
 }) => {

@@ -10,7 +10,7 @@ export const InterviewProcessLayout: React.FC<Props> = ({
   return (
     <div className="h-screen flex flex-col">
       <header className="pt-28 flex flex-col gap-10">{header}</header>
-      <main className="max-w-3xl mx-auto w-full mt-28 flex flex-col gap-10 flex-1 overflow-hidden">
+      <main className="max-w-3xl mx-auto w-full mt-28 flex flex-col gap-10 flex-1 overflow-y-auto">
         {children}
       </main>
     </div>

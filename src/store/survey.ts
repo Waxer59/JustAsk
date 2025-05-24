@@ -1,3 +1,4 @@
+import { LANGS } from '@/i18n/ui'
 import {
   numberOfSurveySteps,
   SurveySteps,
@@ -11,6 +12,7 @@ interface State {
   currentSurveyId: string
   name: string
   email: string
+  consent: boolean
   currentStep: SurveySteps
   files: SurveyDocumentContent[]
   haveRequiredDocuments: boolean
@@ -28,6 +30,7 @@ interface Actions {
   setHaveRequiredDocuments: (haveRequiredDocuments: boolean) => void
   setIsAttempt: (isAttempt: boolean) => void
   setLang: (lang: SupportedLanguages) => void
+  setConsent: (consent: boolean) => void
   nextStep: () => void
   prevStep: () => void
   clear: () => void
@@ -41,7 +44,8 @@ const initialState: State = {
   files: [],
   haveRequiredDocuments: false,
   isAttempt: false,
-  lang: 'es'
+  lang: LANGS.es,
+  consent: false
 }
 
 export const useSurveyStore = create<State & Actions>()(
@@ -99,14 +103,17 @@ export const useSurveyStore = create<State & Actions>()(
       },
       setIsAttempt: (isAttempt) => set({ isAttempt: isAttempt }),
       setLang: (lang) => set({ lang: lang }),
+      setConsent: (consent) => set({ consent: consent }),
       clear: () => set(initialState)
     })),
     {
       name: 'survey-data',
       partialize: (state) => ({
         name: state.name,
-        email: state.email
-      })
+        email: state.email,
+        consent: state.consent
+      }),
+      version: 2
     }
   )
 )

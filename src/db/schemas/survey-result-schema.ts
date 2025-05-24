@@ -9,6 +9,7 @@ import {
 import { survey } from './survey-schema'
 import { surveyUser } from './survey-user-schema'
 import { relations } from 'drizzle-orm'
+import { PRIVACY_POLICY_VERSION } from '@/constants'
 
 export const surveyResult = pgTable('survey_result', {
   id: text('id')
@@ -24,6 +25,12 @@ export const surveyResult = pgTable('survey_result', {
   category: text('category'),
   surveyLog: json('survey_log'),
   isAttempt: boolean('is_attempt').default(false),
+  privacyPolicyAcceptedAt: timestamp('privacy_policy_accepted_at')
+    .defaultNow()
+    .notNull(),
+  privacyPolicyVersion: integer('privacy_policy_version')
+    .default(PRIVACY_POLICY_VERSION)
+    .notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 })
 

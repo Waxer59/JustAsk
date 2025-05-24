@@ -121,6 +121,30 @@ export default {
   'dashboard.chat.rag.generateFeedback': 'Generate feedback',
   'dashboard.chat.rag.feedback': 'Feedback',
 
+  // DASHBOARD CUSTOM AGENT
+  'dashboard.customAgent.create': 'Create custom agent',
+  'dashboard.customAgent.dialog.description':
+    'This will create a custom agent for you to use.',
+  'dashboard.customAgent.name': 'Name',
+  'dashboard.customAgent.description': 'Description',
+  'dashboard.customAgent.action': 'What do you want your agent to do?',
+  'dashboard.customAgent.loading': 'Creating custom agent...',
+  'dashboard.customAgent.success': 'Custom agent created successfully',
+  'dashboard.customAgent.error':
+    'An error occurred while creating the custom agent',
+  'dashboard.agentsResponse.error':
+    'An error occurred while getting the agents',
+  'dahboard.agents.delete.success': 'Agent deleted successfully',
+  'dahboard.agents.delete.error': 'An error occurred while deleting the agent',
+  'dashboard.agents.custom.opening': 'Start the conversation!',
+  'dashboard.agents.custom.edit': 'Edit agent',
+  'dashboard.agents.custom.edit.description':
+    "Edit the agent's name, description, and action",
+  'dashboard.agents.custom.editing': 'Editing agent...',
+  'dashboard.agents.custom.edit.success': 'Agent edited successfully',
+  'dashboard.agents.custom.edit.error':
+    'An error occurred while editing the agent',
+
   // DASHBOARD SURVEY OPTIONS
   'dashboard.options.edit': 'Edit',
   'dashboard.options.share': 'Share',

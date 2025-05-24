@@ -29,6 +29,14 @@ export interface SurveyResult {
   }[]
 }
 
+export interface AgentDetails {
+  id: string
+  name: string
+  description: string
+  action?: string
+  isCustom: boolean
+}
+
 export interface UploadedDocument {
   name: string
 }

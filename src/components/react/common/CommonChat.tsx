@@ -213,7 +213,7 @@ export const CommonChat: React.FC<Props> = ({
   return (
     <div className="mt-8">
       <ul
-        className="h-[500px] w-full overflow-y-auto flex flex-col gap-3"
+        className="h-[500px] w-full overflow-y-auto flex flex-col gap-3 pr-2"
         ref={messagesRef}>
         {messages.map((message, index) => (
           <Message

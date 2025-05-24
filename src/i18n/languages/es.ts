@@ -127,6 +127,28 @@ export default {
   'dashboard.chat.rag.generateFeedback': 'Generar retroalimentación',
   'dashboard.chat.rag.feedback': 'Retroalimentación',
 
+  // DASHBOARD CUSTOM AGENT
+  'dashboard.customAgent.create': 'Crear agente personalizado',
+  'dashboard.customAgent.dialog.description':
+    'Esto creará un agente personalizado para uso.',
+  'dashboard.customAgent.name': 'Nombre',
+  'dashboard.customAgent.description': 'Descripción',
+  'dashboard.customAgent.action': '¿Qué quieres que tu agente haga?',
+  'dashboard.customAgent.loading': 'Creando agente personalizado...',
+  'dashboard.customAgent.success': 'Agente personalizado creado correctamente',
+  'dashboard.customAgent.error':
+    'Ocurrió un error al crear el agente personalizado',
+  'dashboard.agentsResponse.error': 'Ocurrió un error al obtener los agentes',
+  'dahboard.agents.delete.success': 'Agente eliminado correctamente',
+  'dahboard.agents.delete.error': 'Ocurrió un error al eliminar el agente',
+  'dashboard.agents.custom.opening': '¡Comienza la conversación!',
+  'dashboard.agents.custom.edit': 'Editar agente',
+  'dashboard.agents.custom.edit.description':
+    'Edita el nombre, la descripción y la acción del agente',
+  'dashboard.agents.custom.editing': 'Editando agente...',
+  'dashboard.agents.custom.edit.success': 'Agente editado correctamente',
+  'dashboard.agents.custom.edit.error': 'Ocurrió un error al editar el agente',
+
   // DASHBOARD SURVEY OPTIONS
   'dashboard.options.edit': 'Editar',
   'dashboard.options.share': 'Compartir',

@@ -1,49 +1,17 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { DashboardLayout } from '@layouts/react/DashboardLayout'
-import { AgentCard } from '@components/react/dasboard/AgentCard'
-import { getLangFromUrl } from '@/i18n/utils'
-import { createJWT } from '@/lib/jwt'
-import { getAgents } from '@/services/rag'
-
-const { user } = Astro.locals
-
-const lang = getLangFromUrl(Astro.url)
-const jwtToken = createJWT({
-  user_id: user!.id
-})
-
-const agents = await getAgents(lang, jwtToken)
+import { CustomAgentButton } from '@/components/react/dasboard/CustomAgentButton'
+import { AgentCards } from '@/components/react/dasboard/AgentCards'
 ---
 
 <BaseLayout>
   <DashboardLayout client:only="react">
     <div
       class="flex flex-col gap-4 items-center sm:flex-row justify-between sm:items-end my-8 w-full">
-      <h1 class="text-4xl font-bold">
-        <a href="/dashboard">Agentes</a>
-      </h1>
+      <h1 class="text-4xl font-bold">Agentes</h1>
+      <CustomAgentButton client:only="react" />
     </div>
-    <ul class="grid grid-cols-6 gap-4">
-      {
-        agents?.map(
-          (agent: {
-            id: string
-            name: string
-            description: string
-            isCustom: boolean
-          }) => (
-            <li class="col-span-full md:col-span-3 xl:col-span-2">
-              <AgentCard
-                id={agent.id}
-                title={agent.name}
-                description={agent.description}
-                client:only="react"
-              />
-            </li>
-          )
-        )
-      }
-    </ul>
+    <AgentCards client:only="react" />
   </DashboardLayout>
 </BaseLayout>

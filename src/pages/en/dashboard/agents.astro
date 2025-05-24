@@ -1,6 +1,19 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { DashboardLayout } from '@layouts/react/DashboardLayout'
+import { AgentCard } from '@components/react/dasboard/AgentCard'
+import { getLangFromUrl } from '@/i18n/utils'
+import { createJWT } from '@/lib/jwt'
+import { getAgents } from '@/services/rag'
+
+const { user } = Astro.locals
+
+const lang = getLangFromUrl(Astro.url)
+const jwtToken = createJWT({
+  user_id: user!.id
+})
+
+const agents = await getAgents(lang, jwtToken)
 ---
 
 <BaseLayout>
@@ -11,5 +24,26 @@ import { DashboardLayout } from '@layouts/react/DashboardLayout'
         <a href="/dashboard">Agents</a>
       </h1>
     </div>
+    <ul class="grid grid-cols-6 gap-4">
+      {
+        agents?.map(
+          (agent: {
+            id: string
+            name: string
+            description: string
+            isCustom: boolean
+          }) => (
+            <li class="col-span-full md:col-span-3 xl:col-span-2">
+              <AgentCard
+                id={agent.id}
+                title={agent.name}
+                description={agent.description}
+                client:only="react"
+              />
+            </li>
+          )
+        )
+      }
+    </ul>
   </DashboardLayout>
 </BaseLayout>

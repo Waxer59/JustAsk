@@ -56,3 +56,18 @@ export const addRagDocument = async (documentId: string, jwtToken: string) => {
     return null
   }
 }
+
+export const getAgents = async (lang: string, jwtToken: string) => {
+  try {
+    const response = await fetch(`${RAG_API_URL}/agents?lang=${lang}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      }
+    })
+    return await response.json()
+  } catch {
+    return null
+  }
+}

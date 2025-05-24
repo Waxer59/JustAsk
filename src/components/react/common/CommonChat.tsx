@@ -16,22 +16,31 @@ import hark from 'hark'
 import { Mic, Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { Message } from '../common/Message'
+import { Message } from './Message'
 import { BeatLoader } from 'react-spinners'
 
 const { t, lang } = getUiTranslations()
+
+export interface CommonChatMessage {
+  message: string
+  isUser: boolean
+}
 
 const SpeechRecognition =
   // @ts-expect-error https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#javascript
   window.SpeechRecognition || window.webkitSpeechRecognition
 
-export const TrainingChat = () => {
-  const [messages, setMessages] = useState<
-    {
-      message: string
-      isUser: boolean
-    }[]
-  >([])
+interface Props {
+  onSubmit?: (message: string) => Promise<void>
+  setMessages: React.Dispatch<React.SetStateAction<CommonChatMessage[]>>
+  messages: CommonChatMessage[]
+}
+
+export const CommonChat: React.FC<Props> = ({
+  onSubmit,
+  setMessages,
+  messages
+}) => {
   const [isTalking, setIsTalking] = useState<boolean>(false)
   const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')
   const [currentMessage, setCurrentMessage] = useState<string>('')
@@ -84,48 +93,23 @@ export const TrainingChat = () => {
       return
     }
 
-    setIsGeneratingQuestion(true)
     messagesRef.current?.scrollTo({
       behavior: 'smooth',
       top: messagesRef.current?.scrollHeight
     })
+    setIsGeneratingQuestion(true)
     setMessages((prev) => [...prev, { message, isUser: true }])
 
     recognitionRef.current?.stop()
     setCurrentMessage('')
     setTalkingSubtitle('')
 
-    try {
-      const resp = await fetch('/api/dashboard/rag/query', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          question: message
-        })
-      })
+    await onSubmit?.(message)
 
-      const data = await resp.json()
-
-      if (data.answer) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            message: data.answer,
-            isUser: false
-          }
-        ])
-        messagesRef.current?.scrollTo({
-          behavior: 'smooth',
-          top: messagesRef.current?.scrollHeight
-        })
-      } else {
-        toast.error(t('dashboard.chat.rag.error'))
-      }
-    } catch {
-      toast.error(t('dashboard.chat.rag.error'))
-    }
+    messagesRef.current?.scrollTo({
+      behavior: 'smooth',
+      top: messagesRef.current?.scrollHeight
+    })
 
     setIsGeneratingQuestion(false)
   }
@@ -236,7 +220,7 @@ export const TrainingChat = () => {
       </ul>
       <form
         ref={formRef}
-        className="flex flex-col items-center relative pb-12 mt-4"
+        className="flex flex-col items-center relative mt-4"
         onSubmit={async (ev) => {
           ev.preventDefault()
           await handleSendMessage()

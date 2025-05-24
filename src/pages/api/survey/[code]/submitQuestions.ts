@@ -76,7 +76,11 @@ export const POST: APIRoute = async ({ request, params }) => {
         jobAditionalInfo: survey.offerAdditionalInfo ?? '',
         JobStyle: survey.offerStyle,
         questions: data.questions,
-        lang: languageText
+        lang: languageText,
+        categories: survey.surveysToSurveyCategories.map((survey) => ({
+          name: survey.category!.name,
+          description: survey.category!.description ?? ''
+        }))
       }),
       toolChoice: 'required',
       tools: {
@@ -95,7 +99,11 @@ export const POST: APIRoute = async ({ request, params }) => {
               .describe('Hard Skills Score'),
             overallScore: z.number().min(0).max(10).describe('Overall Score'),
             category: z
-              .string()
+              .enum(
+                survey.surveysToSurveyCategories.map(
+                  (survey) => survey.category!.name
+                ) as [string, ...string[]]
+              )
               .describe('Category of the candidate')
               .optional(),
             feedback: z

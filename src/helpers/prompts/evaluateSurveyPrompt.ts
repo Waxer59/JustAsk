@@ -4,7 +4,8 @@ export const evaluateSurveyPrompt = ({
   jobAditionalInfo,
   JobStyle,
   questions,
-  lang
+  lang,
+  categories
 }: {
   jobTitle: string
   jobDescription: string
@@ -12,6 +13,7 @@ export const evaluateSurveyPrompt = ({
   JobStyle: string
   questions: Array<{ question: string; answer: string }>
   lang: string
+  categories: Array<{ name: string; description: string }>
 }): string => `
 As an expert evaluator for job interviews, your task is to assess and provide scores for a candidate's job interview performance, along with constructive feedback, based on the following parameters:
 
@@ -44,6 +46,8 @@ As an expert evaluator for job interviews, your task is to assess and provide sc
 - **Interview Style:** ${JobStyle}
 
 ${jobAditionalInfo ? `Additional Information: ${jobAditionalInfo}` : ''}
+
+${categories.length > 0 ? `You MUST categorize the user based on the following categories: ${categories.map(({ name, description }) => `${name}: ${description}`).join(', ')}` : ''}
 
 ### Questions and Answers:
 ${questions.map(({ question, answer }) => `Question: ${question} Answer: ${answer}`).join('\n')}

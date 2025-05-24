@@ -12,9 +12,11 @@ const queryClient = new QueryClient()
 
 export const StudySection = () => {
   const [messages, setMessages] = useState<CommonChatMessage[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (message: string) => {
     try {
+      setIsLoading(true)
       const resp = await fetch('/api/dashboard/rag/query', {
         method: 'POST',
         headers: {
@@ -41,6 +43,7 @@ export const StudySection = () => {
     } catch {
       toast.error(t('dashboard.chat.rag.error'))
     }
+    setIsLoading(false)
   }
 
   return (
@@ -56,6 +59,7 @@ export const StudySection = () => {
         </TabsList>
         <TabsContent value="chat" className="relative">
           <CommonChat
+            isLoading={isLoading}
             messages={messages}
             onSubmit={handleSubmit}
             setMessages={setMessages}

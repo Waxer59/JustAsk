@@ -56,7 +56,7 @@ export function DashboardLayout({ children }: Props) {
   }, [])
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <DashboardSidebar />
       <div className="w-full">
         <header className="mt-16 flex justify-between items-center w-full relative">

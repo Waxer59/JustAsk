@@ -34,18 +34,19 @@ interface Props {
   onSubmit?: (message: string) => Promise<void>
   setMessages: React.Dispatch<React.SetStateAction<CommonChatMessage[]>>
   messages: CommonChatMessage[]
+  isLoading?: boolean
 }
 
 export const CommonChat: React.FC<Props> = ({
   onSubmit,
   setMessages,
-  messages
+  messages,
+  isLoading
 }) => {
   const [isTalking, setIsTalking] = useState<boolean>(false)
   const [talkingSubtitle, setTalkingSubtitle] = useState<string>('')
   const [currentMessage, setCurrentMessage] = useState<string>('')
   const [mic, setMic] = useState<MediaStream | null>(null)
-  const [isGeneratingQuestion, setIsGeneratingQuestion] = useState(false)
   const recognitionRef = useRef<typeof SpeechRecognition>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const messagesRef = useRef<HTMLUListElement>(null)
@@ -97,7 +98,6 @@ export const CommonChat: React.FC<Props> = ({
       behavior: 'smooth',
       top: messagesRef.current?.scrollHeight
     })
-    setIsGeneratingQuestion(true)
     setMessages((prev) => [...prev, { message, isUser: true }])
 
     recognitionRef.current?.stop()
@@ -110,8 +110,6 @@ export const CommonChat: React.FC<Props> = ({
       behavior: 'smooth',
       top: messagesRef.current?.scrollHeight
     })
-
-    setIsGeneratingQuestion(false)
   }
 
   useEffect(() => {
@@ -205,6 +203,13 @@ export const CommonChat: React.FC<Props> = ({
     }
   }, [mic])
 
+  useEffect(() => {
+    messagesRef.current?.scrollTo({
+      behavior: 'smooth',
+      top: messagesRef.current?.scrollHeight
+    })
+  }, [messages])
+
   return (
     <div className="mt-8">
       <ul
@@ -225,7 +230,7 @@ export const CommonChat: React.FC<Props> = ({
           ev.preventDefault()
           await handleSendMessage()
         }}>
-        {isGeneratingQuestion && (
+        {isLoading && (
           <Card className="absolute -top-14 px-4 py-2">
             <BeatLoader size={10} color="#fff" />
           </Card>
@@ -239,10 +244,11 @@ export const CommonChat: React.FC<Props> = ({
           onKeyDown={handleContentKeyDown}
           placeholder="..."
           value={currentMessage}
+          disabled={isLoading}
           onChange={(e) => setCurrentMessage(e.target.value)}
           name="message"
           maxHeight={200}
-          className="resize-none text-lg h-[54px] pr-[50px] pl-[70px]"
+          className="resize-none text-lg h-[54px] pr-[50px] pl-[70px] text-white"
         />
         <Toggle
           onClick={onToggleClick}

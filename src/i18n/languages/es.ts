@@ -124,6 +124,8 @@ export default {
 
   // DASHBOARD CHAT RAG
   'dashboard.chat.rag.error': 'Error al generar respuesta',
+  'dashboard.chat.rag.generateFeedback': 'Generar retroalimentación',
+  'dashboard.chat.rag.feedback': 'Retroalimentación',
 
   // DASHBOARD SURVEY OPTIONS
   'dashboard.options.edit': 'Editar',

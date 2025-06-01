@@ -32,7 +32,7 @@ import {
 } from '@ui/table'
 import type { UploadedDocument } from '@/types'
 import { getUiTranslations } from '@/i18n/utils'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/dialog'
+import { Dialog } from '@/ui/dialog'
 import { DialogTrigger } from '@radix-ui/react-dialog'
 import { toast } from 'sonner'
 
@@ -71,17 +71,6 @@ export function FilesUploadedTable({ data }: Props) {
         const data = row.original
         const handleDialogMenu = (): JSX.Element | null => {
           switch (dialogMenu) {
-            case 'view':
-              return (
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle className="capitalize">
-                      {data.name}
-                    </DialogTitle>
-                  </DialogHeader>
-                  {/* TODO ADD VIEW FILE */}
-                </DialogContent>
-              )
             case 'delete':
               toast.promise(
                 fetch('/api/dashboard/documents', {
@@ -127,11 +116,7 @@ export function FilesUploadedTable({ data }: Props) {
                 <DropdownMenuLabel>
                   {t('dashboard.table.actions')}
                 </DropdownMenuLabel>
-                <DialogTrigger asChild>
-                  <DropdownMenuItem onClick={() => setDialogMenu('view')}>
-                    {t('dashboard.table.actions.view')}
-                  </DropdownMenuItem>
-                </DialogTrigger>
+                <DialogTrigger asChild></DialogTrigger>
                 <DialogTrigger asChild>
                   <DropdownMenuItem
                     onClick={() => setDialogMenu('delete')}

@@ -1,7 +1,7 @@
 import { R2Buckets } from '@constants'
 import { createJWT } from '@lib/jwt'
 import { s3Client } from '@lib/s3Client'
-import { addRagDocument, clearRagDocument } from '@services/rag'
+import { addRagDocuments, clearRagDocument } from '@services/rag'
 import {
   PutObjectCommand,
   DeleteObjectCommand,
@@ -39,6 +39,8 @@ export const POST: APIRoute = async ({ locals, request }) => {
     user_id: user.id
   })
 
+  const documentsIds: string[] = []
+
   await Promise.all(
     files.map(async (file) => {
       const arrayBuffer = await file.arrayBuffer()
@@ -53,10 +55,11 @@ export const POST: APIRoute = async ({ locals, request }) => {
           ContentType: file.type
         })
       )
-
-      await addRagDocument(key, jwtToken)
+      documentsIds.push(key)
     })
   )
+
+  await addRagDocuments(documentsIds, jwtToken)
 
   return new Response(
     JSON.stringify({
@@ -86,7 +89,6 @@ export const DELETE: APIRoute = async ({ locals, request }) => {
   }
 
   const { files } = body
-
   const jwtToken = createJWT({
     user_id: user.id
   })
@@ -127,15 +129,9 @@ export const GET: APIRoute = async ({ locals }) => {
     })
   )
 
-  if (!documents.Contents) {
-    return new Response(null, {
-      status: 404
-    })
-  }
-
   return new Response(
     JSON.stringify({
-      documents: documents.Contents.map(({ Key, ...rest }) => ({
+      documents: documents?.Contents?.map(({ Key, ...rest }) => ({
         name: Key?.split('/').pop(),
         ...rest
       }))

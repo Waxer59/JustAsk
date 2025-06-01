@@ -23,7 +23,7 @@ export const clearRagDocument = async (
   jwtToken: string
 ) => {
   try {
-    const response = await fetch(`${RAG_API_URL}/document`, {
+    const response = await fetch(`${RAG_API_URL}/documents`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -39,16 +39,19 @@ export const clearRagDocument = async (
   }
 }
 
-export const addRagDocument = async (documentId: string, jwtToken: string) => {
+export const addRagDocuments = async (
+  documentIds: string[],
+  jwtToken: string
+) => {
   try {
-    const response = await fetch(`${RAG_API_URL}/document`, {
+    const response = await fetch(`${RAG_API_URL}/documents`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
-        document_keys: [documentId]
+        document_keys: documentIds
       })
     })
     return await response.json()

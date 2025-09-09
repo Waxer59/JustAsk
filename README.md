@@ -21,6 +21,13 @@ pnpm i
    * `BETTER_AUTH_SECRET`: Provide a secret key for the better auth. run `openssl rand -hex 32` to generate a random key.
    * `AUTH_RESEND_KEY`: Provide a resend API key.
    * `HMAC_KEY`: Provide a secret key for the HMAC. run `openssl rand -hex 32` to generate a random key.
+   * `RESEND_EMAIL`: Provide the email address you will use as the sender in Resend.
+   * `R2_ENDPOINT`: Provide the R2 (Cloudflare) endpoint URL for your object storage.
+   * `R2_ACCESS_KEY_ID`: Provide the access key ID for your R2 storage.
+   * `R2_SECRET_ACCESS_KEY`: Provide the secret access key for your R2 storage.
+   * `JWT_SECRET`: Provide a secret key for signing JWTs. Run `openssl rand -hex 32` to generate a random key.
+   * `JWT_ALGORITHM`: Provide the algorithm to use for JWT signing (e.g., HS256).
+   * `RAG_API_URL`: Provide the URL of the RAG (Retrieval-Augmented Generation) API endpoint.
 
 3. Run the project with the command:
 

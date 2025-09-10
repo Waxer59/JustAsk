@@ -41,6 +41,7 @@ export const InterviewProcess = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <InterviewProcessLayout
+        shouldLockScreen={currentStep < InterviewProcessSteps.COMPLETE}
         header={<Stepper steps={steps} currentStep={currentStep} />}>
         {currentStep === InterviewProcessSteps.OFFER && <OfferStep />}
         {currentStep === InterviewProcessSteps.DOCUMENTS && <DocumentsStep />}

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://justask.app/sitemap-index.xml
+Sitemap: https://justask.hgo.one/sitemap-index.xml

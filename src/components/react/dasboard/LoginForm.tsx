@@ -39,7 +39,7 @@ export const LoginForm = () => {
         ref={formRef}
         className="flex flex-col items-center justify-center w-full gap-4">
         <Input
-          placeholder="interview@justask.app"
+          placeholder="interview@justask.hgo.one"
           type="email"
           name="email"
           required

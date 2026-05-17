@@ -294,7 +294,7 @@ export function CandidatesTable({ surveyName, data }: Props) {
                       className="capitalize"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
+                        column.toggleVisibility(Boolean(value))
                       }>
                       {/* @ts-expect-error all columns ids have a translation */}
                       {t(`dashboard.table.${column.id}`)}
